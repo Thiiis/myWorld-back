@@ -10,6 +10,7 @@
   </settings>
 
   <typeAliases>
-    <typeAlias type="com.example.demo.dto.Member" alias="Member" />
+    <typeAlias type="com.example.demo.dto.User" alias="User" />
   </typeAliases>
+
 </configuration>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.example.demo.dao.UserDao">
+  <insert id="insert" 
+          parameterType="User">
+          <!--resultType="int"> insert의 리턴값이 int. 생략 가능하다. 1개-->
+    insert into "User" ("account", "email", "password")
+    values (#{account}, #{email}, #{password})
+  </insert>
+
+  <update id="update" 
+          parameterType="User"> <!--멤버의 전체 이름-->
+    update "User"
+    set "account"=#{account},
+        "email"=#{email},
+        "password"=#{password}
+    where "account"=#{account}
+  </update>
+
+  <delete id="delete"
+          parameterType="String"> <!--java.lang에 속하는 패키지는 앞에 붙이지 않는다-->
+    delete from "User"
+    where "account"=#{value} <!--값이 하나만 들어오면 #{} 안에 아무거나 상관없음-->
+  </delete>
+
+  <select id="selectByAccount"
+          parameterType="String"
+          resultType="User">
+    select "account","email", "password"
+    from "User"
+    where "account"=#{value}
+  </select>
+</mapper>
