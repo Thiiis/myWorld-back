@@ -10,7 +10,11 @@
   </settings>
 
   <typeAliases>
+<<<<<<< HEAD
     <typeAlias type="com.example.demo.dto.User" alias="User" />
+=======
+    <typeAlias type="com.example.demo.dto.diary.Diary" alias="Diary" />
+>>>>>>> 03f7202d5e74b21f70c32ba78e0a1594f547dbef
   </typeAliases>
 
 </configuration>

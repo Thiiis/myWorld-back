@@ -1,12 +1,12 @@
-package com.example.demo.interceptor;
+// package com.example.demo.interceptor;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+// import java.lang.annotation.ElementType;
+// import java.lang.annotation.Retention;
+// import java.lang.annotation.RetentionPolicy;
+// import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Login {
+// @Retention(RetentionPolicy.RUNTIME)
+// @Target(ElementType.METHOD)
+// public @interface Login {
   
-}
+// }
