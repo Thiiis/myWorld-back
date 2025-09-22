@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.example.demo.dao.MemberDao">
+  <insert id="insert" parameterType="Member">
+    insert into Members (account, email, pwd)
+    values (#{account}, #{email}, #{pwd})
+  </insert>
+
+  <select id="existsByAccount" parameterType="String" resultType="int">
+      SELECT COUNT(*)
+      FROM members
+      WHERE account = #{account}
+  </select>
+
+  <select id="selectByAccount" parameterType="String" resultType="Member">
+    select mid, account,email, pwd
+    from Members
+    where account=#{value}
+  </select>
+
+  <select id="selectByMid" parameterType="Long" resultType="Member">
+    SELECT mid, account, email, password
+    FROM members
+    WHERE mid = #{mid}
+  </select>
+
+  <update id="update" parameterType="Member"> 
+    update Members
+    set account=#{account},
+        email=#{email},
+        pwd=#{pwd}
+    where account=#{account}
+  </update>
+
+  <delete id="deleteByAccount" parameterType="String">
+    delete from Members
+    where account=#{account} 
+  </delete>
+
+  <delete id="deleteByMid" parameterType="Long"> 
+    delete from Members
+    where mid=#{mid} 
+  </delete>
+  
+</mapper>
