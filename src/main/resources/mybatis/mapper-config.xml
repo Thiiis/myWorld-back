@@ -11,6 +11,7 @@
 
   <typeAliases>
     <!-- <typeAlias type="com.example.demo.dto.friend.Friend" alias="Friend" /> -->
-
+    <typeAlias type="com.example.demo.guestboard.dto.GuestBoard" alias="GuestBoard" />
+    <typeAlias type="com.example.demo.guestboard.dto.InfiniteScroll" alias="InfiniteScroll" />
   </typeAliases>
 </configuration>

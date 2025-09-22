@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo">
+<!DOCTYPE mapper 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.guestboard.dao.GuestBoardDao">
+  
+  <insert id="insert" parameterType="GuestBoard">
+    insert into guestboard (gid, pid, content)
+    values (#{gid}, #{pid}, #{content})
+  </insert>
+
+  <!--앞에서 offset만큼 건너뛰고 limit만큼 행 가져오기-->
+  <select id="select" parameterType="InfiniteScroll" resultType="GuestBoard">
+    select * from guestBoard
+    order by gbid desc
+    offset #{offset} rows fetch next #{limit} rows only
+  </select>
+
+  <select id="countAll" resultType="int">
+    select count(*) from guestboard
+  </select>
+
 
 
 </mapper>
