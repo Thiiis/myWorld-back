@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.diary.dao.AttachmentDao">
+
+  <!-- 첨부파일 등록 -->
+  <insert id="insertAttachment" parameterType="Attachment">
+    INSERT INTO ATTACHMENTS (DID, ANAME, ADATA, ATYPE, CREATED_AT, UPDATED_AT)
+    VALUES (#{did}, #{aname}, #{adata}, #{atype}, SYSTIMESTAMP, SYSTIMESTAMP)
+  </insert>
+
+  <!-- 특정 일기 첨부파일 (전체 다운로드를 막으려면 API에서 절대 BLOB을 내려주지 않고, 메타데이터만 전달). -->
+  <select id="selectAttachmentsByDid" parameterType="int" resultType="Attachment">
+    SELECT AID as aid, DID as did, ANAME as aname, ATYPE as atype,
+           CREATED_AT as createdAt, UPDATED_AT as updatedAt
+    FROM ATTACHMENTS
+    WHERE DID = #{did}
+    ORDER BY CREATED_AT ASC
+  </select>
+
+  <!-- 대표사진: 가장 먼저 업로드된 1장(메타데이터만 전달) -->
+  <select id="selectFirstAttachmentByDid" parameterType="int" resultType="Attachment">
+    SELECT AID as aid, DID as did, ANAME as aname, ATYPE as atype,
+           CREATED_AT as createdAt, UPDATED_AT as updatedAt
+    FROM ATTACHMENTS
+    WHERE DID = #{did}
+    ORDER BY CREATED_AT ASC
+    FETCH FIRST 1 ROWS ONLY
+  </select>
+
+  <!-- 첨부파일 전체 삭제 -->
+  <delete id="deleteAttachmentsByDid" parameterType="int">
+    DELETE FROM ATTACHMENTS WHERE DID = #{did}
+  </delete>
+
+</mapper>
