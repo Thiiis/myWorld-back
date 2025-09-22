@@ -10,7 +10,7 @@
   </settings>
 
   <typeAliases>
-    <!-- <typeAlias type="com.example.demo.dto.friend.Friend" alias="Friend" /> -->
+    <typeAlias type="com.example.demo.friend.dto.Friend" alias="Friend" />
 
   </typeAliases>
 </configuration>
