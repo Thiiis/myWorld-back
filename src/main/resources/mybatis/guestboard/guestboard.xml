@@ -10,6 +10,10 @@
     values (#{gid}, #{pid}, #{content})
   </insert>
 
+  <select id="selectByGbid" parameterType="Long" resultType="GuestBoard">
+    select * from guestBoard where gbid = #{gbid}
+  </select>
+
   <!--앞에서 offset만큼 건너뛰고 limit만큼 행 가져오기-->
   <select id="select" parameterType="InfiniteScroll" resultType="GuestBoard">
     select * from guestBoard
@@ -17,9 +21,16 @@
     offset #{offset} rows fetch next #{limit} rows only
   </select>
 
-  <select id="countAll" resultType="int">
-    select count(*) from guestboard
-  </select>
+  <update id="update" parameterType="GuestBoard">
+    update guestBoard 
+    set content = #{content},
+        updated_at = sysdate
+    where gbid = #{gbid}
+  </update>
+
+  <delete id="delete" parameterType="Long">
+    delete from guestBoard where gbid = #{gbid}
+  </delete>
 
 
 

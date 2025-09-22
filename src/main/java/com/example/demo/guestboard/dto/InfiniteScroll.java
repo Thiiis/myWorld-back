@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class InfiniteScroll {
-  private int offset;
-  private int limit;
+  private Long offset;
+  private Long limit;
 }

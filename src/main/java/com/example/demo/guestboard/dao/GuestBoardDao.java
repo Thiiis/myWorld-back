@@ -25,8 +25,9 @@ import com.example.demo.guestboard.dto.InfiniteScroll;
 
 @Mapper
 public interface GuestBoardDao {
-  public int insert(GuestBoard guestBoard);
+  public Long insert(GuestBoard guestBoard);
+  public GuestBoard selectByGbid(Long guestBoardId);
   public List<GuestBoard> select(InfiniteScroll infiniteScroll);
-  public int update(GuestBoard guestBoard);
-  public int delete(int guestBoardId);
+  public Long update(GuestBoard guestBoard);
+  public Long delete(Long guestBoardId);
 }
