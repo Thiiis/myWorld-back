@@ -20,14 +20,16 @@ public class GuestBoardService {
 
   private final GuestBoardDao guestBoardDao;
 
+  // board create
   public GuestBoardCreateResponse create(GuestBoardCreateRequest request) {
-    GuestBoard guestBoard = new GuestBoard(request);
+    GuestBoard guestBoard = new GuestBoard(request.getGid(), request.getPid(), request.getContent(), request.getViewScope());
     guestBoardDao.insert(guestBoard);
     return new GuestBoardCreateResponse(guestBoard);
   }
 
+  // board list
   public List<GuestBoardListResponse> getGuestBoardList(GuestBoardListRequest request) {
-    List<GuestBoard> list = guestBoardDao.select(request);
+    List<GuestBoard> list = guestBoardDao.select(request.getOffset(), request.getLimit());
     return list.stream().map(GuestBoardListResponse::new).toList();
   }
 
@@ -36,8 +38,10 @@ public class GuestBoardService {
     return guestBoard;
   }
 
+  // board update
   public Long update(GuestBoardUpdateRequest request) {
-    return guestBoardDao.update(request);
+    GuestBoard guestBoard = new GuestBoard(request.getGbid(), request.getContent(), request.getViewScope());
+    return guestBoardDao.update(guestBoard);
   }
 
   public Long delete(Long gbid) {

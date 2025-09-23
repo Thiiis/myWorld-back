@@ -3,8 +3,10 @@ package com.example.demo.guestboard.dto;
 import java.time.OffsetDateTime;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class GuestBoard {
   private Long gbid;
   private Long gid;
@@ -14,17 +16,20 @@ public class GuestBoard {
   private OffsetDateTime createdAt;
   private OffsetDateTime updatedAt;
 
-  public GuestBoard() {}
-
-  public GuestBoard(GuestBoardCreateRequest request) {
-    this.gid = request.getGid();
-    this.pid = request.getPid();
-    this.content = request.getContent();
-    this.viewScope = request.getViewScope();
+  // board create 생성자
+  public GuestBoard(Long gid, Long pid, String content, String viewScope) {
+    this.gid = gid;
+    this.pid = pid;
+    this.content = content;
+    this.viewScope = viewScope;
   }
 
-  public GuestBoard(GuestBoardUpdateRequest request) {
-    this.content = request.getContent();
-    this.viewScope = request.getViewScope();
+  // board update 생성자
+  public GuestBoard(Long gbid, String content, String viewScope) {
+    this.gbid = gbid;
+    this.content = content;
+    this.viewScope = viewScope;
+    this.updatedAt = OffsetDateTime.now();
   }
+
 }
