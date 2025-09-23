@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import com.example.demo.friend.enums.FriendStatus;
 
 public class StatusTypeHandler extends BaseTypeHandler<FriendStatus>{
   @Override

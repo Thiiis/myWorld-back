@@ -24,6 +24,7 @@ public class Friend {
         this.status = FriendStatus.ACCEPTED;
     }
 
-
-
+    public void reject() {
+        this.status = FriendStatus.REJECTED;
+    }
 }

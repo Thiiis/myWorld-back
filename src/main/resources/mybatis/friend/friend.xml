@@ -13,5 +13,5 @@
         UPDATE FRIENDS
         SET STATUS = #{status}, UPDATED_AT = SYSTIMESTAMP
         WHERE FID = #{fid}
-    </update>
+     </update>
 </mapper>

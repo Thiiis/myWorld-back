@@ -28,13 +28,20 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.CREATED).body(friendResponse);
     }
 
-    //친구 수락
+    // 친구 수락
     @PostMapping("/{id}/accept")
     public ResponseEntity<Void> acceptFriend(@PathVariable("id") Long id) {
         friendService.acceptFriend(id);
         return ResponseEntity.ok().build();
-    }    
+    }
+
+    //친구 거절
+    @PostMapping("{id}/reject")
+    public ResponseEntity<Void> rejectFriend(@PathVariable("id") Long id) {
+    friendService.rejectFriend(id);
+    return ResponseEntity.ok().build();
+    }
+
+    // 친구 요청 조회
 
 }
-
-

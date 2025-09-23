@@ -27,4 +27,11 @@ public class FriendService {
     friend.accept();
     friendDao.updateStatus(friend);
   }
+
+  public void rejectFriend(Long id) {
+    Friend friend = friendDao.selectById(id);
+    friend.reject();
+        System.out.println(friend.getStatus());
+    friendDao.updateStatus(friend);
+  }
 }
