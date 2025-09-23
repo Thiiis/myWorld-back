@@ -1,16 +1,30 @@
 package com.example.demo.guestboard.dto;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class GuestBoard {
-  private int gbid;
-  private int gid;
-  private int pid;
+  private Long gbid;
+  private Long gid;
+  private Long pid;
   private String content;
-  private String view_scope;
-  private Date createdAt;
-  private Date updatedAt;
+  private String viewScope;
+  private OffsetDateTime createdAt;
+  private OffsetDateTime updatedAt;
+
+  public GuestBoard() {}
+
+  public GuestBoard(GuestBoardCreateRequest request) {
+    this.gid = request.getGid();
+    this.pid = request.getPid();
+    this.content = request.getContent();
+    this.viewScope = request.getViewScope();
+  }
+
+  public GuestBoard(GuestBoardUpdateRequest request) {
+    this.content = request.getContent();
+    this.viewScope = request.getViewScope();
+  }
 }
