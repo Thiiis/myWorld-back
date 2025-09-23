@@ -1,4 +1,4 @@
-package com.example.demo.dto.Auth;
+package com.example.demo.auth.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

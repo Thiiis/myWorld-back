@@ -1,11 +1,11 @@
-package com.example.demo.dto.Auth;
+package com.example.demo.auth.dto;
 
 import java.time.OffsetDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.demo.dto.Profile.Profile;
+import com.example.demo.profile.dto.Profile;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package com.example.demo.dto.Auth;
+package com.example.demo.auth.dto;
 
 public class SignupRequest {
     // 프로필에 저장될 정보
