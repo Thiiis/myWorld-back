@@ -6,7 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.guestboard.dao.GuestBoardDao;
 import com.example.demo.guestboard.dto.GuestBoard;
-import com.example.demo.guestboard.dto.InfiniteScroll;
+import com.example.demo.guestboard.dto.GuestBoardCreateRequest;
+import com.example.demo.guestboard.dto.GuestBoardCreateResponse;
+import com.example.demo.guestboard.dto.GuestBoardListRequest;
+import com.example.demo.guestboard.dto.GuestBoardListResponse;
+import com.example.demo.guestboard.dto.GuestBoardUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,16 +20,15 @@ public class GuestBoardService {
 
   private final GuestBoardDao guestBoardDao;
 
-  public GuestBoard create(GuestBoard guestBoard) {
+  public GuestBoardCreateResponse create(GuestBoardCreateRequest request) {
+    GuestBoard guestBoard = new GuestBoard(request);
     guestBoardDao.insert(guestBoard);
-    return guestBoard;
+    return new GuestBoardCreateResponse(guestBoard);
   }
 
-  public List<GuestBoard> getGuestBoardList(Long offset, Long limit) {
-    InfiniteScroll scroll = new InfiniteScroll();
-    scroll.setOffset(offset);
-    scroll.setLimit(limit);
-    return guestBoardDao.select(scroll);
+  public List<GuestBoardListResponse> getGuestBoardList(GuestBoardListRequest request) {
+    List<GuestBoard> list = guestBoardDao.select(request);
+    return list.stream().map(GuestBoardListResponse::new).toList();
   }
 
   public GuestBoard getGuestBoard(Long gbid) {
@@ -33,12 +36,11 @@ public class GuestBoardService {
     return guestBoard;
   }
 
-  public Long update(GuestBoard guestBoard) {
-    return guestBoardDao.update(guestBoard);
+  public Long update(GuestBoardUpdateRequest request) {
+    return guestBoardDao.update(request);
   }
 
   public Long delete(Long gbid) {
-    Long rows = guestBoardDao.delete(gbid);
-    return rows;
+    return guestBoardDao.delete(gbid);
   }
 } 
