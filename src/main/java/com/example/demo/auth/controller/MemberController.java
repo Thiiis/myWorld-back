@@ -1,4 +1,4 @@
-package com.example.demo.auth;
+package com.example.demo.auth.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
-    // private final JwtService jwtService;
-
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> signupMember(@Valid @RequestBody SignupRequest request) {
         Member member = memberService.signup(request);

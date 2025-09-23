@@ -1,6 +1,5 @@
 package com.example.demo.auth.service;
 
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,9 @@ import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.SignupRequest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class MemberService {
@@ -22,27 +23,36 @@ public class MemberService {
   // private final JwtService jwtService;
 
   @Transactional
-  public Member signup(SignupRequest signupRequest) {
-    int count = memberDao.existsByAccount(signupRequest.getAccount());
+  public Member signup(SignupRequest request) {
+    if (!request.getPwd().equals(request.getPwdConfirm())) {
+      throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+    }
+    int count = memberDao.existsByAccount(request.getAccount());
     if (count > 0) {
       // 이미 아이디가 존재하면 예외를 발생시킵니다.
       throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
     } else {
-      Member member = new Member(signupRequest); // DTO를 Entity로 변환
+      String encodedPassword = passwordEncoder.encode(request.getPwd());
+      Member member = new Member(request.getAccount(),request.getEmail(),encodedPassword);
       memberDao.insert(member);
       return member;
+
     }
   }
 
-  public String login(LoginRequest loginRequest) {
-    Member member = memberDao.selectByAccount(loginRequest.getAccount());
-
-    // 1. 아이디 존재 여부와 비밀번호 일치 여부를 한 번에 확인
-    if (member == null || !passwordEncoder.matches(loginRequest.getPwd(), member.getPwd())) {
-      // 아이디가 없거나 비밀번호가 틀리면 예외 발생
+  public String login(LoginRequest request) {
+    // 1. 회원 아이디 조회
+    Member member = memberDao.selectByAccount(request.getAccount());
+    // 2. 없으면 던지기
+    if (member == null) {
       throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
     }
-    // 2. 로그인이 성공하면 JWT 토큰 생성 및 반환
+    // 3. 비밀번호 비교
+    if (!passwordEncoder.matches(request.getPwd(), member.getPwd())) {
+      // 비밀번호가 일치하지 않으면 예외 발생
+      throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
+    }
+    // 4. 로그인 성공: JWT 토큰 생성 및 반환
     return jwtService.createJWT(member.getAccount(), member.getEmail());
   }
 

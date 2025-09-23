@@ -1,6 +1,7 @@
 package com.example.demo.auth.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.demo.auth.dto.Member;
 
@@ -9,7 +10,7 @@ import com.example.demo.auth.dto.Member;
 public interface MemberDao {
     public int insert(Member member);
     public Member selectByMid(Long mid);
-    public Member selectByAccount(String account);
+    public Member selectByAccount(@Param("account") String account);
     public int update(Member member);
     public int deleteByMid(Long mid);
     public int deleteByAccount(String account);

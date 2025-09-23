@@ -1,11 +1,10 @@
 package com.example.demo.profile.dto;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.example.demo.auth.dto.Member;
-
-import oracle.sql.DATE;
 
 public class Profile {
 
@@ -16,7 +15,7 @@ public class Profile {
     private Member member; //1대1관계
     
     private String pname; // 회원가입할 때 닉네임 받아옴
-    private DATE birthdate; // 생년월일
+    private Date birthdate; // 생년월일
     
     private String imgName; // 프로필 이미지 파일 이름
     private String imgUrl; // 프로필 이미지 서버 저장 경로
@@ -48,7 +47,7 @@ public class Profile {
     public String getPname(){
         return this.pname;
     }
-    public DATE getBirthDate(){
+    public Date getBirthDate(){
         return this.birthdate;
     }
     public Map<String,String> getImageInfo(){
@@ -62,11 +61,11 @@ public class Profile {
     }
     
     // Setter
-    public String updatePname(String pname){
+    public String upDatePname(String pname){
         this.pname = pname;
         return pname;
     }
-    public DATE updateBirthDate(DATE birthdate){
+    public Date upDateBirthDate(Date birthDate){
         this.birthdate = birthdate;
         return this.birthdate;
     }

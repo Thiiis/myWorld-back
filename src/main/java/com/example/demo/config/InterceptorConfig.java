@@ -7,8 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.demo.auth.interceptor.LoginCheckInterceptor;
 
-//import com.example.demo.interceptor.LoginCheckInterceptor;
-
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer{
   @Autowired
@@ -19,6 +17,6 @@ public class InterceptorConfig implements WebMvcConfigurer{
   registry
   .addInterceptor(loginCheckInterceptor)
   .addPathPatterns("/**")
-  .excludePathPatterns("/image/**", "/css/**", "/js/**");
+  .excludePathPatterns("/members/login", "/members/signup", "/","/image/**", "/css/**", "/js/**");
   }
 }
