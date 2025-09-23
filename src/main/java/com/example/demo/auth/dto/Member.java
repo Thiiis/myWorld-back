@@ -9,7 +9,10 @@ import com.example.demo.profile.dto.Profile;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
 
+
+@Getter
 public class Member {
     private long mid;
     private OffsetDateTime cretedAt;
@@ -26,20 +29,6 @@ public class Member {
         this.email = signupRequest.getEmail();
         this.pwd = signupRequest.getPwd();
     };
-
-    // getter   
-    public Long getMid(){
-        return this.mid;
-    }
-    public String getAccount(){
-        return this.account;
-    }
-    public String getEmail(){
-        return this.email;
-    }
-    public String getPwd(){
-        return this.pwd;
-    }
 
     @NotBlank
     @Email

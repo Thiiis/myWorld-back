@@ -1,5 +1,8 @@
 package com.example.demo.auth.dto;
 
+import lombok.Getter;
+
+@Getter
 public class SignupRequest {
     // 프로필에 저장될 정보
     private String nickname;
@@ -8,17 +11,4 @@ public class SignupRequest {
     private String account;
     private String email;
     private String pwd;
-
-    public String getNickname(){
-        return this.nickname;
-    }
-    public String getAccount(){
-        return this.account;
-    }
-    public String getEmail(){
-        return this.email;
-    }
-    public String getPwd(){
-        return this.pwd;
-    }
 }

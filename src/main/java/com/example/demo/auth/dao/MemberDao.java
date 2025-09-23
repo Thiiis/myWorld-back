@@ -3,7 +3,6 @@ package com.example.demo.auth.dao;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.auth.dto.Member;
-import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.SignupRequest;
 
 
@@ -18,8 +17,5 @@ public interface MemberDao {
 
     // MemberMapper.xml의 id="existsByAccount" 쿼리를 호출합니다.
     public int existsByAccount(String account);
-
-    // MemberMapper.xml의 id="save" 쿼리를 호출합니다.
-    public void save(SignupRequest signupRequest);
     
 }
