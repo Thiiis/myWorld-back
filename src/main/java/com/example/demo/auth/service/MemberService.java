@@ -1,14 +1,13 @@
-package com.example.demo.service;
+package com.example.demo.auth.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.example.demo.dao.MemberDao;
-import com.example.demo.dto.Auth.LoginRequest;
-import com.example.demo.dto.Auth.Member;
-import com.example.demo.dto.Auth.SignupRequest;
+import com.example.demo.auth.dao.MemberDao;
+import com.example.demo.auth.dto.Member;
+import com.example.demo.auth.dto.SignupRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
     private final MemberDao memberDao;
     private final PasswordEncoder passwordEncoder; // SecurityConfig에 등록한 Bean을 주입받음
-    private final JwtService jwtService;
+    // private final JwtService jwtService;
 
     @Transactional
     public Member signup(SignupRequest signupRequest){
@@ -31,19 +30,6 @@ public class MemberService {
           return member;
         }
     }
-
-    public String login(LoginRequest loginRequest) {
-      Member member = memberDao.selectByAccount(loginRequest.getAccount());
-
-      // 1. 아이디 존재 여부와 비밀번호 일치 여부를 한 번에 확인
-      if (member == null || !passwordEncoder.matches(loginRequest.getPwd(), member.getPwd())) {
-          // 아이디가 없거나 비밀번호가 틀리면 예외 발생
-          throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
-      }
-      // 2. 로그인이 성공하면 JWT 토큰 생성 및 반환
-      return jwtService.createJWT(member.getAccount(), member.getEmail());
-    } 
-
 
   public Member getMemberByAccount(String account){
     Member member = memberDao.selectByAccount(account);

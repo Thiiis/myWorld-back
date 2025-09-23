@@ -5,12 +5,15 @@
 
   <!-- 일기 생성 -->
  <insert id="insertDiary" parameterType="Diary">
-    INSERT INTO DIARYS ( MID, TITLE, CONTENT, VIEW_SCOPE, EMO, WEATHER, CREATED_AT, UPDATED_AT )
-    VALUES ( #{mid}, #{title}, #{content}, #{viewScope}, #{emo}, #{weather}, SYSTIMESTAMP, SYSTIMESTAMP )
+    INSERT INTO DIARYS 
+  (MID, TITLE, CONTENT, VIEW_SCOPE, EMO, WEATHER)
+VALUES 
+  (#{mid}, #{title}, #{content}, #{viewScope}, #{emo}, #{weather})
+
   </insert>
 
   <!--일기 생성 후 DID값이 보이지 않아 DID를 select문으로 수동으로 보여주기 (마지막 삽입된 행 조회 (해당 사용자의 가장 최근 작성 글)-->
-<select id="selectLatestDiary" parameterType="int" resultType="Diary">
+<select id="selectLatestDiary" parameterType="long" resultType="Diary">
   SELECT DID as did, MID as mid, TITLE as title, CONTENT as content, VIEW_SCOPE as viewScope, EMO as emo, WEATHER as weather, CREATED_AT as createdAt, UPDATED_AT as updatedAt
   FROM DIARYS
   WHERE MID = #{mid}
@@ -19,7 +22,7 @@
 </select>
 
 <!-- 단건 조회 -->
-<select id="selectDiaryById" parameterType="int" resultType="Diary">
+<select id="selectDiaryById" parameterType="long" resultType="Diary">
     SELECT DID as did, MID as mid,TITLE as title, CONTENT as content, VIEW_SCOPE as viewScope, EMO as emo, WEATHER as weather, CREATED_AT as createdAt, UPDATED_AT as updatedAt
     FROM DIARYS
     WHERE DID = #{did}
@@ -33,7 +36,7 @@
  </select>
 
  <!--페이징을 위한 전체 행 수 가져오기-->
- <select id="countDiaries" resultType="int">
+ <select id="countDiaries" resultType="long">
   SELECT COUNT(*)
   FROM DIARYS
  </select>

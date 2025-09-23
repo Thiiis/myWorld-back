@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
-import com.example.demo.diary.dto.Weather;
+import com.example.demo.diary.enums.Weather;
 
 
 public class WeatherTypeHandler extends BaseTypeHandler<Weather> {

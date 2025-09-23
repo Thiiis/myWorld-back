@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE configuration
-  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
   <settings>
@@ -17,4 +15,10 @@
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoard" alias="GuestBoard" />
     <typeAlias type="com.example.demo.guestboard.dto.InfiniteScroll" alias="InfiniteScroll" />
   </typeAliases>
+
+  <typeHandlers>
+    <typeHandler handler="com.example.demo.diary.dto.handler.EmoTypeHandler" javaType="com.example.demo.diary.enums.Emo" />
+    <typeHandler handler="com.example.demo.diary.dto.handler.ViewScopeTypeHandler" javaType="com.example.demo.diary.enums.ViewScope" />
+    <typeHandler handler="com.example.demo.diary.dto.handler.WeatherTypeHandler" javaType="com.example.demo.diary.enums.Weather" />
+  </typeHandlers>
 </configuration>

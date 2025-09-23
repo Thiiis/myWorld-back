@@ -1,20 +1,14 @@
-package com.example.demo.dto.Auth;
+package com.example.demo.auth.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-
+import lombok.Getter;
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SignupResponse {
 
     private String message;
     private String account;
-
-    public String getMessage(){
-        return this.message;
-    }
-    public String getAccount(){
-        return this.account;
-    }
 
     // 성공 응답 객체를 만드는 static 메서드
     public static SignupResponse success(String account) {

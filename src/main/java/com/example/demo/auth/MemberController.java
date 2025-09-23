@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.auth;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.Auth.LoginRequest;
-import com.example.demo.dto.Auth.LoginResponse;
-import com.example.demo.dto.Auth.Member;
-import com.example.demo.dto.Auth.SignupRequest;
-import com.example.demo.dto.Auth.SignupResponse;
+import com.example.demo.auth.dto.Member;
+import com.example.demo.auth.dto.SignupRequest;
+import com.example.demo.auth.dto.SignupResponse;
 import com.example.demo.interceptor.Login;
-import com.example.demo.service.JwtService;
-import com.example.demo.service.MemberService;
+import com.example.demo.auth.service.MemberService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
-    private final JwtService jwtService;
+    // private final JwtService jwtService;
 
     @PostMapping("/signup")
     public ResponseEntity<SignupResponse> signupMember(@Valid @RequestBody SignupRequest signupRequest) {
