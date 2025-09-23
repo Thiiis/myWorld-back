@@ -3,7 +3,6 @@ package com.example.demo.auth.dao;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.auth.dto.Member;
-import com.example.demo.auth.dto.SignupRequest;
 
 
 @Mapper
