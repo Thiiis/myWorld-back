@@ -3,7 +3,7 @@
 <mapper namespace="com.example.demo.diary.dao.DiaryDao">
     <!-- 일기 생성 -->
     <insert id="insert" parameterType="Diary">
-        INSERT INTO DIARYS (MID, TITLE, CONTENT,VIEW_SCOPE, EMO, WEATHER)
+        INSERT INTO DIARYS (MID, TITLE, CONTENT, VIEW_SCOPE, EMO, WEATHER)
         VALUES (#{mid}, #{title}, #{content}, #{viewScope}, #{emo},#{weather})
     </insert>
 </mapper>

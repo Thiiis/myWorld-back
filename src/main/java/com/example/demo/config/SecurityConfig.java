@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .requestMatchers("/members/signup", "/members/login").permitAll()
                 
                 // 나머지 모든 요청은 인증 필요
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             );
 
         return http.build();
