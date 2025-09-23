@@ -11,6 +11,11 @@
 
   <typeAliases>
     <typeAlias type="com.example.demo.friend.dto.Friend" alias="Friend" />
+    <typeAlias type="com.example.demo.friend.enums.StatusTypeHandler" alias="StatusTypeHandler" />
 
   </typeAliases>
+
+  <typeHandlers>
+    <typeHandler handler="com.example.demo.friend.enums.StatusTypeHandler" javaType="com.example.demo.friend.enums.FriendStatus"/>
+  </typeHandlers>
 </configuration>

@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class Friend {
-    private Long id;
+    private Long fid;
     private Long requesterId;
     private Long accepterId;
     private FriendStatus status;
@@ -18,6 +18,12 @@ public class Friend {
     public Friend(Long requesterId, Long accepterId) {
         this.requesterId = requesterId;
         this.accepterId = accepterId;
-    }   
+    }
+
+    public void accept() {
+        this.status = FriendStatus.ACCEPTED;
+    }
+
+
 
 }

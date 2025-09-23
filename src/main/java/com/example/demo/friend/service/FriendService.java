@@ -18,7 +18,13 @@ public class FriendService {
   public FriendResponse createFriend(FriendCreateRequest dto) {
     Friend friend = new Friend(dto.getRequesterId(), dto.getAccepterId());
     friendDao.insert(friend);
-    return new FriendResponse(friend.getId(), friend.getRequesterId(), friend.getRequesterId(), friend.getCreatedAt());
-    // return new FriendResponse(friend);
+    // return new FriendResponse(friend.getId(), friend.getRequesterId(), friend.getRequesterId(), friend.getCreatedAt());
+    return new FriendResponse(friend);
+  }
+
+  public void acceptFriend(Long id) {
+    Friend friend = friendDao.selectById(id);
+    friend.accept();
+    friendDao.updateStatus(friend);
   }
 }

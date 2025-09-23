@@ -1,8 +1,8 @@
 package com.example.demo.friend.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +27,13 @@ public class FriendController {
         FriendResponse friendResponse = friendService.createFriend(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(friendResponse);
     }
+
+    //친구 수락
+    @PostMapping("/{id}/accept")
+    public ResponseEntity<Void> acceptFriend(@PathVariable("id") Long id) {
+        friendService.acceptFriend(id);
+        return ResponseEntity.ok().build();
+    }    
 
 }
 
