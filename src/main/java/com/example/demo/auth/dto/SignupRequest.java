@@ -11,4 +11,6 @@ public class SignupRequest {
     private String account;
     private String email;
     private String pwd;
+    // 멤버에 필요 없는 정보
+    private String pwdConfirm;
 }
