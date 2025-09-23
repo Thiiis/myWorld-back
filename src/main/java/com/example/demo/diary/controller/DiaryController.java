@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.diary.dto.Diary;
 import com.example.demo.diary.dto.DiaryRequest;
+import com.example.demo.diary.dto.DiaryResponse;
 import com.example.demo.diary.service.DiaryService;
 
 import jakarta.websocket.server.PathParam;
@@ -40,33 +42,16 @@ public class DiaryController {
   private final DiaryService diaryService;
   
   @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Map<String, Object> createDiary(@Validated(DiaryRequest.Create.class) @RequestPart("diary") Diary diary, @RequestPart(value = "files", required = false) List<MultipartFile> files) {
-        Map<String, Object> map = new HashMap<>();
-        try {
-            // 1. 일기 저장
-            Diary created = diaryService.createDiary(diary, files);
-            map.put("result", "success");
-            map.put("diary", created);   // PK(did) 포함된 JSON 응답
-        } catch (Exception e) {
-            log.error("Diary insert error", e);
-            map.put("result", "fail");
-            map.put("message", e.getMessage());
-        }
-        return map;
+    public ResponseEntity<DiaryResponse> createDiary(@Validated(DiaryRequest.Create.class) @RequestPart("diary") DiaryRequest.Create diary, @RequestPart(value = "files", required = false) List<MultipartFile> files) throws IOException {
+        
+        Diary created = diaryService.createDiary(diary, files);
+        return ResponseEntity.ok(created);
     }
 
   @GetMapping("/detail")
-  public Map<String, Object> getDiary(@RequestParam("did") int did) {
-    Map<String, Object> map = new HashMap<>();
-    Diary diary = diaryService.getDiary(did);
-    if (diary != null) {
-        map.put("result", "success");
-        map.put("diary", diary);
-    } else {
-        map.put("result", "fail");
-        map.put("message", "Diary not found");
-    }
-    return map;
+  public ResponseEntity<DiaryResponse> getDiary(@RequestParam("did") int did) {
+    DiaryResponse diary = diaryService.getDiary(did);
+    return ResponseEntity.ok(diary);
   }
 
   @GetMapping("/list")
@@ -79,10 +64,9 @@ public class DiaryController {
   }
 
   @GetMapping("/list/paged")
-  public Map<String, Object> getDiariesPaged(@RequestParam(name="pageNo", defaultValue = "1") int pageNo, @RequestParam(name="rowsPerPage",defaultValue = "6") int rowsPerPage, @RequestParam(name="pagesPerGroup",defaultValue = "5") int pagesPerGroup) {
+  public ResponseEntity<DiaryResponse> getDiariesPaged(@RequestParam(name="pageNo", defaultValue = "1") int pageNo, @RequestParam(name="rowsPerPage",defaultValue = "6") int rowsPerPage, @RequestParam(name="pagesPerGroup",defaultValue = "5") int pagesPerGroup) {
       return diaryService.getDiariesPaged(pageNo, rowsPerPage, pagesPerGroup);
   }
-  
 
   @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public Map<String, Object> updateDiary(@Validated(DiaryRequest.Update.class) @RequestPart("diary") Diary diary, @RequestPart(value = "files", required = false) List<MultipartFile> files, @RequestPart(value = "deleteAids", required = false) List<Integer> deleteAids) {
@@ -100,7 +84,7 @@ public class DiaryController {
         map.put("result", "fail");
         map.put("message", e.getMessage());
       }
-      return map;
+      return ;
   }
   
   // 상세페이지 단건 삭제

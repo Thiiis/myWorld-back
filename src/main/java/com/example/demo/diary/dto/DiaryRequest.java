@@ -4,9 +4,15 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DiaryRequest {
 
   // 그룹 정의
@@ -26,11 +32,9 @@ public class DiaryRequest {
   private Weather weather; // SUNNY, CLOUDY, RAINY, SNOWY
 
   // 클라이언트 --> 서버
-  private List<AttachmentCreateRequest> attachments; // 전체 첨부(상세 조회용)
+  private List<AttachmentRequest> attachments; // 전체 첨부(상세 조회용)
 
-  public DiaryRequest() {}
-
-  public DiaryRequest(Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather, List<AttachmentCreateRequest> attachments) {
+  public DiaryRequest(Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather, List<AttachmentRequest> attachments) {
     this.mid = mid;
     this.title = title;
     this.content = content;
@@ -40,12 +44,12 @@ public class DiaryRequest {
     this.attachments = attachments;
   }
 
-  // public void setMid(Long mid) { this.mid = mid; }
-  // public void setTitle(String title) { this.title = title; }
-  // public void setContent(String content) { this.content = content; }
-  // public void setViewScope(ViewScope viewScope) { this.viewScope = viewScope; }
-  // public void setEmo(Emo emo) { this.emo = emo; }
-  // public void setWeather(Weather weather) { this.weather = weather; }
-  // public void setAttachments(List<AttachmentCreateRequest> attachments) { this.attachments = attachments; }
+  public void setMid(Long mid) { this.mid = mid; }
+  public void setTitle(String title) { this.title = title; }
+  public void setContent(String content) { this.content = content; }
+  public void setViewScope(ViewScope viewScope) { this.viewScope = viewScope; }
+  public void setEmo(Emo emo) { this.emo = emo; }
+  public void setWeather(Weather weather) { this.weather = weather; }
+  public void setAttachments(List<AttachmentRequest> attachments) { this.attachments = attachments; }
 
 }

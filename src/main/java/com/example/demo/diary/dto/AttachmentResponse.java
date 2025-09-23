@@ -19,9 +19,9 @@ public class AttachmentResponse {
     this.createdAt = createdAt;
   }
 
-  // public void setAid(Long aid) { this.aid = aid; }
-  // public void setAname(String aname) { this.aname = aname; }
-  // public void setAtype(String atype) { this.atype = atype; }
-  // public void setAdata(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+  public void setAid(Long aid) { this.aid = aid; }
+  public void setAname(String aname) { this.aname = aname; }
+  public void setAtype(String atype) { this.atype = atype; }
+  public void setAdata(OffsetDateTime createdAt) { this.createdAt = createdAt; }
   
 }

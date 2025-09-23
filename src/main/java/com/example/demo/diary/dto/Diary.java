@@ -1,11 +1,8 @@
 package com.example.demo.diary.dto;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,15 +28,45 @@ public class Diary {
   private List<Attachment> attachments; // 전체 첨부(상세 조회용)
   private Attachment representativeImage; // 대표사진(리스트/페이징 조회용)
 
-    // --- Setter 역할 메서드 ---
-    public void setDid(Long did) { this.did = did; }
-    public void setMid(Long mid) { this.mid = mid; }
-    public void setTitle(String title) { this.title = title; }
-    public void setContent(String content) { this.content = content; }
-    public void setViewScope(ViewScope viewScope) { this.viewScope = viewScope; }
-    public void setEmo(Emo emo) { this.emo = emo; }
-    public void setWeather(Weather weather) { this.weather = weather; }
-    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
-    public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+  // ---도메인 행위 메서드---
+  public void changeTitle(String title) {
+    if (title == null || title.isBlank()) throw new IllegalArgumentException("제목은 비어 있을 수 없음");
+    this.title = title;
+    this.updatedAt = OffsetDateTime.now();
+  }
+
+  public void changeContent(String content) {
+    if (content == null || content.isBlank()) throw new IllegalArgumentException("내용은 비어 있을 수 없음");
+    this.content = content;
+    this.updatedAt = OffsetDateTime.now();
+  }
+
+  public void changeViewScope(ViewScope viewScope) {
+    this.viewScope = viewScope;
+    this.updatedAt = OffsetDateTime.now();
+  }
+
+  public void changeWeather(Weather weather) {
+    this.weather = weather;
+    this.updatedAt = OffsetDateTime.now();
+  }
+
+  public void changeEmo(Emo emo) {
+    this.emo = emo;
+    this.updatedAt = OffsetDateTime.now();
+  }
+
+  // ---MyBatis 매핑 전용 Setter 역할 메서드 ---
+  public void setDid(Long did) { this.did = did; }
+  public void setMid(Long mid) { this.mid = mid; }
+  public void setTitle(String title) { this.title = title; }
+  public void setContent(String content) { this.content = content; }
+  public void setViewScope(ViewScope viewScope) { this.viewScope = viewScope; }
+  public void setEmo(Emo emo) { this.emo = emo; }
+  public void setWeather(Weather weather) { this.weather = weather; }
+  public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
+  public void setUpdatedAt(OffsetDateTime updatedAt) { this.updatedAt = updatedAt; }
+  public void setAttachments(List<Attachment> attachments) { this.attachments = attachments; }
+  public void setRepresentativeImage(Attachment representativeImage) { this.representativeImage = representativeImage; }
 
 }
