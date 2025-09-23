@@ -23,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 
 
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 public class GuestBoardController {
 
   private final GuestBoardService guestBoardService;

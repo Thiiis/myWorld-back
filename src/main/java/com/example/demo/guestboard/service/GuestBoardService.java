@@ -14,8 +14,8 @@ import com.example.demo.guestboard.dto.GuestBoardUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class GuestBoardService {
 
   private final GuestBoardDao guestBoardDao;

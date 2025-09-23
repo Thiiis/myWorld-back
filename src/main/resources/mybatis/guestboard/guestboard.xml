@@ -6,7 +6,7 @@
 <mapper namespace="com.example.demo.guestboard.dao.GuestBoardDao">
   
   <insert id="insert" parameterType="GuestBoard" useGeneratedKeys="true" keyProperty="gbid" keyColumn="gbid">
-    insert into guestboard (gid, pid, content, viewScope)
+    insert into guestboard (gid, pid, content, view_scope)
     values (#{gid}, #{pid}, #{content}, #{viewScope})
   </insert>
 
