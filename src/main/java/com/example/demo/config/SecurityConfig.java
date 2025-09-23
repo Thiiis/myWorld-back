@@ -31,10 +31,11 @@ public class SecurityConfig {
             // 3. HTTP 요청에 대한 접근 권한 설정
             .authorizeHttpRequests(auth -> auth
                 // ✅ 이 부분이 핵심! 로그인과 회원가입 경로는 인증 없이 허용
-                .requestMatchers("/members/signup", "/members/login").permitAll()
-                
-                // 나머지 모든 요청은 인증 필요
+                ////.requestMatchers("/members/signup", "/members/login").permitAll()
                 .anyRequest().permitAll()
+
+                // 나머지 모든 요청은 인증 필요
+                ////.anyRequest().authenticated()
             );
 
         return http.build();

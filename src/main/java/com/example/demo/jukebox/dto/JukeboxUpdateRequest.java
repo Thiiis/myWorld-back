@@ -1,12 +1,10 @@
 package com.example.demo.jukebox.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-public class JukeboxCreateRequest {
-  private Long mid;
+public class JukeboxUpdateRequest {
+  private Long jid;
   private String title;
   private String content;
 }
