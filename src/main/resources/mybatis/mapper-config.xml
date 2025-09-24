@@ -19,6 +19,7 @@
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardListRequest" alias="GuestBoardListRequest" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardUpdateRequest" alias="GuestBoardUpdateRequest" />
     <typeAlias type="com.example.demo.jukebox.dto.Jukebox" alias="Jukebox" />
+
   </typeAliases>
 
   

@@ -4,7 +4,10 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.example.demo.auth.dao.MemberDao">
-  <insert id="insert" parameterType="Member">
+  <insert id="insert" parameterType="Member"
+          useGeneratedKeys="true"
+          keyProperty="mid"
+          keyColumn="MID">
     insert into Members (account, email, pwd)
     values (#{account}, #{email}, #{pwd})
   </insert>

@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/guestboard")
+@RequestMapping("/guestboards")
 public class GuestBoardController {
 
   private final GuestBoardService guestBoardService;

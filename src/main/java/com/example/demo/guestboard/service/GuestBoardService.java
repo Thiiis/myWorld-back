@@ -24,13 +24,14 @@ public class GuestBoardService {
   public GuestBoardCreateResponse create(GuestBoardCreateRequest request) {
     GuestBoard guestBoard = new GuestBoard(request.getGid(), request.getPid(), request.getContent(), request.getViewScope());
     guestBoardDao.insert(guestBoard);
-    return new GuestBoardCreateResponse(guestBoard);
+    GuestBoard dbGuestBoard = guestBoardDao.selectByGbid(guestBoard.getGbid());
+    return new GuestBoardCreateResponse(dbGuestBoard.getGbid(), dbGuestBoard.getCreatedAt(), dbGuestBoard.getUpdatedAt());
   }
 
   // board list
   public List<GuestBoardListResponse> getGuestBoardList(GuestBoardListRequest request) {
     List<GuestBoard> list = guestBoardDao.select(request.getOffset(), request.getLimit());
-    return list.stream().map(GuestBoardListResponse::new).toList();
+    return list.stream().map(g -> new GuestBoardListResponse(g.getGbid(), g.getGid(), g.getContent(), g.getViewScope(), g.getCreatedAt(), g.getUpdatedAt())).toList();
   }
 
   public GuestBoard getGuestBoard(Long gbid) {

@@ -1,6 +1,6 @@
 package com.example.demo.guestboard.dto;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 
 import lombok.Getter;
 
@@ -10,13 +10,15 @@ public class GuestBoardListResponse {
   private Long gid;
   private String content;
   private String viewScope;
-  private OffsetDateTime updatedAt;
+  private Date createdAt;
+  private Date updatedAt;
 
-  public GuestBoardListResponse(GuestBoard guestBoard) {
-    this.gbid = guestBoard.getGbid();
-    this.gid = guestBoard.getGid();
-    this.content = guestBoard.getContent();
-    this.viewScope = guestBoard.getViewScope();
-    this.updatedAt = guestBoard.getUpdatedAt();
+  public GuestBoardListResponse(Long gbid, Long gid, String content, String viewScope, Date createdAt, Date updatedAt) {
+    this.gbid = gbid;
+    this.gid = gid;
+    this.content = content;
+    this.viewScope = viewScope;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }

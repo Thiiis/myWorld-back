@@ -15,7 +15,6 @@ import com.example.demo.auth.dto.LoginResponse;
 import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.SignupRequest;
 import com.example.demo.auth.dto.SignupResponse;
-import com.example.demo.auth.interceptor.Login;
 import com.example.demo.auth.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -55,14 +54,12 @@ public class MemberController {
     
 
     // delete 둘 중에 하나 선택, 개발하면서 생각해보기
-    @Login
     @DeleteMapping("/delete/mid/{mid}")
     public ResponseEntity<Void> deleteByMid(@PathVariable Long mid) {
         memberService.deleteByMid(mid);
         return ResponseEntity.noContent().build();
     }
     
-    @Login
     @DeleteMapping("/delete/account/{account}")
     public ResponseEntity<Void> deleteByAccount(@PathVariable String account) {
         memberService.deleteByAccount(account);
