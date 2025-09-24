@@ -32,6 +32,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // ✅ 이 부분이 핵심! 로그인과 회원가입 경로는 인증 없이 허용
                 ////.requestMatchers("/members/signup", "/members/login").permitAll()
+                .requestMatchers("/jukebox/**").permitAll()
                 .anyRequest().permitAll()
 
                 // 나머지 모든 요청은 인증 필요

@@ -1,17 +1,19 @@
 package com.example.demo.jukebox.dto;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class Jukebox {
   private Long jid;
   private Long mid;
   private String title;
   private String content;
-  private OffsetDateTime createdAt;
-  private OffsetDateTime updatedAt;
+  private Date createdAt;
+  private Date updatedAt;
 
   // jukebox create 생성자
   public Jukebox(Long mid, String title, String content) {
@@ -26,6 +28,5 @@ public class Jukebox {
     this.jid = jid;
     this.title = title;
     this.content = content;
-    this.updatedAt = OffsetDateTime.now();
   }
 }
