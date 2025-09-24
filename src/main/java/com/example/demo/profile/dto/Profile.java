@@ -6,6 +6,9 @@ import java.util.Map;
 
 import com.example.demo.auth.dto.Member;
 
+import lombok.Getter;
+
+@Getter
 public class Profile {
 
     private Long pid; // PK
@@ -14,7 +17,7 @@ public class Profile {
 
     private Member member; //1대1관계
     
-    private String pname; // 회원가입할 때 닉네임 받아옴
+    private String nickname; // 회원가입할 때 닉네임 받아옴
     private Date birthdate; // 생년월일
     
     private String imgName; // 프로필 이미지 파일 이름
@@ -35,35 +38,10 @@ public class Profile {
     // private int viewScope;
     // Profile Privacy가 있긴 한데 어떻게 할지 몰겟음
     
-    public Long getMid(){
-        return this.mid;
-    }
-    public Long getPid(){
-        return this.pid;
-    }
-    public Long getJid(){
-        return this.jid;
-    }
-    public String getPname(){
-        return this.pname;
-    }
-    public Date getBirthDate(){
-        return this.birthdate;
-    }
-    public Map<String,String> getImageInfo(){
-        Map <String,String> map = new HashMap<String,String>();
-        map.put("imgName",this.imgName);
-        map.put("imgUrl",this.imgUrl);
-        return map;
-    }
-    public int getViewCount(){
-        return viewCount;
-    }
-    
     // Setter
-    public String upDatePname(String pname){
-        this.pname = pname;
-        return pname;
+    public String upDateNickname(String nickname){
+        this.nickname = nickname;
+        return nickname;
     }
     public Date upDateBirthDate(Date birthDate){
         this.birthdate = birthdate;
