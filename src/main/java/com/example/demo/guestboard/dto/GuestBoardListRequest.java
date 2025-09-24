@@ -4,6 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class GuestBoardListRequest {
-  private Long offset = 0L;
-  private Long limit = 10L;
+  private Long offset;
+  private Long limit;
+
+  public GuestBoardListRequest(Long offset, Long limit) {
+    this.offset = offset;
+    this.limit = limit;
+  }
 }

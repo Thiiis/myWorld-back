@@ -17,6 +17,6 @@ public class InterceptorConfig implements WebMvcConfigurer{
   registry
   .addInterceptor(loginCheckInterceptor)
   .addPathPatterns("/**")
-  .excludePathPatterns("/members/login", "/members/signup", "/","/image/**", "/css/**", "/js/**");
+  .excludePathPatterns("/image/**", "/css/**", "/js/**");
   }
 }

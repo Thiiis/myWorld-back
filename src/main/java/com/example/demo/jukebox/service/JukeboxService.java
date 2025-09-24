@@ -14,30 +14,31 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class JukeboxService {
+
   private final JukeboxDao jukeboxDao;
 
   public JukeboxCreateResponse create(JukeboxCreateRequest request) {
-    Jukebox jukebox = new Jukebox(request);
+    Jukebox jukebox = new Jukebox(request.getMid(), request.getTitle(), request.getContent());
     jukeboxDao.insert(jukebox);
     return new JukeboxCreateResponse(jukebox);
   }
 
-  public List<Jukebox> getJukeboxList() {
-    return jukeboxDao.selectJukeboxList();
-  }
+  // public List<Jukebox> getJukeboxList() {
+  //   return jukeboxDao.selectJukeboxList();
+  // }
 
-  public Jukebox getJukebox(Long jid) {
-    Jukebox jukebox = jukeboxDao.selectByJid(jid);
-    return jukebox;
-  }
+  // public Jukebox getJukebox(Long jid) {
+  //   Jukebox jukebox = jukeboxDao.selectByJid(jid);
+  //   return jukebox;
+  // }
 
-  public Long update(Jukebox jukebox) {
-    return jukeboxDao.update(jukebox);
-  }
+  // public Long update(Jukebox jukebox) {
+  //   return jukeboxDao.update(jukebox);
+  // }
 
-  public Long delete(Long jid) {
-    Long rows = jukeboxDao.delete(jid);
-    return rows;
-  }
+  // public Long delete(Long jid) {
+  //   Long rows = jukeboxDao.delete(jid);
+  //   return rows;
+  // }
 
 }

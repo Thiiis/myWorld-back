@@ -13,9 +13,19 @@ public class Jukebox {
   private OffsetDateTime createdAt;
   private OffsetDateTime updatedAt;
 
-  public Jukebox(JukeboxCreateRequest request) {
-    this.mid = request.getMid();
-    this.title = request.getTitle();
-    this.content = request.getContent();
+  // jukebox create 생성자
+  public Jukebox(Long mid, String title, String content) {
+    this.mid = mid;
+    this.title = title;
+    this.content = content;
+  }
+
+  // jukebox update 생성자
+  // new Jukebox(jid, title, content, true)
+  public Jukebox(Long jid, String title, String content, boolean forUpdate) { 
+    this.jid = jid;
+    this.title = title;
+    this.content = content;
+    this.updatedAt = OffsetDateTime.now();
   }
 }
