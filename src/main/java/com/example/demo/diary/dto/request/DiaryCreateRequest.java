@@ -1,7 +1,8 @@
-package com.example.demo.diary.dto;
+package com.example.demo.diary.dto.request;
 
 import java.util.List;
 
+import com.example.demo.diary.dto.Diary;
 import com.example.demo.diary.enums.Emo;
 import com.example.demo.diary.enums.ViewScope;
 import com.example.demo.diary.enums.Weather;
@@ -24,4 +25,9 @@ public class DiaryCreateRequest {
   private Weather weather; // SUNNY, CLOUDY, RAINY, SNOWY
   private List<AttachmentCreateRequest> attachments; // 전체 첨부(상세 조회용)
 
+
+  // 변환 메서드 추가
+  public Diary updateStartData() {
+    return new Diary(mid, title, content, viewScope, emo, weather);
+  }
 }

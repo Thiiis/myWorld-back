@@ -1,4 +1,4 @@
-package com.example.demo.diary.dto;
+package com.example.demo.diary.dto.response;
 
 import java.time.OffsetDateTime;
 import java.util.Date;

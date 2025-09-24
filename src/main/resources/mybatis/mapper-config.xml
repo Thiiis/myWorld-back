@@ -10,6 +10,7 @@
   <typeAliases>
     <typeAlias type="com.example.demo.diary.dto.Diary" alias="Diary" />
     <typeAlias type="com.example.demo.diary.dto.Attachment" alias="Attachment" />
+    <typeAlias type="com.example.demo.diary.dto.Pager" alias="Pager" />
 
     <typeAlias type="com.example.demo.auth.dto.Member" alias="Member" />
     <typeAlias type="com.example.demo.profile.dto.Profile" alias="Profile" />
@@ -17,7 +18,6 @@
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoard" alias="GuestBoard" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardListRequest" alias="GuestBoardListRequest" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardUpdateRequest" alias="GuestBoardUpdateRequest" />
-    
     <typeAlias type="com.example.demo.jukebox.dto.Jukebox" alias="Jukebox" />
     <typeAlias type="com.example.demo.jukebox.dto.JukeboxLikes" alias="JukeboxLikes" />
     <typeAlias type="com.example.demo.jukebox.dto.Song" alias="Song" />

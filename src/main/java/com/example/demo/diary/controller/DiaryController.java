@@ -1,37 +1,26 @@
 package com.example.demo.diary.controller;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.diary.dto.Diary;
-import com.example.demo.diary.dto.DiaryCreateRequest;
-import com.example.demo.diary.dto.DiaryResponse;
-import com.example.demo.diary.dto.DiaryUpdateRequest;
+import com.example.demo.diary.dto.Pager;
+import com.example.demo.diary.dto.request.DiaryCreateRequest;
+import com.example.demo.diary.dto.request.DiaryUpdateRequest;
+import com.example.demo.diary.dto.response.DiaryCreateResponse;
+import com.example.demo.diary.dto.response.DiaryPageResponse;
+import com.example.demo.diary.dto.response.DiaryReadResponse;
 import com.example.demo.diary.service.DiaryService;
 
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Slf4j
 @RestController
@@ -42,17 +31,38 @@ public class DiaryController {
   private final DiaryService diaryService;
 
   @PostMapping("/create")
-  public ResponseEntity<DiaryResponse> createDiary(@RequestBody DiaryCreateRequest request) {
-    diaryService.createDiary(request);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<DiaryCreateResponse> createDiary(@RequestBody DiaryCreateRequest request) {
+    DiaryCreateResponse response = diaryService.createDiary(request);
+    return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/detail")
-  public ResponseEntity<DiaryResponse> getDiary(@RequestParam("did") Long did) {
-
-    DiaryResponse diary = diaryService.getDiary(did);
-
+  @GetMapping("/page/detail")
+  public ResponseEntity<DiaryReadResponse> getDiary(@RequestParam("did") Long did) {
+    DiaryReadResponse diary = diaryService.getDiary(did);
     return ResponseEntity.ok(diary);
   }
 
+  @GetMapping("/page")
+  public ResponseEntity<DiaryPageResponse> getDiariesPage(@RequestParam(value = "pageNo", defaultValue = "1") int pageNo) {
+
+    int totalRows = diaryService.countDiaries();
+    Pager pager = new Pager(6, 5, totalRows, pageNo);
+
+    DiaryPageResponse response = diaryService.getDiariesPage(pager);
+
+    return ResponseEntity.ok(response);
+  }
+
+  @PutMapping("/update")
+  public ResponseEntity<Void> updateDiary(@RequestBody DiaryUpdateRequest request) {
+      diaryService.updateDiary(request);
+      log.info("request{}", request);
+      return ResponseEntity.noContent().build();
+  }
+
+  @DeleteMapping("/delete/{did}")
+  public ResponseEntity<Void> deleteDiary(@PathVariable("did") Long did) {
+    diaryService.deleteDiary(did);
+    return ResponseEntity.noContent().build();
+  }
 }

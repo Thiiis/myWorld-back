@@ -1,20 +1,26 @@
 package com.example.demo.profile.dto;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.example.demo.auth.dto.Member;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@Getter
 public class Profile {
 
     private Long pid; // PK
     private Long mid; // 멤버 FK
     private Long jid; // 주크박스 FK
 
+    private Date createdAt;
+    private Date updatedAt;
+
     private Member member; //1대1관계
     
-    private String pname; // 회원가입할 때 닉네임 받아옴
+    private String nickname; // 회원가입할 때 닉네임 받아옴
     private Date birthdate; // 생년월일
     
     private String imgName; // 프로필 이미지 파일 이름
@@ -32,64 +38,35 @@ public class Profile {
 
     private int viewCount  = 0; // 미니홈 조회수
     
-    // private int viewScope;
+    private String viewScope;
     // Profile Privacy가 있긴 한데 어떻게 할지 몰겟음
     
-    public Long getMid(){
-        return this.mid;
+    public Profile(String nickname, long mid){
+        this.nickname = nickname;
+        this.mid = mid;
     }
-    public Long getPid(){
-        return this.pid;
-    }
-    public Long getJid(){
-        return this.jid;
-    }
-    public String getPname(){
-        return this.pname;
-    }
-    public Date getBirthDate(){
-        return this.birthdate;
-    }
-    public Map<String,String> getImageInfo(){
-        Map <String,String> map = new HashMap<String,String>();
-        map.put("imgName",this.imgName);
-        map.put("imgUrl",this.imgUrl);
-        return map;
-    }
-    public int getViewCount(){
-        return viewCount;
-    }
-    
     // Setter
-    public String upDatePname(String pname){
-        this.pname = pname;
-        return pname;
+    public String updateNickname(String nickname){
+        this.nickname = nickname;
+        return nickname;
     }
-    public Date upDateBirthDate(Date birthDate){
+    public void updateBirthdate(Date birthDate){
         this.birthdate = birthdate;
-        return this.birthdate;
     }
-    public Map<String, String> updateImageInfo(String newName){
-        Map<String, String> map = new HashMap<String,String>();
-        this.imgName= newName;
-        // this.imgUrl에서 파일 이름만 바꾸면 되는디....
-        
-        map.put("name",this.imgName);
-        map.put("url",this.imgUrl);
-        
-        return map;
+    public void updateImage(String imgName, String imgUrl){
+        this.imgName= imgName;
+        this.imgUrl= imgUrl;
     }
-    public Map<String, String> updateTextInfo(String statusMessage, String intro){
+    public void updateText(String statusMessage, String intro){
         this.statusMessage = statusMessage;
         this.intro = intro;
-
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("statusMessage",this.statusMessage);
-        map.put("intro",this.intro);
-
-        return map;
     }
 
     //주소 게터 세터 나중에
+    public void updateAddress(String postalCode, String mainAddress, String detailAddress){
+        this.postalCode = postalCode;
+        this.mainAddress = mainAddress;
+        this.detailAddress = detailAddress;
+    }
 
 }

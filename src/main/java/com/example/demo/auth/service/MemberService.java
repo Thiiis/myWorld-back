@@ -9,6 +9,8 @@ import com.example.demo.auth.dao.MemberDao;
 import com.example.demo.auth.dto.LoginRequest;
 import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.SignupRequest;
+import com.example.demo.profile.dao.ProfileDao;
+import com.example.demo.profile.dto.Profile;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class MemberService {
   private final MemberDao memberDao;
+  private final ProfileDao profileDao;
   private final JwtService jwtService;
   private final PasswordEncoder passwordEncoder; // SecurityConfig에 등록한 Bean을 주입받음
   // private final JwtService jwtService;
@@ -33,10 +36,19 @@ public class MemberService {
       throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
     } else {
       String encodedPassword = passwordEncoder.encode(request.getPwd());
-      Member member = new Member(request.getAccount(),request.getEmail(),encodedPassword);
+      Member member = new Member(request.getAccount(), request.getEmail(), encodedPassword);
       memberDao.insert(member);
-      return member;
+      // 2. member.getId()에 유효한 값이 들어왔는지 확인!
+      // (디버깅으로 member 객체의 id 값을 꼭 확인해보세요)
+      if (member.getMid() == 0) {
+        // 이 경우라면 위의 Mapper.xml 설정이 잘못된 것입니다.
+        throw new RuntimeException("멤버 ID를 가져오지 못했습니다.");
+      }
 
+      // 3. 가져온 member.getId()로 Profile 생성
+      Profile profile = new Profile(request.getNickname(), member.getMid());
+      profileDao.insert(profile);
+      return member;
     }
   }
 

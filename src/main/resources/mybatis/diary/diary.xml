@@ -18,4 +18,49 @@
        FETCH FIRST 1 ROWS ONLY
     </select>
 
+    <!--단건 조회-->
+    <select id="selectDiaryById" parameterType="Long" resultType="Diary">
+      SELECT DID as did, MID as mid, TITLE as title, CONTENT as content, EMO as emo, WEATHER as weather, VIEW_SCOPE as viewScope, CREATED_AT as createdAt, UPDATED_AT as updatedAt
+      FROM DIARYS
+      WHERE DID = #{did}
+      ORDER BY CREATED_AT DESC
+    </select>
+
+    <!--총 글 개수(전체글 조회 대신 사용-성능향상)-->
+    <select id="countDiaries" resultType="int">
+      SELECT COUNT(*)
+      FROM DIARYS
+    </select>
+
+    <!--페이징-->
+    <select id="selectDiariesByPage" parameterType="Pager" resultType="Diary">
+      <![CDATA[
+      SELECT *
+      FROM (
+        SELECT d.*, ROWNUM rn
+        FROM ( 
+          SELECT * 
+          FROM DIARYS 
+          ORDER BY CREATED_AT DESC 
+          ) d
+        WHERE ROWNUM <= #{endRowNo}
+       )
+       WHERE rn >= #{startRowNo}
+      ]]>
+    </select>
+
+    <!-- 수정 -->
+    <update id="updateDiary" parameterType="Diary">
+      UPDATE DIARYS
+      SET TITLE = #{title}, CONTENT = #{content}, EMO = #{emo}, WEATHER = #{weather}, VIEW_SCOPE = #{viewScope}, UPDATED_AT = SYSTIMESTAMP
+      WHERE DID = #{did}
+    </update>
+
+    <!-- 삭제 -->
+    <delete id="deleteDiary" parameterType="Long">
+      DELETE FROM DIARYS
+      WHERE DID = #{did}
+    </delete>
+
+    
   </mapper>
