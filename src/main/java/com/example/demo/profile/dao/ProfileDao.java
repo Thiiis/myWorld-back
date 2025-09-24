@@ -7,11 +7,11 @@ import com.example.demo.profile.dto.Profile;
 @Mapper
 public interface ProfileDao {
     public void insert(Profile profile);
-    public int existsByNickname(String nickname);
-    // public Profile selectByPid(Long pid);
-    // public Profile selectByPname(String pname);
-    // public int updateInfo(Profile Profile);
-    // public int updateImg(Profile Profile);
+    // public int existsByNickname(String nickname);
+    public Profile selectByPid(Long pid);
+    public Profile selectByNickname(String nickname);
+    public void update(Profile Profile);
+    // public void updateImg(Profile Profile);
     // public int updateAddress(Profile profile);
     // public int delete(int pid);
     // public int delete(String pname);

@@ -11,4 +11,28 @@
       FROM profiles
       WHERE nickname = #{nickname}
   </select> -->
+
+  <!-- <select id="selectByNickname" parameterType="String" resultType="Profile">
+    select (*)
+    from profiles
+    where nickname=#{nickname}
+  </select> -->
+
+  <select id="selectByPid" parameterType="Long" resultType="Profile">
+    SELECT (*)
+    FROM profiles
+    WHERE pid = #{pid}
+  </select>
+  
+  <select id="selectByMid" parameterType="Long" resultType="Profile">
+    SELECT (*)
+    FROM profiles
+    WHERE mid = #{mid}
+  </select>
+
+  <!-- <update id="update" parameterType="Profile"> 
+    update profiles
+    set nickname=#{nickname}
+    where pid=#{pid}
+  </update> -->
 </mapper>
