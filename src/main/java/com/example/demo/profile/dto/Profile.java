@@ -41,8 +41,9 @@ public class Profile {
     private String viewScope;
     // Profile Privacy가 있긴 한데 어떻게 할지 몰겟음
     
-    public Profile(String nickname){
+    public Profile(String nickname, long mid){
         this.nickname = nickname;
+        this.mid = mid;
     }
     // Setter
     public String updateNickname(String nickname){

@@ -1,18 +1,18 @@
 package com.example.demo.guestboard.dto;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 
 import lombok.Getter;
 
 @Getter
 public class GuestBoardCreateResponse {
   private Long gbid;
-  private OffsetDateTime createdAt;
-  private OffsetDateTime updatedAt;
+  private Date createdAt;
+  private Date updatedAt;
 
-  public GuestBoardCreateResponse(GuestBoard guestBoard) {
-    this.gbid = guestBoard.getGbid();
-    this.createdAt = OffsetDateTime.now();
-    this.updatedAt = OffsetDateTime.now();
+  public GuestBoardCreateResponse(Long gbid, Date createdAt, Date updatedAt) {
+    this.gbid = gbid;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }

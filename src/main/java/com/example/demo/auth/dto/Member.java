@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class Member implements UserDetails{
+public class Member implements UserDetails {
     private long mid;
     private Date cretedAt;
     private Date updatedAt;
@@ -26,14 +26,14 @@ public class Member implements UserDetails{
     private String email;
     private String pwd;
 
-    private Profile profile; //1대1관계
+    private Profile profile; // 1대1관계
 
-    public Member(String account,String email,String pwd){
+    public Member(String account, String email, String pwd) {
         this.account = account;
         this.email = email;
         this.pwd = pwd;
     }
-    
+
     @NotBlank
     @Email
     public void setEmail(String email) {

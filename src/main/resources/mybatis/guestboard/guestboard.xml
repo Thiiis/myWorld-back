@@ -6,23 +6,23 @@
 <mapper namespace="com.example.demo.guestboard.dao.GuestBoardDao">
   
   <insert id="insert" parameterType="GuestBoard" useGeneratedKeys="true" keyProperty="gbid" keyColumn="gbid">
-    insert into guestboard (gid, pid, content, view_scope)
+    insert into guestboards (gid, pid, content, view_scope)
     values (#{gid}, #{pid}, #{content}, #{viewScope})
   </insert>
 
   <select id="selectByGbid" parameterType="Long" resultType="GuestBoard">
-    select * from guestboard where gbid = #{gbid}
+    select * from guestboards where gbid = #{gbid}
   </select>
 
   <!--앞에서 offset만큼 건너뛰고 limit만큼 행 가져오기-->
   <select id="select" parameterType="GuestBoardListRequest" resultType="GuestBoard">
-    select * from guestboard
+    select * from guestboards
     order by gbid desc
     offset #{offset} rows fetch next #{limit} rows only
   </select>
 
   <update id="update" parameterType="GuestBoard">
-    update guestboard 
+    update guestboards 
     set content = #{content},
         view_scope = #{viewScope},
         updated_at = sysdate
@@ -30,7 +30,7 @@
   </update>
 
   <delete id="delete" parameterType="Long">
-    delete from guestboard where gbid = #{gbid}
+    delete from guestboards where gbid = #{gbid}
   </delete>
 
 
