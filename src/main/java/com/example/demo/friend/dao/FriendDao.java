@@ -18,4 +18,6 @@ public interface FriendDao {
     void updateStatus(Friend friend);
     //친구 요청 조회
     List<Friend> selectByAccepterId(Long accId);
+    //친구 목록 조회
+    List<Friend> selectFriendsByMid(Long mid);
 }

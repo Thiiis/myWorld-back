@@ -11,6 +11,7 @@ import com.example.demo.friend.dao.FriendDao;
 import com.example.demo.friend.dto.Friend;
 import com.example.demo.friend.dto.FriendCreateRequest;
 import com.example.demo.friend.dto.FriendCreateResponse;
+import com.example.demo.friend.dto.FriendListResponse;
 import com.example.demo.friend.dto.FriendRequestListResponse;
 import com.example.demo.profile.dto.Profile;
 
@@ -28,7 +29,7 @@ public class FriendService {
     Friend friend = new Friend(dto.getReqId(), dto.getAccId());
     friendDao.insert(friend);
     Profile profile = new Profile(dto.getAccId(), "nickname", "imgUrl", "hahahaha");
-    ProfileInfo accepterInfo = new ProfileInfo(1L, profile.getNickName(), profile.getImgUrl(), profile.getStatusMessage());
+    ProfileInfo accepterInfo = new ProfileInfo(1L, profile.getNickname(), profile.getImgUrl(), profile.getStatusMessage());
     Friend dbFriend = friendDao.selectById(friend.getFid());
     return new FriendCreateResponse(dbFriend.getFid(), accepterInfo, dbFriend.getCreatedAt());
     // return new FriendResponse(friend);
@@ -50,12 +51,12 @@ public class FriendService {
   public List<FriendRequestListResponse> getFriednRequestList(Long userId) {
     List<Friend> friends = friendDao.selectByAccepterId(userId);
      return friends.stream().map(request -> {
-        Profile requesterUser = findUserByIdTemporarily(request.getReqId());
+        Profile requesterProfile = findUserByIdTemporarily(request.getReqId());
         ProfileInfo requesterInfo = new ProfileInfo(
-            requesterUser.getPid(), 
-            requesterUser.getNickName(), 
-            requesterUser.getImgUrl(),
-            requesterUser.getStatusMessage());
+            requesterProfile.getPid(), 
+            requesterProfile.getNickname(), 
+            requesterProfile.getImgUrl(),
+            requesterProfile.getStatusMessage());
 
         return new FriendRequestListResponse(
             request.getFid(),
@@ -67,4 +68,23 @@ public class FriendService {
   private Profile findUserByIdTemporarily(Long userId) {
     return new Profile(userId, "테스트", "http://image.url/21", "반갑습니다!");
   }
+
+  public List<FriendListResponse> getFriendList(Long mid) {
+    List<Friend> friends = friendDao.selectFriendsByMid(mid);
+    return friends.stream().map(friend -> {
+            // userId가 requester인지 accepter인지에 따라 상대방 정보 가져오기
+            Long friendMid = friend.getReqId().equals(mid) ? 
+                               friend.getAccId() : friend.getReqId();
+            
+            // 친구의 프로필 정보 가져오기 (임시)
+            Profile friendProfile = findUserByIdTemporarily(friendMid);
+            ProfileInfo friendInfo = new ProfileInfo(
+                friendProfile.getPid(),
+                friendProfile.getNickname(),
+                friendProfile.getImgUrl(),
+                friendProfile.getStatusMessage()
+            );
+               return new FriendListResponse(friend.getFid(), friendInfo, friend.getCreatedAt());
+        }).collect(Collectors.toList());
+  }      
 }

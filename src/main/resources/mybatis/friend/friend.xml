@@ -19,6 +19,14 @@
         SELECT *
         FROM FRIENDS
         WHERE ACC_ID = #{accId}
-        ORDER BY created_at DESC
+        ORDER BY CREATED_AT DESC
+    </select>
+
+    <select id="selectFriendsByMid" parameterType="Long" resultType="Friend">
+      SELECT *
+      FROM FRIENDS
+      WHERE REQ_ID = #{mid} OR ACC_ID = #{mid}
+      AND STATUS = 'ACCEPTED'
+      ORDER BY CREATED_AT DESC
     </select>
 </mapper>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.friend.dto.FriendCreateRequest;
 import com.example.demo.friend.dto.FriendCreateResponse;
+import com.example.demo.friend.dto.FriendListResponse;
 import com.example.demo.friend.dto.FriendRequestListResponse;
 import com.example.demo.friend.service.FriendService;
 
@@ -41,13 +42,13 @@ public class FriendController {
     }
 
     //친구 거절
-    @PostMapping("{id}/reject")
+    @PostMapping("/{id}/reject")
     public ResponseEntity<Void> rejectFriend(@PathVariable("id") Long id) {
     friendService.rejectFriend(id);
     return ResponseEntity.noContent().build();
     }
 
-    // 친구 요청 조회
+    //친구 요청 조회
     @GetMapping("/request-list")
     //쿼리파람(임시) -> JWT 구현하면 변경
     public ResponseEntity<List<FriendRequestListResponse>> getFriednRequestList(@RequestParam("userId") Long userId) {
@@ -55,7 +56,12 @@ public class FriendController {
         return ResponseEntity.ok(requests); 
     }
 
-    // @GetMapping("/list/me")
+    //친구 목록 조회
+    @GetMapping("/{mid}/list")
+    public ResponseEntity<List<FriendListResponse>> getFriendList(@PathVariable("mid") Long mid) {
+        List<FriendListResponse> friends = friendService.getFriendList(mid);
+        return ResponseEntity.ok(friends);
+    }
 
 
 }
