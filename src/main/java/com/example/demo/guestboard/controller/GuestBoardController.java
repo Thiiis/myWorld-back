@@ -30,14 +30,14 @@ public class GuestBoardController {
   private final GuestBoardService guestBoardService;
 
   // 방명록 생성
-  @PostMapping("/guestBoard-create")
+  @PostMapping("/create")
   public ResponseEntity<GuestBoardCreateResponse> guestBoardCreate(@RequestBody GuestBoardCreateRequest request) {
     GuestBoardCreateResponse response = guestBoardService.create(request);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   // 방명록 조회
-  @GetMapping("/guestBoard-list")
+  @GetMapping("/list")
   public ResponseEntity<List<GuestBoardListResponse>> guestBoardList(
       @RequestParam(defaultValue = "0") Long offset,
       @RequestParam(defaultValue = "10") Long limit) {
@@ -53,7 +53,7 @@ public class GuestBoardController {
   }
 
   // 방명록 수정
-  @PutMapping("/guestBoard-update")
+  @PutMapping("/update")
   public ResponseEntity<Long> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest request) {
     try {
       Long rows = guestBoardService.update(request);
@@ -64,7 +64,7 @@ public class GuestBoardController {
   }
 
   // 방명록 삭제
-  @DeleteMapping("/guestBoard-delete")
+  @DeleteMapping("/delete")
   public ResponseEntity<Long> guestBoardDelete(@RequestParam("gbid") Long gbid) {
     Long rows = guestBoardService.delete(gbid);
     if (rows > 0) {

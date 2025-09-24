@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.diary.dao.DiaryDao">
     <!-- 일기 생성 -->
-    <insert id="insert" parameterType="Diary">
+    <!-- <insert id="insert" parameterType="Diary">
         INSERT INTO DIARYS (MID, TITLE, CONTENT, VIEW_SCOPE, EMO, WEATHER)
         VALUES (#{mid}, #{title}, #{content}, #{viewScope}, #{emo},#{weather})
-    </insert>
+    </insert> -->
 </mapper>

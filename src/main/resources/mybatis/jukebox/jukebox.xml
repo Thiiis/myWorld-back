@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo">
+<mapper namespace="com.example.demo.jukebox.dao.JukeboxDao">
+  
+  <insert id="insert" parameterType="Jukebox" useGeneratedKeys="true" keyProperty="jid" keyColumn="jid">
+    insert into jukeboxes (mid, title, content)
+    values (#{mid}, #{title}, #{content})
+  </insert>
+
 
 
 </mapper>
