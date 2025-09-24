@@ -1,23 +1,10 @@
 package com.example.demo.diary.service;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.example.demo.diary.dao.AttachmentDao;
 import com.example.demo.diary.dao.DiaryDao;
-import com.example.demo.diary.dto.Attachment;
 import com.example.demo.diary.dto.Diary;
 import com.example.demo.diary.dto.Pager;
 import com.example.demo.diary.dto.request.DiaryCreateRequest;
@@ -71,6 +58,10 @@ public class DiaryService {
 
   public void updateDiary(DiaryUpdateRequest request) {
     diaryDao.updateDiary(request);
+  }
+
+  public void deleteDiary(Long did) {
+    diaryDao.deleteDiary(did);
   }
 
 }
