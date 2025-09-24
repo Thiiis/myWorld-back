@@ -7,6 +7,31 @@
     values (#{mid}, #{title}, #{content})
   </insert>
 
+  <select id="selectByJid" parameterType="Long" resultType="Jukebox">
+    select * from jukeboxes where jid = #{jid}
+  </select>
+
+  <select id="selectListByMid" resultType="Jukebox">
+    select * from jukeboxes
+    where mid = #{mid}
+    order by updated_at desc
+  </select>
+
+  <select id="countByMid" resultType="Long">
+    select count(*) from jukeboxes where mid = #{mid}
+  </select>
+
+  <update id="update" parameterType="Jukebox">
+    update jukeboxes
+    set title = #{title},
+        content = #{content},
+        updated_at = sysdate
+    where jid = #{jid}
+  </update>
+
+  <delete id="delete" parameterType="Long">
+    delete from jukeboxes where jid = #{jid}
+  </delete>
 
 
 </mapper>
