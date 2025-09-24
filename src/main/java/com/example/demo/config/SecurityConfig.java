@@ -30,7 +30,6 @@ public class SecurityConfig {
 
             // 3. HTTP 요청에 대한 접근 권한 설정
             .authorizeHttpRequests(auth -> auth
-                ////.requestMatchers("/members/signup", "/members/login").permitAll()
                 .requestMatchers("/jukebox/**").permitAll()
                 .anyRequest().permitAll()
                 //.requestMatchers("/members/signup", "/members/login").permitAll()

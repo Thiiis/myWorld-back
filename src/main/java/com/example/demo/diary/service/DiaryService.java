@@ -69,8 +69,8 @@ public class DiaryService {
     return new DiaryPageResponse(pager, list);
   }
 
-  // public void updateDiary(DiaryUpdateRequest request) {
-  //   diaryDao.updateDiary(request);
-  // }
+  public void updateDiary(DiaryUpdateRequest request) {
+    diaryDao.updateDiary(request);
+  }
 
 }

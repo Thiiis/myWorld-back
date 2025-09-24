@@ -49,5 +49,12 @@
       ]]>
     </select>
 
+    <!-- 수정 -->
+    <update id="updateDiary" parameterType="Diary">
+      UPDATE DIARYS
+      SET TITLE = #{title}, CONTENT = #{content}, EMO = #{emo}, WEATHER = #{weather}, VIEW_SCOPE = #{viewScope}, UPDATED_AT = SYSTIMESTAMP
+      WHERE DID = #{did}
+    </update>
+
     
   </mapper>
