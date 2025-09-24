@@ -18,7 +18,4 @@
        FETCH FIRST 1 ROWS ONLY
     </select>
 
-    <select id="selectDiaryById" parameterType="">
-
-    </select>
   </mapper>
