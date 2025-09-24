@@ -50,14 +50,18 @@ dependencies {
 	implementation 'org.json:json:20250517'
 
 	// 암호화
-	implementation 'org.springframework.security:spring-security-crypto:6.3.8'
+	 implementation 'org.springframework.security:spring-security-crypto:6.3.8'
 
 	// JWT
 	implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0'
 
+	// Offsettimezone
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+	// 암호화 2 로그인 회원가입 인증없이 하기
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {

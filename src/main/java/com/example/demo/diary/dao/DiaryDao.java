@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.diary.dto.Diary;
+import com.example.demo.diary.dto.DiaryResponse;
 
 /*
     "diaryId" NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -22,16 +23,16 @@ import com.example.demo.diary.dto.Diary;
 
 @Mapper
 public interface DiaryDao {
-  int insertDiary(Diary diary);  // 일기 생성
+  void insertDiary(Diary diary);  // 일기 생성
   Diary selectLatestDiary(Long mid);      // 가장 최근 글 조회(did가 db에서 자동생성 되므로 별도로 db에 들어간 글 보여주기)
 
   Diary selectDiaryById(Long did);       // 단건 조회
-  List<Diary> selectAllDiaries();       // 전체 조회
+  // List<Diary> selectAllDiaries();       // 전체 조회
   
-  int countDiaries();                                             // 페이징 처리 관련
-  List<Diary> selectDiariesByPage(Map<String, Object> params);    // 페이징 처리 관련
+  // int countDiaries();                                             // 페이징 처리 관련
+  // List<Diary> selectDiariesByPage(Map<String, Object> params);    // 페이징 처리 관련
 
-  int updateDiary(Diary diary);         // 일기 수정
-  int deleteDiary(Long did);             // 일기 삭제
+  // int updateDiary(Diary diary);         // 일기 수정
+  // int deleteDiary(Long did);             // 일기 삭제
   
 }
