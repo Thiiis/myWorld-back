@@ -10,8 +10,6 @@ public class GuestBoardCreateResponse {
   private OffsetDateTime createdAt;
   private OffsetDateTime updatedAt;
 
-  public GuestBoardCreateResponse() {}
-
   public GuestBoardCreateResponse(GuestBoard guestBoard) {
     this.gbid = guestBoard.getGbid();
     this.createdAt = OffsetDateTime.now();

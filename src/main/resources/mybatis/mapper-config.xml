@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE configuration
-  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
   <settings>
@@ -10,13 +8,18 @@
   </settings>
 
   <typeAliases>
+    <typeAlias type="com.example.demo.diary.dto.Diary" alias="Diary" />
+    <typeAlias type="com.example.demo.diary.dto.Attachment" alias="Attachment" />
+
+    <typeAlias type="com.example.demo.auth.dto.Member" alias="Member" />
+    <typeAlias type="com.example.demo.profile.dto.Profile" alias="Profile" />
+
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoard" alias="GuestBoard" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardListRequest" alias="GuestBoardListRequest" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardUpdateRequest" alias="GuestBoardUpdateRequest" />
-
+    
     <typeAlias type="com.example.demo.jukebox.dto.Jukebox" alias="Jukebox" />
-
+    
     <typeAlias type="com.example.demo.friend.dto.Friend" alias="Friend" />
   </typeAliases>
-
 </configuration>

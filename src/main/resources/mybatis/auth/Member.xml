@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-<mapper namespace="com.example.demo.dao.MemberDao">
+<mapper namespace="com.example.demo.auth.dao.MemberDao">
   <insert id="insert" parameterType="Member">
     insert into Members (account, email, pwd)
     values (#{account}, #{email}, #{pwd})
@@ -18,7 +18,7 @@
   <select id="selectByAccount" parameterType="String" resultType="Member">
     select mid, account,email, pwd
     from Members
-    where account=#{value}
+    where account=#{account}
   </select>
 
   <select id="selectByMid" parameterType="Long" resultType="Member">

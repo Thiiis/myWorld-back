@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class GuestBoardUpdateRequest {
-  private String gbid;
+  private Long gbid;
   private String content;
   private String viewScope;
 }
