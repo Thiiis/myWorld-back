@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +37,6 @@ public class DiaryController {
 
   @GetMapping("/page/detail")
   public ResponseEntity<DiaryReadResponse> getDiary(@RequestParam("did") Long did) {
-    log.info("did{}", did);
     DiaryReadResponse diary = diaryService.getDiary(did);
     return ResponseEntity.ok(diary);
   }
@@ -54,11 +52,11 @@ public class DiaryController {
     return ResponseEntity.ok(response);
   }
 
-  // @PutMapping("/update")
-  // public ResponseEntity<Void> updateDiary(@RequestBody DiaryUpdateRequest request) {
-  //     diaryService.updateDiary(request);
-      
-  //     return ResponseEntity.noContent().build();
-  // }
+  @PutMapping("/update")
+  public ResponseEntity<Void> updateDiary(@RequestBody DiaryUpdateRequest request) {
+      diaryService.updateDiary(request);
+      log.info("request{}", request);
+      return ResponseEntity.noContent().build();
+  }
 
 }
