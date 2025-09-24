@@ -6,7 +6,7 @@ import com.example.demo.profile.dto.Profile;
 
 @Mapper
 public class ProfileDao {
-    // public void insert(Profile profile);
+    public void insert(Profile profile);
     // public Profile selectByPid(Long pid);
     // public Profile selectByPname(String pname);
     // public int updateInfo(Profile Profile);

@@ -1,13 +1,13 @@
 package com.example.demo.profile.dto;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.example.demo.auth.dto.Member;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class Profile {
 
@@ -41,36 +41,31 @@ public class Profile {
     private String viewScope;
     // Profile Privacy가 있긴 한데 어떻게 할지 몰겟음
     
+    public Profile(String nickname){
+        this.nickname = nickname;
+    }
     // Setter
-    public String upDateNickname(String nickname){
+    public String updateNickname(String nickname){
         this.nickname = nickname;
         return nickname;
     }
-    public Date upDateBirthDate(Date birthDate){
+    public void updateBirthdate(Date birthDate){
         this.birthdate = birthdate;
-        return this.birthdate;
     }
-    public Map<String, String> updateImageInfo(String newName){
-        Map<String, String> map = new HashMap<String,String>();
-        this.imgName= newName;
-        // this.imgUrl에서 파일 이름만 바꾸면 되는디....
-        
-        map.put("name",this.imgName);
-        map.put("url",this.imgUrl);
-        
-        return map;
+    public void updateImage(String imgName, String imgUrl){
+        this.imgName= imgName;
+        this.imgUrl= imgUrl;
     }
-    public Map<String, String> updateTextInfo(String statusMessage, String intro){
+    public void updateText(String statusMessage, String intro){
         this.statusMessage = statusMessage;
         this.intro = intro;
-
-        Map<String,String> map = new HashMap<String,String>();
-        map.put("statusMessage",this.statusMessage);
-        map.put("intro",this.intro);
-
-        return map;
     }
 
     //주소 게터 세터 나중에
+    public void updateAddress(String postalCode, String mainAddress, String detailAddress){
+        this.postalCode = postalCode;
+        this.mainAddress = mainAddress;
+        this.detailAddress = detailAddress;
+    }
 
 }
