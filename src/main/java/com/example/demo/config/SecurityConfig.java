@@ -3,17 +3,27 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.example.demo.auth.filter.JwtAuthenticationFilter;
+import com.example.demo.auth.service.CustomUserDetailsService;
+import com.example.demo.auth.service.JwtService;
 
 import lombok.RequiredArgsConstructor;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    
+
+    private final JwtService jwtService;
+    private final CustomUserDetailsService customUserDetailsService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -22,21 +32,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. CSRF(Cross-Site Request Forgery) 보호 비활성화 (stateless API에서는 보통 비활성화)
             .csrf(csrf -> csrf.disable())
-
-            // 2. 세션 관리를 STATELESS로 설정 (JWT 사용 시 세션을 사용하지 않음)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-            // 3. HTTP 요청에 대한 접근 권한 설정
+            .formLogin(form -> form.disable())
+            .httpBasic(basic -> basic.disable())
             .authorizeHttpRequests(auth -> auth
-                // ✅ 이 부분이 핵심! 로그인과 회원가입 경로는 인증 없이 허용
-                ////.requestMatchers("/members/signup", "/members/login").permitAll()
-                .anyRequest().permitAll()
-
-                // 나머지 모든 요청은 인증 필요
-                ////.anyRequest().authenticated()
-            );
+                .requestMatchers("/members/login", "/members/signup","/").permitAll()
+                .anyRequest().authenticated()
+            )
+            // ** 직접 만든 JwtAuthenticationFilter를 필터 체인에 추가 **
+            .addFilterBefore(new JwtAuthenticationFilter(jwtService, customUserDetailsService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

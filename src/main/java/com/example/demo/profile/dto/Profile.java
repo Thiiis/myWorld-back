@@ -15,6 +15,9 @@ public class Profile {
     private Long mid; // 멤버 FK
     private Long jid; // 주크박스 FK
 
+    private Date createdAt;
+    private Date updatedAt;
+
     private Member member; //1대1관계
     
     private String nickname; // 회원가입할 때 닉네임 받아옴
@@ -35,7 +38,7 @@ public class Profile {
 
     private int viewCount  = 0; // 미니홈 조회수
     
-    // private int viewScope;
+    private String viewScope;
     // Profile Privacy가 있긴 한데 어떻게 할지 몰겟음
     
     // Setter
