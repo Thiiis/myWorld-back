@@ -1,25 +1,37 @@
 package com.example.demo.friend.service;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.common.dto.ProfileInfo;
 import com.example.demo.friend.dao.FriendDao;
 import com.example.demo.friend.dto.Friend;
 import com.example.demo.friend.dto.FriendCreateRequest;
-import com.example.demo.friend.dto.FriendResponse;
+import com.example.demo.friend.dto.FriendCreateResponse;
+import com.example.demo.friend.dto.FriendRequestListResponse;
+import com.example.demo.profile.dto.Profile;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FriendService {
 
   private final FriendDao friendDao;
 
-  public FriendResponse createFriend(FriendCreateRequest dto) {
-    Friend friend = new Friend(dto.getRequesterId(), dto.getAccepterId());
+  //memeber 구현 완료 후 수정
+  public FriendCreateResponse createFriend(FriendCreateRequest dto) {
+    Friend friend = new Friend(dto.getReqId(), dto.getAccId());
     friendDao.insert(friend);
-    // return new FriendResponse(friend.getId(), friend.getRequesterId(), friend.getRequesterId(), friend.getCreatedAt());
-    return new FriendResponse(friend);
+    Profile profile = new Profile(dto.getAccId(), "nickname", "imgUrl", "hahahaha");
+    ProfileInfo accepterInfo = new ProfileInfo(1L, profile.getNickName(), profile.getImgUrl(), profile.getStatusMessage());
+    Friend dbFriend = friendDao.selectById(friend.getFid());
+    return new FriendCreateResponse(dbFriend.getFid(), accepterInfo, dbFriend.getCreatedAt());
+    // return new FriendResponse(friend);
   }
 
   public void acceptFriend(Long id) {
@@ -31,7 +43,28 @@ public class FriendService {
   public void rejectFriend(Long id) {
     Friend friend = friendDao.selectById(id);
     friend.reject();
-        System.out.println(friend.getStatus());
     friendDao.updateStatus(friend);
+  }
+
+  //memeber 구현 완료 후 수정
+  public List<FriendRequestListResponse> getFriednRequestList(Long userId) {
+    List<Friend> friends = friendDao.selectByAccepterId(userId);
+     return friends.stream().map(request -> {
+        Profile requesterUser = findUserByIdTemporarily(request.getReqId());
+        ProfileInfo requesterInfo = new ProfileInfo(
+            requesterUser.getPid(), 
+            requesterUser.getNickName(), 
+            requesterUser.getImgUrl(),
+            requesterUser.getStatusMessage());
+
+        return new FriendRequestListResponse(
+            request.getFid(),
+            requesterInfo,
+            request.getCreatedAt());
+    }).collect(Collectors.toList());
+  }
+
+  private Profile findUserByIdTemporarily(Long userId) {
+    return new Profile(userId, "테스트", "http://image.url/21", "반갑습니다!");
   }
 }
