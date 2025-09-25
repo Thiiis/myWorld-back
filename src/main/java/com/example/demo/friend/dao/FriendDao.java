@@ -17,7 +17,7 @@ public interface FriendDao {
     // 상태 변경
     void updateStatus(Friend friend);
     //친구 요청 조회
-    List<FriendRequestListResponse> selectByAccepterId(Long accId);    
+    List<FriendRequestListResponse> selectByAccId(Long accId);    
     //친구 목록 조회
     List<FriendListResponse> selectFriendsByMid(Long mid);
     //친구 삭제

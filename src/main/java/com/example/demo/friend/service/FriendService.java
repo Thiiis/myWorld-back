@@ -43,8 +43,8 @@ public class FriendService {
   }
 
   //memeber 구현 완료 후 수정
-  public List<FriendRequestListResponse> getFriednRequestList(Long userId) {
-    return friendDao.selectByAccepterId(userId);
+  public List<FriendRequestListResponse> getFriendRequestList(Long mid) {
+    return friendDao.selectByAccId(mid);
   }
 
   public List<FriendListResponse> getFriendList(Long mid) {

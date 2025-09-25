@@ -30,31 +30,31 @@ public class FriendController {
     private final FriendService friendService;
 
     // 친구 요청
-    @PostMapping("/request")
+    @PostMapping
     public ResponseEntity<FriendCreateResponse> createFriend(@RequestBody FriendCreateRequest dto) {
         FriendCreateResponse friendResponse = friendService.createFriend(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(friendResponse);
     }
 
     // 친구 수락
-    @PostMapping("/{id}/accept")
+    @PutMapping("/{id}/accept")
     public ResponseEntity<Void> acceptFriend(@PathVariable("id") Long id) {
         friendService.acceptFriend(id);
         return ResponseEntity.noContent().build();
     }
 
     //친구 거절
-    @PostMapping("/{id}/reject")
+    @PutMapping("/{id}/reject")
     public ResponseEntity<Void> rejectFriend(@PathVariable("id") Long id) {
     friendService.rejectFriend(id);
     return ResponseEntity.noContent().build();
     }
 
     //친구 요청 조회
-    @GetMapping("/request-list")
+    @GetMapping("/pending")
     //쿼리파람(임시) -> JWT 구현하면 변경
-    public ResponseEntity<List<FriendRequestListResponse>> getFriednRequestList(@RequestParam("userId") Long userId) {
-        List<FriendRequestListResponse> requests = friendService.getFriednRequestList(userId);
+    public ResponseEntity<List<FriendRequestListResponse>> getFriendRequestList(@RequestParam("mid") Long mid) {
+        List<FriendRequestListResponse> requests = friendService.getFriendRequestList(mid);
         return ResponseEntity.ok(requests); 
     }
 
