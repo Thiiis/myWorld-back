@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Song {
   private Long sid;
-  private Long jid;
+  private Long mid;
   private String title;
   private String artist;
   private Long duration;
@@ -17,8 +17,8 @@ public class Song {
   private Date createdAt;
 
   // Song create 생성자
-  public Song(Long jid, String title, String artist, Long duration, String videoId) {
-    this.jid = jid;
+  public Song(Long mid, String title, String artist, Long duration, String videoId) {
+    this.mid = mid;
     this.title = title;
     this.artist = artist;
     this.duration = duration;

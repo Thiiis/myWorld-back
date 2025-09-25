@@ -30,16 +30,18 @@ public class SongService {
 
   // 음악 검색하기
   // 관련 높은 10개만 가져오기
-  public List<SongSearchResponse> searchSongs(String query) {
+  public List<SongSearchResponse> searchSongs(String search) {
     String url = "https://www.googleapis.com/youtube/v3/search"
-      + "?part=snippet"
-      + "&type=video"
-      + "&videoCategoryId=10"
+      + "?part=snippet" // 제목, 채널 이름
+      + "&type=video" // 동영상만 검색
+      + "&videoCategoryId=10" // 음악 카테고리
       + "&maxResults=10"
-      + "&q=" + query
+      + "&q=" + search
       + "&key=" + apiKey;
 
+    // HTTP 통신 처리. 요청을 보내기 위해 RestTemplate 객체 생성
     RestTemplate restTemplate = new RestTemplate();
+    // HTTP GET 요청
     String response = restTemplate.getForObject(url, String.class);
 
     JsonNode root = null;
@@ -95,7 +97,7 @@ public class SongService {
     Long duration = parseDuration(durationStr);
 
     // 2. DB 저장
-    Song song = new Song(request.getJid(), title, artist, duration, videoId);
+    Song song = new Song(request.getMid(), title, artist, duration, videoId);
     songDao.insert(song);
 
     Song dbSong = songDao.selectBySid(song.getSid());
