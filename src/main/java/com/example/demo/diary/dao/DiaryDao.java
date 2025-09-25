@@ -18,7 +18,7 @@ public interface DiaryDao {
   int countDiaries();                               // 페이징 처리 관련(총 글 개수)
   List<Diary> selectDiariesByPage(Pager pager);     // 페이징 처리 관련(총 페이지 수)
 
-  int updateDiary(DiaryUpdateRequest request);                  // 일기 수정
-  int deleteDiary(Long did);                     // 일기 삭제
+  int updateDiary(DiaryUpdateRequest request);      // 일기 수정
+  int deleteDiary(Long did);                        // 일기 삭제
   
 }

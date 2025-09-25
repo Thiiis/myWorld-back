@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.diary.dao.AttachmentDao">
+
+  <!--CREATE 첨부파일 저장 -->
+ <insert id="insertAttachment" parameterType="Attachment">
+  INSERT INTO ATTACHMENTS ( DID, ANAME, ATYPE, ADATA, CREATED_AT, UPDATED_AT ) 
+  VALUES ( #{did}, #{aname}, #{atype}, #{adata, jdbcType=BLOB}, SYSTIMESTAMP, SYSTIMESTAMP )
+</insert>
+
+
+<!--첨부파일 insert시 aid가 db에서 생성되므로 null이기 때문에 db에서 생성 후 별도로 aid값을 가져오기-->
+<select id="selectInsertedAttachmentId" parameterType="Attachment" resultType="long">
+  SELECT AID
+  FROM ATTACHMENTS
+  WHERE DID = #{did}
+    AND ANAME = #{aname}
+    AND ATYPE = #{atype}
+  ORDER BY CREATED_AT DESC
+  FETCH FIRST 1 ROWS ONLY
+</select>
+
+  <!--READ 특정 Diary의 모든 첨부파일 조회 (BLOB 제외) -->
+  <select id="selectAttachmentsByDid" parameterType="long" resultType="Attachment">
+    SELECT AID, DID, ANAME, ATYPE, NULL, CREATED_AT, UPDATED_AT <!--adata는 NULL로 표현(BLOB은 성능 문제로 응답 제외) -->
+    FROM ATTACHMENTS
+    WHERE DID = #{did}
+    ORDER BY CREATED_AT ASC
+  </select>
+
+  <!--READ 특정 Diary의 첫 번째 첨부파일 조회 (대표 이미지 용) -->
+  <select id="selectFirstAttachmentByDid" parameterType="long" resultType="Attachment">
+    SELECT AID, DID, ANAME, ATYPE, NULL, CREATED_AT, UPDATED_AT
+    FROM ATTACHMENTS
+    WHERE DID = #{did}
+    ORDER BY CREATED_AT ASC
+    FETCH FIRST 1 ROWS ONLY
+  </select>
+
+  <!--READ 단일 첨부파일 조회 (다운로드 시, BLOB 포함) -->
+  <select id="selectAttachmentByAid" parameterType="long"
+          resultType="com.example.demo.diary.dto.Attachment">
+    SELECT
+      AID       AS aid,
+      DID       AS did,
+      ANAME     AS aname,
+      ATYPE     AS atype,
+      ADATA     AS adata,        <!-- 실제 다운로드 용도로만 노출 -->
+      CREATED_AT AS createdAt,
+      UPDATED_AT AS updatedAt
+    FROM ATTACHMENTS
+    WHERE AID = #{aid}
+  </select> 
+
+  <!-- 첨부파일 삭제 
+  <delete id="deleteAttachmentByAid" parameterType="long">
+    DELETE FROM ATTACHMENTS
+    WHERE AID = #{aid}
+  </delete>-->
+
+  <!-- 특정 Diary의 첨부 전체 삭제 
+  <delete id="deleteAttachmentsByDid" parameterType="long">
+    DELETE FROM ATTACHMENTS
+    WHERE DID = #{did}
+  </delete> -->
+
+</mapper>

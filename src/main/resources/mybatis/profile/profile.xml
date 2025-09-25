@@ -11,4 +11,39 @@
       FROM profiles
       WHERE nickname = #{nickname}
   </select> -->
+
+  <select id="selectByPid" parameterType="Long" resultType="Profile">
+    SELECT (*)
+    FROM profiles
+    WHERE pid = #{pid}
+  </select>
+  
+  <select id="selectByMid" parameterType="Long" resultType="Profile">
+    SELECT (*)
+    FROM profiles
+    WHERE mid = #{mid}
+  </select>
+
+  <select id="selectByNickname" parameterType="Long" resultType="Profile">
+    SELECT (*)
+    FROM profiles
+    WHERE nickname = #{nickname}
+  </select>
+
+  <update id="updateProfile" parameterType="com.example.demo.profile.dto.ProfileUpdateRequest">
+    UPDATE PROFILE_TABLE
+    <set>
+        <if test="nickname != null"> NICKNAME = #{nickname}, </if>
+        <if test="birthdate != null"> BIRTHDATE = #{birthdate}, </if>
+        <if test="statusMessage != null"> STATUS_MESSAGE = #{statusMessage}, </if>
+        <if test="intro != null"> INTRO = #{intro}, </if>
+        <if test="postalCode != null"> POSTAL_CODE = #{postalCode}, </if>
+        <if test="mainAddress != null"> MAIN_ADDRESS = #{mainAddress}, </if>
+        <if test="detailAddress != null"> DETAIL_ADDRESS = #{detailAddress}, </if>
+        UPDATED_AT = SYSDATE
+    </set>
+    WHERE PID = #{pid}
+  </update>
+
+
 </mapper>

@@ -18,5 +18,7 @@ public class DiaryUpdateRequest {
   private ViewScope viewScope; // PUBLIC, FRIENDS, PRIVATE
   private Emo emo; // HAPPY, CALM, EXCITED, SAD
   private Weather weather; // SUNNY, CLOUDY, RAINY, SNOWY
+
   private List<AttachmentUpdateRequest> attachments; // 전체 첨부(상세 조회용)
+  private List<Long> deleteAids;                     // 삭제할 파일 id 리스트
 }
