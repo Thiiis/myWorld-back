@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.friend.dao.FriendDao">
+    <insert id="insert" parameterType="Friend" useGeneratedKeys="true" keyProperty="fid" keyColumn="FID">
+        INSERT INTO FRIENDS (REQ_ID, ACC_ID, CREATED_AT)
+        VALUES (#{reqId}, #{accId}, SYSTIMESTAMP) </insert>
+
+    <select id="selectById" parameterType="Long" resultType="Friend">
+        SELECT * FROM FRIENDS
+        WHERE FID = #{fid} </select>
+
+    <update id="updateStatus" parameterType="Friend">
+        UPDATE FRIENDS
+        SET STATUS = #{status}, UPDATED_AT = SYSTIMESTAMP
+        WHERE FID = #{fid}
+     </update>
+
+     <resultMap id="FriendRequestListResponseMap" type="com.example.demo.friend.dto.FriendRequestListResponse">
+        <id property="fid" column="FID"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <association property="requester" javaType="com.example.demo.common.dto.ProfileInfo">
+            <id property="pid" column="PID"/>
+            <result property="nickname" column="NICKNAME"/>
+            <result property="profileImageUrl" column="IMG_URL"/>
+            <result property="statusMessage" column="STATUS_MESSAGE"/>
+        </association>
+    </resultMap>
+
+    <select id="selectByAccId" parameterType="Long" resultMap="FriendRequestListResponseMap">
+        SELECT f.FID, p.PID, p.NICKNAME, p.IMG_URL, p.STATUS_MESSAGE, f.CREATED_AT
+        FROM FRIENDS f
+        INNER JOIN MEMBERS m ON f.REQ_ID = m.MID
+        INNER JOIN PROFILES p ON m.MID = p.MID
+        WHERE f.ACC_ID = #{accId}
+        AND f.STATUS = 'PENDING'
+        ORDER BY f.CREATED_AT DESC
+    </select>
+
+    <resultMap id="FriendListResponseMap" type="com.example.demo.friend.dto.FriendListResponse">
+        <id property="fid" column="FID"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <association property="friendInfo" javaType="com.example.demo.common.dto.ProfileInfo">
+         <id property="pid" column="friend_pid"/>
+         <result property="nickname" column="friend_nickname"/>
+         <result property="profileImageUrl" column="friend_img_url"/>
+         <result property="statusMessage" column="friend_status_message"/>
+        </association>
+    </resultMap>
+
+    <select id="selectFriendsByMid" parameterType="Long" resultMap="FriendListResponseMap">
+      SELECT f.FID,
+             CASE WHEN f.REQ_ID = #{mid} THEN acc_p.PID ELSE req_p.PID END as friend_pid,
+             CASE WHEN f.REQ_ID = #{mid} THEN acc_p.NICKNAME ELSE req_p.NICKNAME END as friend_nickname,
+             CASE WHEN f.REQ_ID = #{mid} THEN acc_p.IMG_URL ELSE req_p.IMG_URL END as friend_img_url,
+             CASE WHEN f.REQ_ID = #{mid} THEN acc_p.STATUS_MESSAGE ELSE req_p.STATUS_MESSAGE END as friend_status_message,
+             f.CREATED_AT
+      FROM FRIENDS f
+      INNER JOIN MEMBERS req_m ON f.REQ_ID = req_m.MID
+      INNER JOIN PROFILES req_p ON req_m.MID = req_p.MID
+      INNER JOIN MEMBERS acc_m ON f.ACC_ID = acc_m.MID
+      INNER JOIN PROFILES acc_p ON acc_m.MID = acc_p.MID
+      WHERE (REQ_ID = #{mid} OR ACC_ID = #{mid})
+      AND f.STATUS = 'ACCEPTED'
+      ORDER BY f.CREATED_AT DESC
+    </select>
+
+    <delete id="deleteFriend" parameterType="Long">
+        DELETE FROM FRIENDS
+        WHERE FID = #{fid}
+    </delete>
+</mapper>
