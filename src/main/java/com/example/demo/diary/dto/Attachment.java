@@ -16,46 +16,31 @@ public class Attachment {
   private Date createdAt;
   private Date updatedAt;
 
-  //응답 오버로딩
-  public Attachment(Long did, String aname, String atype, byte[] adata) {
-    this.did = did;
-    this.aname = aname;
-    this.atype = atype;
-    this.adata = adata;
-  }
-
-  // 방법 2. 생성자 오버로딩 방식
-  public Attachment(Long aid, Long did, String aname, String atype, byte[] adata, Date createdAt, Date updatedAt) {
-    this.aid = aid;
-    this.did = did;
-    this.aname = aname;
-    this.atype = atype;
-    this.adata = adata;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
-    // 정적 팩토리 메서드 - 생성 시점
-    //public static
-
-  // --- 도메인 행위 메서드 --- entity에서는 update필드명메소드 스타일로 두는것이 더 좋다.(방법2.메소드 개별로 생성)
-    public void updateAid(Long aid) {
-        this.aid = aid;
-    }
-
-    public void updateDid(Long did) {
+ // 업로드용 (insert 시점)
+    public Attachment(Long did, String aname, String atype, byte[] adata) {
         this.did = did;
-    }
-
-    public void updateAname(String aname) {
         this.aname = aname;
-    }
-
-    public void updateAtype(String atype) {
         this.atype = atype;
+        this.adata = adata;
     }
 
-    public void updateAdata(byte[] adata) {
+    // 조회용 (select 결과)
+    public Attachment(Long aid, Long did, String aname, String atype, byte[] adata, Date createdAt, Date updatedAt) {
+        this.aid = aid;
+        this.did = did;
+        this.aname = aname;
+        this.atype = atype;
+        this.adata = adata;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    // 수정용
+    public Attachment(Long aid, Long did, String aname, String atype, byte[] adata) {
+        this.aid = aid;
+        this.did = did;
+        this.aname = aname;
+        this.atype = atype;
         this.adata = adata;
     }
 }

@@ -21,4 +21,20 @@ public class DiaryUpdateRequest {
 
   private List<AttachmentUpdateRequest> attachments; // 전체 첨부(상세 조회용)
   private List<Long> deleteAids;                     // 삭제할 파일 id 리스트
+
+  public void updateRequest(Long did) {
+    if (did == null) {
+        throw new IllegalArgumentException("DID 값은 null일 수 없습니다.");
+    }
+    this.did = did;
+}
+
+  public void updateData(Long did, String title, String content, ViewScope viewScope, Emo emo, Weather weather) {
+    this.did = did;
+    this.title = title;
+    this.content = content;
+    this.viewScope = viewScope;
+    this.emo = emo;
+    this.weather = weather; 
+  }
 }

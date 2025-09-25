@@ -30,8 +30,8 @@ public class Diary {
 
      // 방법 1(캡슐화를 지키기 위한 정적 팩토리 사용) // public void update(DiaryUpdateRequest req) { // if (req.getTitle() != null) this.title = req.getTitle(); // }
 
-    public Diary(Long mid, String title, String content,
-            ViewScope viewScope, Emo emo, Weather weather) {
+     // 생성용
+    public Diary(Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather) {
         this.mid = mid;
         this.title = title;
         this.content = content;
@@ -40,12 +40,16 @@ public class Diary {
         this.weather = weather;
     }
 
-    // --- 도메인 행위 메서드 --- 방법2
-    public void updateAttachments(List<Attachment> attachments) {
-        this.attachments = attachments;
-    }
-
-    public void updateRepresentativeImage(Attachment representativeImage) {
-        this.representativeImage = representativeImage;
+    // 2. ⭐️ 업데이트용 (DID 필요, MID도 포함하여 시그니처 구분) ⭐️
+    // 7개의 인자를 받도록 변경하여 1번 생성자(6개 인자)와 시그니처를 완전히 다르게 만듭니다.
+    public Diary(Long did, Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather) {
+        this.did = did; // ⬅️ DID에 올바르게 할당
+        this.mid = mid; // MID도 할당 (Service에서 조회하여 가져와야 함)
+        this.title = title;
+        this.content = content;
+        this.viewScope = viewScope;
+        this.emo = emo;
+        this.weather = weather;
     }
 }
+

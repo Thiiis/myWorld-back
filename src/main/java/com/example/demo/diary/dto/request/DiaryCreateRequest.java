@@ -26,8 +26,13 @@ public class DiaryCreateRequest {
   private List<AttachmentCreateRequest> attachments; // 전체 첨부(상세 조회용)
 
 
-  // 변환 메서드 추가
-  public Diary updateStartData() {
-    return new Diary(mid, title, content, viewScope, emo, weather);
+  public DiaryCreateRequest(Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather, List<AttachmentCreateRequest> attachments) {
+    this.mid = mid;
+    this.title = title;
+    this.content = content;
+    this.viewScope = viewScope;
+    this.emo = emo;
+    this.weather = weather;
+    this.attachments = attachments;
   }
 }

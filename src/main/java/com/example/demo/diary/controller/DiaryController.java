@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +38,9 @@ public class DiaryController {
 
   //생성
   @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<DiaryCreateResponse> createDiary(@RequestPart("request") DiaryCreateRequest request, @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+  public ResponseEntity<DiaryCreateResponse> createDiary(@RequestPart("request") DiaryCreateRequest dto, @RequestPart(value = "files", required = false) List<MultipartFile> files) {
 
-    DiaryCreateResponse response = diaryService.createDiary(request, files);
+    DiaryCreateResponse response = diaryService.createDiary(dto, files);
     return ResponseEntity.ok(response);
   }
 
@@ -63,15 +64,17 @@ public class DiaryController {
   }
 
   //수정
-  @PutMapping("/update")
-  public ResponseEntity<Void> updateDiary(@RequestBody DiaryUpdateRequest request) {
-      diaryService.updateDiary(request);
-      log.info("request{}", request);
-      return ResponseEntity.noContent().build();
+  @PutMapping(value = "/update/{did}", consumes = "multipart/form-data")
+  public ResponseEntity<Void> updateDiary(@PathVariable("did") Long did, @RequestPart("dto") DiaryUpdateRequest dto, @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+    
+    dto.updateRequest(did);
+    diaryService.updateDiary(dto, files);
+
+    return ResponseEntity.noContent().build();
   }
 
   //삭제
-  @DeleteMapping("/delete/{did}")
+  @DeleteMapping("/delete")
   public ResponseEntity<Void> deleteDiary(@PathVariable("did") Long did) {
     diaryService.deleteDiary(did);
     return ResponseEntity.noContent().build();

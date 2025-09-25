@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
   <mapper namespace="com.example.demo.diary.dao.DiaryDao">
-    <insert id="insertDiary" parameterType="Diary" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
+    <insert id="insert" parameterType="Diary" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
         INSERT INTO DIARYS (MID, TITLE, CONTENT, VIEW_SCOPE, EMO, WEATHER, CREATED_AT, UPDATED_AT)
     VALUES (#{mid}, #{title}, #{content}, #{viewScope}, #{emo}, #{weather}, SYSTIMESTAMP, SYSTIMESTAMP)
     </insert>
@@ -19,7 +19,7 @@
     </select>
 
     <!--단건 조회-->
-    <select id="selectDiaryById" parameterType="Long" resultType="Diary">
+    <select id="selectByDid" parameterType="Long" resultType="Diary">
       SELECT DID as did, MID as mid, TITLE as title, CONTENT as content, EMO as emo, WEATHER as weather, VIEW_SCOPE as viewScope, CREATED_AT as createdAt, UPDATED_AT as updatedAt
       FROM DIARYS
       WHERE DID = #{did}
@@ -50,17 +50,16 @@
     </select>
 
     <!-- 수정 -->
-    <update id="updateDiary" parameterType="Diary">
+    <update id="update" parameterType="Diary">
       UPDATE DIARYS
       SET TITLE = #{title}, CONTENT = #{content}, EMO = #{emo}, WEATHER = #{weather}, VIEW_SCOPE = #{viewScope}, UPDATED_AT = SYSTIMESTAMP
       WHERE DID = #{did}
     </update>
 
     <!-- 삭제 -->
-    <delete id="deleteDiary" parameterType="Long">
+    <delete id="delete" parameterType="Long">
       DELETE FROM DIARYS
       WHERE DID = #{did}
     </delete>
 
-    
   </mapper>
