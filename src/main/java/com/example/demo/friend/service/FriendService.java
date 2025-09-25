@@ -51,21 +51,6 @@ public class FriendService {
   }
 
   public List<FriendListResponse> getFriendList(Long mid) {
-    List<Friend> friends = friendDao.selectFriendsByMid(mid);
-    return friends.stream().map(friend -> {
-            // userId가 requester인지 accepter인지에 따라 상대방 정보 가져오기
-            Long friendMid = friend.getReqId().equals(mid) ? 
-                               friend.getAccId() : friend.getReqId();
-            
-            // 친구의 프로필 정보 가져오기 (임시)
-            Profile friendProfile = findUserByIdTemporarily(friendMid);
-            ProfileInfo friendInfo = new ProfileInfo(
-                friendProfile.getPid(),
-                friendProfile.getNickname(),
-                friendProfile.getImgUrl(),
-                friendProfile.getStatusMessage()
-            );
-               return new FriendListResponse(friend.getFid(), friendInfo, friend.getCreatedAt());
-        }).collect(Collectors.toList());
+    return friendDao.selectFriendsByMid(mid);
   }      
 }

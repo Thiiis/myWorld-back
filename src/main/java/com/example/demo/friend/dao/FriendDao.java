@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.friend.dto.Friend;
 import com.example.demo.friend.dto.FriendRequestListResponse;
+import com.example.demo.friend.dto.FriendListResponse;
 
 @Mapper
 public interface FriendDao {
@@ -18,5 +19,5 @@ public interface FriendDao {
     //친구 요청 조회
     List<FriendRequestListResponse> selectByAccepterId(Long accId);    
     //친구 목록 조회
-    List<Friend> selectFriendsByMid(Long mid);
+    List<FriendListResponse> selectFriendsByMid(Long mid);
 }

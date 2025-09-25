@@ -56,12 +56,15 @@ public class FriendController {
         return ResponseEntity.ok(requests); 
     }
 
-    //친구 목록 조회
+    //친구 목록 조회 -> 친구 목록 내 검색은 프론트에서 구현
     @GetMapping("/{mid}/list")
     public ResponseEntity<List<FriendListResponse>> getFriendList(@PathVariable("mid") Long mid) {
         List<FriendListResponse> friends = friendService.getFriendList(mid);
         return ResponseEntity.ok(friends);
     }
 
+    //친구 찾기
+
+    //친구 삭제
 
 }
