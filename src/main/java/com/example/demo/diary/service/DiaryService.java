@@ -89,22 +89,6 @@ public class DiaryService {
     // 3) Diary + Attachment 응답
     return new DiaryCreateResponse(savedDiary.getDid(), savedDiary.getMid(), savedDiary.getTitle(), savedDiary.getContent(), savedDiary.getViewScope(), savedDiary.getEmo(), savedDiary.getWeather(), savedDiary.getCreatedAt(), attachmentCreateResponses);
   }
-
-  // 일기 상세 읽기
-  public DiaryReadResponse getDiary(Long did) {
-    Diary diary = diaryDao.selectDiaryById(did);
-
-    // 첨부파일 조회해서 응답 객체에 세팅(Service 안에서 첨부조회까지 처리), adata가 null로 응답해주어야 하고, 메타데이터만 내려주어야 한다.(실제 BLOB은 노출 안하게 하기 위함 + 성능향상)
-    // 첨부파일 메타데이터 조회
-    //List<Attachment> attachments = attachmentDao.selectAttachmentsByDid(did);
-    //diary.updateAttachments(attachmentDao.insertAttachment(attachments);
-
-    // 대표이미지
-    //Attachment representative = attachmentDao.selectFirstAttachmentByDid(did);
-    //diary.updateRepresentativeImage(attachmentDao.selectFirstAttachmentByDid(representative);
-
-    return new DiaryReadResponse(diary.getDid(), diary.getMid(), diary.getTitle(), diary.getContent(), diary.getViewScope(), diary.getEmo(), diary.getWeather(), diary.getCreatedAt(), diary.getUpdatedAt());
-  }
   
   // 전체 글 개수 (Pager 계산용)
   public int countDiaries() {
@@ -113,11 +97,46 @@ public class DiaryService {
 
   // 일기 페이징 리스트 조회
   public DiaryPageResponse getDiariesPage(Pager pager) {
-    //1. DAO로 데이터 전달
+
+    //1. 페이징된 다이어리 목록 조회 / DAO로 데이터 전달
     List<Diary> diaries = diaryDao.selectDiariesByPage(pager);
-    //2. 리턴하기 위한 타입 변환(Diary -> DiaryReadResponse)
-    List<DiaryReadResponse> list = diaries.stream().map(d -> new DiaryReadResponse( d.getDid(), d.getMid(), d.getTitle(), d.getContent(), d.getViewScope(), d.getEmo(), d.getWeather(), d.getCreatedAt(), d.getUpdatedAt())).toList();
+
+    //2. Response 변환(대표 이미지 1장만) / 리턴하기 위한 타입 변환(Diary -> DiaryReadResponse)
+    List<DiaryReadResponse> list = diaries.stream().map(d -> {
+      Attachment representative = attachmentDao.selectFirstAttachmentByDid(d.getDid());
+
+      AttachmentCreateResponse repResponse = representative != null
+      ? new AttachmentCreateResponse(representative.getAid(), representative.getAname(), representative.getAtype(), "/attachments/" + representative.getAid())
+      : null;
+
+      return new DiaryReadResponse(d.getDid(), d.getMid(), d.getTitle(), d.getContent(), d.getViewScope(), d.getEmo(), d.getWeather(), d.getCreatedAt(), d.getUpdatedAt(), null, repResponse);
+
+    }).toList();
+
     return new DiaryPageResponse(pager, list);
+  }
+  // 일기 상세 읽기
+  public DiaryReadResponse getDiary(Long did) {
+    
+    // 1. 일기 본문 조회
+    Diary diary = diaryDao.selectDiaryById(did);
+
+    // 첨부파일 조회해서 응답 객체에 세팅(Service 안에서 첨부조회까지 처리), adata가 null로 응답해주어야 하고, 메타데이터만 내려주어야 한다.(실제 BLOB은 노출 안하게 하기 위함 + 성능향상)
+    // 2. 첨부파일 메타데이터 조회
+    List<Attachment> attachments = attachmentDao.selectAttachmentsByDid(did);
+    //diary.updateAttachments(attachmentDao.insertAttachment(attachments);
+
+    // 3. 대표이미지 (첫 번째 첨부파일)
+    Attachment representative = attachmentDao.selectFirstAttachmentByDid(did);
+    //diary.updateRepresentativeImage(attachmentDao.selectFirstAttachmentByDid(representative);
+
+    // 4. Diary -> Response 변환
+    List<AttachmentCreateResponse> attachmentResponses = attachments.stream().map(a -> new AttachmentCreateResponse(
+    a.getAid(), a.getAname(), a.getAtype(), "/attachments/" + a.getAid()
+    )).toList();
+
+    return new DiaryReadResponse(diary.getDid(), diary.getMid(), diary.getTitle(), diary.getContent(), diary.getViewScope(), diary.getEmo(), diary.getWeather(), diary.getCreatedAt(), diary.getUpdatedAt(), attachmentResponses,
+        representative != null ? new AttachmentCreateResponse(representative.getAid(),representative.getAname(), representative.getAtype(), "/attachments/" + representative.getAid()) : null);
   }
 
   //수정
