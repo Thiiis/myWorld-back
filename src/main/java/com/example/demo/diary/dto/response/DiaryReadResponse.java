@@ -23,8 +23,8 @@ public class DiaryReadResponse {
   private String weather;
   private Date createdAt;
   private Date updatedAt;
-  private List<AttachmentResponse> attachments;
-  private AttachmentResponse representativeImage;
+  private List<AttachmentCreateResponse> attachments;
+  private AttachmentCreateResponse representativeImage;
 
    // Diary → DiaryResponse 변환 생성자(create용)
   public DiaryReadResponse(Long did, Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather, Date createdAt, Date updatedAt) {

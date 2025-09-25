@@ -16,14 +16,15 @@ import lombok.NoArgsConstructor;
 public class Diary {
 
     private Long did;                       // GENERATED ALWAYS AS IDENTITY -> INSERT시 생략
-    private Date createdAt;                 // DB에 저장되는 타입은 TIMESTAMP WITH TIME ZONE인데 DTO에서의 타입을 OffsetDateTime을 권장한다 만약에
-    private Date updatedAt;                 // 단순히 시간만 필요하다면 LocalDateTime도 무방하다.
     private Long mid;
     private String title;
     private String content;
     private ViewScope viewScope;            // PUBLIC, FRIENDS, PRIVATE
     private Emo emo;                        // HAPPY, CALM, EXCITED, SAD
     private Weather weather;                // SUNNY, CLOUDY, RAINY, SNOWY
+    private Date createdAt;                 // DB에 저장되는 타입은 TIMESTAMP WITH TIME ZONE인데 DTO에서의 타입을 OffsetDateTime을 권장한다 만약에
+    private Date updatedAt;                 // 단순히 시간만 필요하다면 LocalDateTime도 무방하다.
+    
     private List<Attachment> attachments;   // 전체 첨부(상세 조회용)
     private Attachment representativeImage; // 대표사진(리스트/페이징 조회용)
 
@@ -40,8 +41,11 @@ public class Diary {
     }
 
     // --- 도메인 행위 메서드 --- 방법2
-    public void updateTitle(String title, Date updatedAt) {
-        this.title = title;
-        this.updatedAt = updatedAt;
+    public void updateAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    public void updateRepresentativeImage(Attachment representativeImage) {
+        this.representativeImage = representativeImage;
     }
 }
