@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.jukebox.dao.TrackDao">
+  
+  <insert id="insert" parameterType="Track" useGeneratedKeys="true" keyProperty="trid" keyColumn="trid">
+    insert into tracks (jid, sid, track_order)
+    values (#{jid}, #{sid}, #{trackOrder})
+  </insert>
+
+  <select id="selectByTrid" parameterType="Long" resultType="Track">
+    select * from tracks where trid = #{trid}
+  </select>
+
+  <select id="selectSongsByJid" parameterType="Long" resultType="Song">
+    select s.sid, s.title, s.artist, s.duration
+    from tracks t
+    join songs s on t.sid = s.sid
+    where t.jid = #{jid}
+    order by t.track_order asc
+  </select>
+
+  <delete id="delete" parameterType="Long">
+    delete from tracks where trid = #{trid}
+  </delete>
+
+
+</mapper>

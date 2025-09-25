@@ -21,6 +21,7 @@
     <typeAlias type="com.example.demo.jukebox.dto.Jukebox" alias="Jukebox" />
     <typeAlias type="com.example.demo.jukebox.dto.JukeboxLikes" alias="JukeboxLikes" />
     <typeAlias type="com.example.demo.jukebox.dto.Song" alias="Song" />
+    <typeAlias type="com.example.demo.jukebox.dto.Track" alias="Track" />
 
     <typeAlias type="com.example.demo.friend.dto.Friend" alias="Friend" />
   </typeAliases>

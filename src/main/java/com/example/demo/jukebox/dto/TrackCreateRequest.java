@@ -5,7 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class SongCreateRequest {
-  private Long mid;
-  private String videoId;
+public class TrackCreateRequest {
+  private Long jid;
+  private Long sid;
+  private Long trackOrder;
 }

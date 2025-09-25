@@ -3,8 +3,8 @@
 <mapper namespace="com.example.demo.jukebox.dao.SongDao">
 
   <insert id="insert" parameterType="Song" useGeneratedKeys="true" keyProperty="sid" keyColumn="sid">
-    insert into songs (jid, title, artist, video_id, duration)
-    values (#{jid}, #{title}, #{artist}, #{videoId}, #{duration})
+    insert into songs (mid, title, artist, video_id, duration)
+    values (#{mid}, #{title}, #{artist}, #{videoId}, #{duration})
   </insert>
 
   <select id="selectBySid" resultType="Song">
