@@ -40,7 +40,7 @@ public class ProfileService {
         unifiedRequest.setIntro(textDto.getIntro());
 
         // 3. 통합 Request를 Mapper의 단일 update 메소드로 전달
-        profileDao.update(unifiedRequest);
+        // profileDao.update(unifiedRequest);
     }
 
     // '주소' 업데이트 요청 처리
@@ -55,6 +55,6 @@ public class ProfileService {
         unifiedDto.setDetailAddress(addressDto.getDetailAddress());
 
         // 3. 여기서도 동일한 updateProfile 메소드를 호출
-        profileDao.update(unifiedDto);
+        // profileDao.update(unifiedDto);
     }
 }
