@@ -26,7 +26,7 @@
         </association>
     </resultMap>
 
-    <select id="selectByAccepterId" parameterType="Long" resultMap="FriendRequestListResponseMap">
+    <select id="selectByAccId" parameterType="Long" resultMap="FriendRequestListResponseMap">
         SELECT f.FID, p.PID, p.NICKNAME, p.IMG_URL, p.STATUS_MESSAGE, f.CREATED_AT
         FROM FRIENDS f
         INNER JOIN MEMBERS m ON f.REQ_ID = m.MID
@@ -52,7 +52,8 @@
              CASE WHEN f.REQ_ID = #{mid} THEN acc_p.PID ELSE req_p.PID END as friend_pid,
              CASE WHEN f.REQ_ID = #{mid} THEN acc_p.NICKNAME ELSE req_p.NICKNAME END as friend_nickname,
              CASE WHEN f.REQ_ID = #{mid} THEN acc_p.IMG_URL ELSE req_p.IMG_URL END as friend_img_url,
-             CASE WHEN f.REQ_ID = #{mid} THEN acc_p.STATUS_MESSAGE ELSE req_p.STATUS_MESSAGE END as friend_status_message
+             CASE WHEN f.REQ_ID = #{mid} THEN acc_p.STATUS_MESSAGE ELSE req_p.STATUS_MESSAGE END as friend_status_message,
+             f.CREATED_AT
       FROM FRIENDS f
       INNER JOIN MEMBERS req_m ON f.REQ_ID = req_m.MID
       INNER JOIN PROFILES req_p ON req_m.MID = req_p.MID
