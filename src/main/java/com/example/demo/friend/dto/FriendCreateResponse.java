@@ -1,6 +1,7 @@
 package com.example.demo.friend.dto;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 
 import com.example.demo.common.dto.ProfileInfo;
 
@@ -11,21 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FriendCreateResponse {
   private Long fid;
-  private ProfileInfo accepter;
-  private OffsetDateTime createdAt;
+  private Long reqId;
+  private Long accId;
+  private Date createdAt;
 
-  public FriendCreateResponse(Long id, ProfileInfo accepter, OffsetDateTime createdAt) {
-    this.fid = id;
-    this.accepter = accepter;
-    this.createdAt = createdAt;
-  }
-
-    // public FriendResponse(Long fid, Long requesterId, Long accepterId, OffsetDateTime createdAt) {
-    //   this.fid = fid;
-    //   this.requesterId = requesterId;
-    //   this.accepterId = accepterId;
-    //   this.createdAt = createdAt;
-    // }
+    public FriendCreateResponse(Long fid, Long reqId, Long accId, Date createdAt) {
+      this.fid = fid;
+      this.reqId = reqId;
+      this.accId = accId;
+      this.createdAt = createdAt;
+    }
 
   // public FriendResponse(Friend friend) {
   //   this.fid = friend.getFid();

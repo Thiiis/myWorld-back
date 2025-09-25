@@ -28,10 +28,8 @@ public class FriendService {
   public FriendCreateResponse createFriend(FriendCreateRequest dto) {
     Friend friend = new Friend(dto.getReqId(), dto.getAccId());
     friendDao.insert(friend);
-    Profile profile = new Profile(dto.getAccId(), "nickname", "imgUrl", "hahahaha");
-    ProfileInfo accepterInfo = new ProfileInfo(1L, profile.getNickname(), profile.getImgUrl(), profile.getStatusMessage());
     Friend dbFriend = friendDao.selectById(friend.getFid());
-    return new FriendCreateResponse(dbFriend.getFid(), accepterInfo, dbFriend.getCreatedAt());
+    return new FriendCreateResponse(dbFriend.getFid(), dbFriend.getReqId(), dbFriend.getAccId(), dbFriend.getCreatedAt());
     // return new FriendResponse(friend);
   }
 

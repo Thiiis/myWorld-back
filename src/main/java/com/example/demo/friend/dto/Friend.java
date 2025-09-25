@@ -1,6 +1,6 @@
 package com.example.demo.friend.dto;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 
 import com.example.demo.friend.enums.FriendStatus;
 
@@ -12,13 +12,13 @@ public class Friend {
     private Long reqId;
     private Long accId;
     private String status; 
-    private OffsetDateTime createdAt;
-    private OffsetDateTime updatedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Friend(Long reqId, Long accId) {
         this.reqId = reqId;
         this.accId = accId;
-        // this.createdAt = OffsetDateTime.now().
+        // this.createdAt = Date.now().
     }
      
     public void accept() {
