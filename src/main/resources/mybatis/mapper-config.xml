@@ -14,7 +14,7 @@
 
     <typeAlias type="com.example.demo.auth.dto.Member" alias="Member" />
     <typeAlias type="com.example.demo.profile.dto.Profile" alias="Profile" />
-    <!-- <typeAlias type="com.example.demo.friend.dto.Friend" alias="Friend" /> -->
+
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoard" alias="GuestBoard" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardListRequest" alias="GuestBoardListRequest" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardUpdateRequest" alias="GuestBoardUpdateRequest" />
@@ -22,8 +22,6 @@
     <typeAlias type="com.example.demo.jukebox.dto.JukeboxLikes" alias="JukeboxLikes" />
     <typeAlias type="com.example.demo.jukebox.dto.Song" alias="Song" />
 
+    <typeAlias type="com.example.demo.friend.dto.Friend" alias="Friend" />
   </typeAliases>
-
-  
-
 </configuration>

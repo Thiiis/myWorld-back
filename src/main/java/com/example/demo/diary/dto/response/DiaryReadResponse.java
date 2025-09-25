@@ -27,7 +27,7 @@ public class DiaryReadResponse {
   private AttachmentCreateResponse representativeImage;
 
    // Diary → DiaryResponse 변환 생성자(create용)
-  public DiaryReadResponse(Long did, Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather, Date createdAt, Date updatedAt) {
+  public DiaryReadResponse(Long did, Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather, Date createdAt, Date updatedAt, List<AttachmentCreateResponse> attachments, AttachmentCreateResponse representativeImage) {
     this.did = did;
     this.mid = mid;
     this.title = title;
@@ -37,6 +37,8 @@ public class DiaryReadResponse {
     this.weather = weather.name();
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.attachments = attachments;
+    this.representativeImage = representativeImage;
     // this.attachments = (diary.getAttachments() != null)
     //     ? diary.getAttachments().stream().map(AttachmentResponse::new).toList()
     //     : null;
