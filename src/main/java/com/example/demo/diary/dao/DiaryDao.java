@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.diary.dto.Diary;
 import com.example.demo.diary.dto.Pager;
-import com.example.demo.diary.dto.request.DiaryCreateRequest;
 import com.example.demo.diary.dto.request.DiaryUpdateRequest;
 
 @Mapper
@@ -20,6 +19,6 @@ public interface DiaryDao {
   List<Diary> selectDiariesByPage(Pager pager);     // 페이징 처리 관련(총 페이지 수)
 
   int updateDiary(DiaryUpdateRequest request);                  // 일기 수정
-  // int deleteDiary(Long did);                     // 일기 삭제
+  int deleteDiary(Long did);                     // 일기 삭제
   
 }

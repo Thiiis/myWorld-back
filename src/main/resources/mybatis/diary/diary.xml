@@ -56,5 +56,11 @@
       WHERE DID = #{did}
     </update>
 
+    <!-- 삭제 -->
+    <delete id="deleteDiary" parameterType="Long">
+      DELETE FROM DIARYS
+      WHERE DID = #{did}
+    </delete>
+
     
   </mapper>
