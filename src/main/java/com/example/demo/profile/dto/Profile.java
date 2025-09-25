@@ -50,7 +50,7 @@ public class Profile {
         this.nickname = nickname;
         return nickname;
     }
-    public void updateBirthdate(Date birthDate){
+    public void updateBirthdate(Date birthdate){
         this.birthdate = birthdate;
     }
     public void updateImage(String imgName, String imgUrl){
