@@ -20,4 +20,6 @@ public interface FriendDao {
     List<FriendRequestListResponse> selectByAccepterId(Long accId);    
     //친구 목록 조회
     List<FriendListResponse> selectFriendsByMid(Long mid);
+    //친구 삭제
+    void deleteFriend(Long id);
 }

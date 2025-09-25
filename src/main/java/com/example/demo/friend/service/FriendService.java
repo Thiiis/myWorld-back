@@ -1,19 +1,16 @@
 package com.example.demo.friend.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.common.dto.ProfileInfo;
 import com.example.demo.friend.dao.FriendDao;
 import com.example.demo.friend.dto.Friend;
 import com.example.demo.friend.dto.FriendCreateRequest;
 import com.example.demo.friend.dto.FriendCreateResponse;
 import com.example.demo.friend.dto.FriendListResponse;
 import com.example.demo.friend.dto.FriendRequestListResponse;
-import com.example.demo.profile.dto.Profile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,5 +49,12 @@ public class FriendService {
 
   public List<FriendListResponse> getFriendList(Long mid) {
     return friendDao.selectFriendsByMid(mid);
-  }      
+  }
+
+  public void deleteFriend(Long id) {
+    Friend friend = friendDao.selectById(id);
+    //검증 로직 추가 필요
+    friendDao.deleteFriend(id);
+  }
+
 }

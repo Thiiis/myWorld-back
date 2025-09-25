@@ -62,4 +62,9 @@
       AND f.STATUS = 'ACCEPTED'
       ORDER BY f.CREATED_AT DESC
     </select>
+
+    <delete id="deleteFriend" parameterType="Long">
+        DELETE FROM FRIENDS
+        WHERE FID = #{fid}
+    </delete>
 </mapper>
