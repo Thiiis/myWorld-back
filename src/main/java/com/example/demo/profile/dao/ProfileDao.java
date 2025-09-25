@@ -9,7 +9,8 @@ public interface ProfileDao {
     public void insert(Profile profile);
     // public int existsByNickname(String nickname);
     public Profile selectByPid(Long pid);
-    public Profile selectByNickname(String nickname);
+    public Profile selectByMid(Long mid);
+    // public Profile selectByNickname(String nickname);
     public void update(Profile Profile);
     // public void updateImg(Profile Profile);
     // public int updateAddress(Profile profile);

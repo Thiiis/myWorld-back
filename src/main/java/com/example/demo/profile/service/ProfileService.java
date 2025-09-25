@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
-import com.example.demo.profile.dto.ProfileUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
