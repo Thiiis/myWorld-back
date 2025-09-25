@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
 import com.example.demo.profile.dto.ProfileAddressUpdateRequest;
+import com.example.demo.profile.dto.ProfileBasicUpdateRequest;
+import com.example.demo.profile.dto.ProfileFKUpdateRequest;
 import com.example.demo.profile.dto.ProfileTextUpdateRequest;
 import com.example.demo.profile.dto.ProfileUpdateRequest;
 
@@ -29,7 +31,16 @@ public class ProfileService {
         return profileDao.selectByNickname(nickname);
     }
 
-   // '텍스트' 업데이트 요청 처리
+    public void updateBasic(ProfileBasicUpdateRequest basicDto) {
+        ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
+
+        unifiedDto.setPid(basicDto.getPid());
+        unifiedDto.setNickname(basicDto.getNickname());
+        unifiedDto.setBirthdate(basicDto.getBirthdate());
+
+    }
+
+    // '텍스트' 업데이트 요청 처리
     public void updateText(ProfileTextUpdateRequest textDto) {
         // 1. Mapper로 보낼 '통합 Request' 생성
         ProfileUpdateRequest unifiedRequest = new ProfileUpdateRequest();
@@ -47,7 +58,7 @@ public class ProfileService {
     public void updateAddress(ProfileAddressUpdateRequest addressDto) {
         // 1. Mapper로 보낼 '통합 Request' 생성
         ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
-        
+
         // 2. 필수 값(pid)과 섹션에 맞는 값(address)을 통합 Request에 복사
         unifiedDto.setPid(addressDto.getPid());
         unifiedDto.setPostalCode(addressDto.getPostalCode());
@@ -55,6 +66,17 @@ public class ProfileService {
         unifiedDto.setDetailAddress(addressDto.getDetailAddress());
 
         // 3. 여기서도 동일한 updateProfile 메소드를 호출
+        // profileDao.update(unifiedDto);
+    }
+
+    public void updateFK(ProfileFKUpdateRequest fkDto) {
+        ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
+
+        unifiedDto.setPid(fkDto.getPid());
+        unifiedDto.setMid(fkDto.getMid());
+        unifiedDto.setJid(fkDto.getJid());
+        unifiedDto.setTid(fkDto.getTid());
+
         // profileDao.update(unifiedDto);
     }
 }

@@ -10,12 +10,14 @@ public class ProfileBasicUpdateRequest {
     private Long mid;
     private String nickname;
     private Date birthdate;
-    // private int viewCount;
+    private int viewCount;
     private Date updatedAt;
 
-    public ProfileBasicUpdateRequest(Long pid, String nickname, Date birthdate) {
+    public ProfileBasicUpdateRequest(Long pid, String nickname, Date birthdate, int viewCount, Date updatedAt) {
         this.pid = pid;
         this.nickname = nickname;
         this.birthdate = birthdate;
+        this.viewCount = viewCount;
+        this.updatedAt = updatedAt;
     }
 }

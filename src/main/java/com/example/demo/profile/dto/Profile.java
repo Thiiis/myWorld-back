@@ -4,10 +4,11 @@ import java.util.Date;
 
 import com.example.demo.auth.dto.Member;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Profile {
 
@@ -44,29 +45,6 @@ public class Profile {
     public Profile(String nickname, long mid){
         this.nickname = nickname;
         this.mid = mid;
-    }
-    // Setter
-    public String updateNickname(String nickname){
-        this.nickname = nickname;
-        return nickname;
-    }
-    public void updateBirthdate(Date birthdate){
-        this.birthdate = birthdate;
-    }
-    public void updateImage(String imgName, String imgUrl){
-        this.imgName= imgName;
-        this.imgUrl= imgUrl;
-    }
-    public void updateText(String statusMessage, String intro){
-        this.statusMessage = statusMessage;
-        this.intro = intro;
-    }
-
-    //주소 게터 세터 나중에
-    public void updateAddress(String postalCode, String mainAddress, String detailAddress){
-        this.postalCode = postalCode;
-        this.mainAddress = mainAddress;
-        this.detailAddress = detailAddress;
     }
 
 }

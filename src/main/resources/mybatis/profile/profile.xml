@@ -30,9 +30,17 @@
     WHERE nickname = #{nickname}
   </select>
 
+  <!-- <select id="findAll" resultType="Profile">
+      SELECT * FROM PROFILES
+  </select> -->
+
+
   <update id="updateProfile" parameterType="com.example.demo.profile.dto.ProfileUpdateRequest">
     UPDATE PROFILE_TABLE
     <set>
+        <if test="mid != null"> NICKNAME = #{mid}, </if>
+        <if test="jid != null"> NICKNAME = #{jid}, </if>
+        <if test="tid != null"> NICKNAME = #{tid}, </if>
         <if test="nickname != null"> NICKNAME = #{nickname}, </if>
         <if test="birthdate != null"> BIRTHDATE = #{birthdate}, </if>
         <if test="statusMessage != null"> STATUS_MESSAGE = #{statusMessage}, </if>

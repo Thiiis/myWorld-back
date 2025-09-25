@@ -14,6 +14,7 @@ import lombok.Setter;
 public class ProfileUpdateRequest {
     private Long pid; // PK
     private Long mid; // 멤버 FK
+    private Long tid; // 테마 FK
     private Long jid; // 주크박스 FK
 
     private Date createdAt;
