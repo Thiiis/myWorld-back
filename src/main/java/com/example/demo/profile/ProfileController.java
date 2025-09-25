@@ -1,16 +1,15 @@
 package com.example.demo.profile;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.profile.dto.Profile;
 import com.example.demo.profile.service.ProfileService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RequiredArgsConstructor
@@ -19,8 +18,14 @@ import org.springframework.web.bind.annotation.PatchMapping;
 public class ProfileController {
     private final ProfileService profileService;
 
-    @PatchMapping("/text")
-    public void updateText(){
+    @GetMapping("/detail")
+    public String getProfile(@RequestParam String param) {
+        return new String();
+    }
+    
+
+    @PutMapping("/upadate")
+    public void updateProfile(){
 
     }
 

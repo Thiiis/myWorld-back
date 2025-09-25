@@ -4,8 +4,6 @@ import java.util.Date;
 
 import com.example.demo.profile.dto.Profile;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,16 +23,6 @@ public class Member {
     public Member(String account, String email, String pwd) {
         this.account = account;
         this.email = email;
-        this.pwd = pwd;
-    }
-
-    @NotBlank
-    @Email
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPwd(String pwd){
         this.pwd = pwd;
     }
 

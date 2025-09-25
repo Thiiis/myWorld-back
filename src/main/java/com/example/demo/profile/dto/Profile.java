@@ -3,11 +3,13 @@ package com.example.demo.profile.dto;
 import java.util.Date;
 
 import com.example.demo.auth.dto.Member;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Profile {
 
@@ -21,6 +23,8 @@ public class Profile {
     private Member member; //1대1관계
     
     private String nickname; // 회원가입할 때 닉네임 받아옴
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date birthdate; // 생년월일
     
     private String imgName; // 프로필 이미지 파일 이름
@@ -38,35 +42,13 @@ public class Profile {
 
     private int viewCount  = 0; // 미니홈 조회수
     
-    private String viewScope;
+    // private String viewScope;
     // Profile Privacy가 있긴 한데 어떻게 할지 몰겟음
     
-    public Profile(String nickname, long mid){
-        this.nickname = nickname;
+    public Profile(long mid, String nickname, Date birthdate){
         this.mid = mid;
-    }
-    // Setter
-    public String updateNickname(String nickname){
         this.nickname = nickname;
-        return nickname;
-    }
-    public void updateBirthdate(Date birthdate){
-        this.birthdate = birthdate;
-    }
-    public void updateImage(String imgName, String imgUrl){
-        this.imgName= imgName;
-        this.imgUrl= imgUrl;
-    }
-    public void updateText(String statusMessage, String intro){
-        this.statusMessage = statusMessage;
-        this.intro = intro;
-    }
-
-    //주소 게터 세터 나중에
-    public void updateAddress(String postalCode, String mainAddress, String detailAddress){
-        this.postalCode = postalCode;
-        this.mainAddress = mainAddress;
-        this.detailAddress = detailAddress;
+        this.birthdate=birthdate;
     }
 
 }
