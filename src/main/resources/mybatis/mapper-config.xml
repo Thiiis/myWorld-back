@@ -24,5 +24,9 @@
     <typeAlias type="com.example.demo.jukebox.dto.Track" alias="Track" />
 
     <typeAlias type="com.example.demo.friend.dto.Friend" alias="Friend" />
+    <typeAlias type="com.example.demo.friend.dto.FriendRequestListResponse" alias="FriendRequestListResponse"/>
+    <typeAlias type="com.example.demo.friend.dto.FriendListResponse" alias="FriendListResponse"/>
+
   </typeAliases>
+
 </configuration>

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.friend.dto.FriendCreateRequest;
 import com.example.demo.friend.dto.FriendCreateResponse;
-import com.example.demo.friend.dto.FriendListResponse;
-import com.example.demo.friend.dto.FriendRequestListResponse;
+// import com.example.demo.friend.dto.FriendListResponse;
+// import com.example.demo.friend.dto.FriendRequestListResponse;
 import com.example.demo.friend.service.FriendService;
 
 import lombok.RequiredArgsConstructor;
@@ -50,20 +50,20 @@ public class FriendController {
     return ResponseEntity.noContent().build();
     }
 
-    //친구 요청 조회
-    @GetMapping("/pending")
-    //쿼리파람(임시) -> JWT 구현하면 변경
-    public ResponseEntity<List<FriendRequestListResponse>> getFriendRequestList(@RequestParam("mid") Long mid) {
-        List<FriendRequestListResponse> requests = friendService.getFriendRequestList(mid);
-        return ResponseEntity.ok(requests); 
-    }
+    // //친구 요청 조회
+    // @GetMapping("/pending")
+    // //쿼리파람(임시) -> JWT 구현하면 변경
+    // public ResponseEntity<List<FriendRequestListResponse>> getFriendRequestList(@RequestParam("mid") Long mid) {
+    //     List<FriendRequestListResponse> requests = friendService.getFriendRequestList(mid);
+    //     return ResponseEntity.ok(requests); 
+    // }
 
-    //친구 목록 조회 -> 친구 목록 내 검색은 프론트에서 구현
-    @GetMapping("/{mid}/list")
-    public ResponseEntity<List<FriendListResponse>> getFriendList(@PathVariable("mid") Long mid) {
-        List<FriendListResponse> friends = friendService.getFriendList(mid);
-        return ResponseEntity.ok(friends);
-    }
+    // //친구 목록 조회 -> 친구 목록 내 검색은 프론트에서 구현
+    // @GetMapping("/{mid}/list")
+    // public ResponseEntity<List<FriendListResponse>> getFriendList(@PathVariable("mid") Long mid) {
+    //     List<FriendListResponse> friends = friendService.getFriendList(mid);
+    //     return ResponseEntity.ok(friends);
+    // }
 
     //친구 삭제 -> 소프트 딜리트 고민
     @DeleteMapping("/{id}")

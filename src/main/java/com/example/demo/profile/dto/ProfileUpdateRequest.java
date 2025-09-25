@@ -3,6 +3,7 @@ package com.example.demo.profile.dto;
 import java.util.Date;
 
 import com.example.demo.auth.dto.Member;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class ProfileUpdateRequest {
     private Member member; // 1대1관계
 
     private String nickname; // 회원가입할 때 닉네임 받아옴
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date birthdate; // 생년월일
 
     private String imgName; // 프로필 이미지 파일 이름

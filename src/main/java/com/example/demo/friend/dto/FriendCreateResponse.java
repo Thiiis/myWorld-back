@@ -1,9 +1,6 @@
 package com.example.demo.friend.dto;
 
-import java.time.OffsetDateTime;
 import java.util.Date;
-
-import com.example.demo.common.dto.ProfileInfo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

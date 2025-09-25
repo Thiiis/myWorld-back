@@ -25,7 +25,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     // 전처리
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        log.info("전처리 실행");
 
         // preflight request 로 요청한 것은 통과
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
