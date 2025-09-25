@@ -31,6 +31,7 @@ public class SecurityConfig {
             // 3. HTTP 요청에 대한 접근 권한 설정
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/jukebox/**").permitAll()
+                .requestMatchers("/songs/**").permitAll()
                 .anyRequest().permitAll()
                 //.requestMatchers("/members/signup", "/members/login").permitAll()
                 // 나머지 모든 요청은 인증 필요

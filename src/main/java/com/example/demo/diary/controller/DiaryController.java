@@ -1,6 +1,7 @@
 package com.example.demo.diary.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,4 +60,9 @@ public class DiaryController {
       return ResponseEntity.noContent().build();
   }
 
+  @DeleteMapping("/delete/{did}")
+  public ResponseEntity<Void> deleteDiary(@PathVariable("did") Long did) {
+    diaryService.deleteDiary(did);
+    return ResponseEntity.noContent().build();
+  }
 }

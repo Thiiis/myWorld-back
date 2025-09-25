@@ -18,16 +18,18 @@ import com.example.demo.jukebox.dto.JukeboxCreateResponse;
 import com.example.demo.jukebox.dto.JukeboxDetailResponse;
 import com.example.demo.jukebox.dto.JukeboxListResponse;
 import com.example.demo.jukebox.dto.JukeboxUpdateRequest;
+import com.example.demo.jukebox.service.JukeboxLikesService;
 import com.example.demo.jukebox.service.JukeboxService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/jukebox")
+@RequestMapping("/jukeboxes")
 public class JukeboxController {
 
     private final JukeboxService jukeboxservice;
+    private final JukeboxLikesService jukeboxLikesService;
 
     // 주크박스 생성
     @PostMapping("/create")
@@ -76,5 +78,17 @@ public class JukeboxController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0L);
         }
     }
+
+    // 주크박스 좋아요
+    @PostMapping("/like")
+    public ResponseEntity<String> toggleJukeboxLike(@RequestParam Long jid, @RequestParam Long mid) { 
+        boolean isLike = jukeboxLikesService.toggleLike(jid, mid);
+        if(isLike) {
+            return ResponseEntity.ok("좋아요");
+        } else {
+            return ResponseEntity.ok("좋아요 취소");
+        }
+    }
+    
 
 }
