@@ -15,11 +15,27 @@
         WHERE FID = #{fid}
      </update>
 
-    <select id="selectByAccepterId" parameterType="Long" resultType="Friend">
-        SELECT *
-        FROM FRIENDS
-        WHERE ACC_ID = #{accId}
-        ORDER BY CREATED_AT DESC
+
+
+     <resultMap id="FriendRequestListResponseMap" type="com.example.demo.friend.dto.FriendRequestListResponse">
+        <id property="fid" column="FID"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <association property="requester" javaType="com.example.demo.common.dto.ProfileInfo">
+            <id property="pid" column="PID"/>
+            <result property="nickname" column="NICKNAME"/>
+            <result property="profileImageUrl" column="IMG_URL"/>
+            <result property="statusMessage" column="STATUS_MESSAGE"/>
+        </association>
+    </resultMap>
+
+    <select id="selectByAccepterId" parameterType="Long" resultMap="FriendRequestListResponseMap">
+        SELECT f.FID, p.PID, p.NICKNAME, p.IMG_URL, p.STATUS_MESSAGE, f.CREATED_AT
+        FROM FRIENDS f
+        INNER JOIN MEMBERS m ON f.REQ_ID = m.MID
+        INNER JOIN PROFILES p ON m.MID = p.MID
+        WHERE f.ACC_ID = #{accId}
+        AND f.STATUS = 'PENDING'
+        ORDER BY f.CREATED_AT DESC
     </select>
 
     <select id="selectFriendsByMid" parameterType="Long" resultType="Friend">

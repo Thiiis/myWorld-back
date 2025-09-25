@@ -47,24 +47,7 @@ public class FriendService {
 
   //memeber 구현 완료 후 수정
   public List<FriendRequestListResponse> getFriednRequestList(Long userId) {
-    List<Friend> friends = friendDao.selectByAccepterId(userId);
-     return friends.stream().map(request -> {
-        Profile requesterProfile = findUserByIdTemporarily(request.getReqId());
-        ProfileInfo requesterInfo = new ProfileInfo(
-            requesterProfile.getPid(), 
-            requesterProfile.getNickname(), 
-            requesterProfile.getImgUrl(),
-            requesterProfile.getStatusMessage());
-
-        return new FriendRequestListResponse(
-            request.getFid(),
-            requesterInfo,
-            request.getCreatedAt());
-    }).collect(Collectors.toList());
-  }
-
-  private Profile findUserByIdTemporarily(Long userId) {
-    return new Profile(userId, "테스트", "http://image.url/21", "반갑습니다!");
+    return friendDao.selectByAccepterId(userId);
   }
 
   public List<FriendListResponse> getFriendList(Long mid) {

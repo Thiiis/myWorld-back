@@ -1,6 +1,6 @@
 package com.example.demo.friend.dto;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 
 import com.example.demo.common.dto.ProfileInfo;
 
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 public class FriendRequestListResponse {
   private Long fid;
   private ProfileInfo requester;
-  private OffsetDateTime createdAt;
-
-  public FriendRequestListResponse(Long id, ProfileInfo requester, OffsetDateTime createdAt) {
+  private Date createdAt;
+ 
+  public FriendRequestListResponse(Long id, ProfileInfo requester, Date createdAt) {
     this.fid = id;
     this.requester = requester;
     this.createdAt = createdAt;
