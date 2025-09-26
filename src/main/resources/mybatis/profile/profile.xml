@@ -6,36 +6,36 @@
     VALUES (#{mid}, #{nickname}, #{birthdate})
   </insert>
   
-  <!-- <select id="existsByNickname" parameterType="String" resultType="int">
-      SELECT COUNT(*)
+  <select id="countByNickname" parameterType="String" resultType="int">
+      SELECT COUNT (*)
       FROM profiles
       WHERE nickname = #{nickname}
-  </select> -->
+  </select>
 
   <select id="selectByPid" parameterType="Long" resultType="Profile">
     SELECT *
     FROM profiles
     WHERE pid = #{pid}
   </select>
-  
+<!--   
   <select id="selectByMid" parameterType="Long" resultType="Profile">
     SELECT *
     FROM profiles
     WHERE mid = #{mid}
-  </select>
+  </select> -->
 
-  <select id="selectByNickname" parameterType="String" resultType="Profile">
+  <!-- <select id="selectByNickname" parameterType="String" resultType="Profile">
     SELECT *
     FROM profiles
     WHERE nickname = #{nickname}
-  </select>
+  </select> -->
 
-  <!-- <select id="findAll" resultType="Profile">
+  <!-- <select id="selectAll" resultType="Profile">
       SELECT * FROM PROFILES
   </select> -->
 
 
-  <update id="updateProfile" parameterType="com.example.demo.profile.dto.ProfileUpdateRequest">
+  <!-- <update id="updateProfile" parameterType="ProfileUpdateRequest">
     UPDATE PROFILE_TABLE
     <set>
         <if test="mid != null"> MID = #{mid}, </if>
@@ -51,7 +51,7 @@
         UPDATED_AT = SYSDATE
     </set>
     WHERE PID = #{pid}
-  </update>
+  </update> -->
 
 
 </mapper>

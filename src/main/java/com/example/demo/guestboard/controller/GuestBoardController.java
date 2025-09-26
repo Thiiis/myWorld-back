@@ -2,10 +2,10 @@ package com.example.demo.guestboard.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +19,7 @@ import com.example.demo.guestboard.dto.GuestBoardListRequest;
 import com.example.demo.guestboard.dto.GuestBoardListResponse;
 import com.example.demo.guestboard.dto.GuestBoardUpdateRequest;
 import com.example.demo.guestboard.service.GuestBoardService;
+import com.example.demo.interceptor.Login;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,20 +31,22 @@ public class GuestBoardController {
   private final GuestBoardService guestBoardService;
 
   // 방명록 생성
+  @Login
   @PostMapping("/create")
-  public ResponseEntity<GuestBoardCreateResponse> guestBoardCreate(@RequestBody GuestBoardCreateRequest request) {
-    GuestBoardCreateResponse response = guestBoardService.create(request);
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+  public ResponseEntity<GuestBoardCreateResponse> guestBoardCreate(@RequestBody GuestBoardCreateRequest dto) {
+    GuestBoardCreateResponse response = guestBoardService.create(dto);
+    return ResponseEntity.ok(response);
   }
 
   // 방명록 조회
+  @Login
   @GetMapping("/list")
   public ResponseEntity<List<GuestBoardListResponse>> guestBoardList(
       @RequestParam(defaultValue = "0") Long offset,
       @RequestParam(defaultValue = "10") Long limit) {
 
-    GuestBoardListRequest request = new GuestBoardListRequest(offset, limit);
-    List<GuestBoardListResponse> list = guestBoardService.getGuestBoardList(request);
+    GuestBoardListRequest dto = new GuestBoardListRequest(offset, limit);
+    List<GuestBoardListResponse> list = guestBoardService.getGuestBoardList(dto);
 
     if (list.isEmpty()) {
       return ResponseEntity.noContent().build();
@@ -53,25 +56,19 @@ public class GuestBoardController {
   }
 
   // 방명록 수정
+  @Login
   @PutMapping("/update")
-  public ResponseEntity<Long> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest request) {
-    try {
-      Long rows = guestBoardService.update(request);
-      return ResponseEntity.ok(rows);
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0L);
-    }
+  public ResponseEntity<Void> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest dto) {
+    guestBoardService.update(dto);
+    return ResponseEntity.noContent().build();
   }
 
   // 방명록 삭제
-  @DeleteMapping("/delete")
-  public ResponseEntity<Long> guestBoardDelete(@RequestParam("gbid") Long gbid) {
-    Long rows = guestBoardService.delete(gbid);
-    if (rows > 0) {
-      return ResponseEntity.ok(rows);
-    } else {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0L);
-    }
+  @Login
+  @DeleteMapping("/delete/{gbid}")
+  public ResponseEntity<Void> guestBoardDelete(@PathVariable("gbid") Long gbid) {
+    guestBoardService.delete(gbid);
+    return ResponseEntity.noContent().build();
 
   }
 

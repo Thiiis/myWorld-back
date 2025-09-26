@@ -20,19 +20,19 @@ public class JukeboxService {
 
   private final JukeboxDao jukeboxDao;
 
-  public JukeboxCreateResponse create(JukeboxCreateRequest request) {
-    Long count = jukeboxDao.countByMid(request.getMid());
+  public JukeboxCreateResponse create(JukeboxCreateRequest dto) {
+    int count = jukeboxDao.countByMid(dto.getMid());
     if (count >= 10) {
       throw new IllegalStateException("유저당 10개까지만 생성 가능");
     }
-    Jukebox jukebox = new Jukebox(request.getMid(), request.getTitle(), request.getContent());
+    Jukebox jukebox = new Jukebox(dto.getMid(), dto.getTitle(), dto.getContent());
     jukeboxDao.insert(jukebox);
     Jukebox dbJukebox = jukeboxDao.selectByJid(jukebox.getJid());
     return new JukeboxCreateResponse(dbJukebox.getJid(), dbJukebox.getCreatedAt(), dbJukebox.getUpdatedAt());
   }
 
-  public Long update(JukeboxUpdateRequest request) {
-    Jukebox jukebox = new Jukebox(request.getJid(), request.getTitle(), request.getContent(), true);
+  public int update(JukeboxUpdateRequest dto) {
+    Jukebox jukebox = new Jukebox(dto.getJid(), dto.getTitle(), dto.getContent(), true);
     return jukeboxDao.update(jukebox);
   }
 
@@ -46,8 +46,8 @@ public class JukeboxService {
     return new JukeboxDetailResponse(jukebox.getJid(), jukebox.getTitle(), jukebox.getContent(), jukebox.getCreatedAt(), jukebox.getUpdatedAt());
   }
 
-  public Long delete(Long jid) {
-    return jukeboxDao.delete(jid);
+  public void delete(Long jid) {
+    jukeboxDao.delete(jid);
   }
 
 }

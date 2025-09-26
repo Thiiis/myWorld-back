@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class Member {
-    private long mid;
+    private Long mid;
     private Date cretedAt;
     private Date updatedAt;
 
@@ -20,10 +20,17 @@ public class Member {
 
     private Profile profile; // 1대1관계
 
+    // Create
     public Member(String account, String email, String pwd) {
         this.account = account;
         this.email = email;
         this.pwd = pwd;
     }
 
+    // Update
+    public Member(Long mid, String email, String pwd){
+        this.mid = mid;
+        this.email = email;
+        this.pwd = pwd;
+    }
 }

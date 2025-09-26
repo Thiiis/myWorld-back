@@ -18,4 +18,17 @@
     FROM DIARY_COMMENT
     WHERE DID = #{did} AND DCID = #{dcid}
   </select>
+  <!-- 댓글 수정 (did와 comment DTO 기준) -->
+  <update id="update">
+    UPDATE DIARY_COMMENT <!-- 모든 쿼리의 테이블 이름을 DIARY_COMMENT로 통일 -->
+    SET
+      CONTENT = #{comment.content},
+      UPDATED_AT = SYSTIMESTAMP  <!-- DB에서 현재 시각을 직접 기록 -->
+    WHERE DCID = #{comment.dcid} AND DID = #{did} <!-- did를 사용하여 보안 검증 -->
+  </update>
+  <!--댓글 삭제-->
+  <delete id="delete">
+    DELETE FROM DIARY_COMMENT
+    WHERE DCID = #{dcid}
+  </delete>
 </mapper>

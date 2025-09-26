@@ -2,10 +2,10 @@ package com.example.demo.jukebox.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.interceptor.Login;
 import com.example.demo.jukebox.dto.JukeboxCreateRequest;
 import com.example.demo.jukebox.dto.JukeboxCreateResponse;
 import com.example.demo.jukebox.dto.JukeboxDetailResponse;
@@ -32,17 +33,15 @@ public class JukeboxController {
     private final JukeboxLikesService jukeboxLikesService;
 
     // 주크박스 생성
+    @Login
     @PostMapping("/create")
-    public ResponseEntity<JukeboxCreateResponse> jukeboxCreate(@RequestBody JukeboxCreateRequest request) {
-        try {
-            JukeboxCreateResponse response = jukeboxservice.create(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<JukeboxCreateResponse> jukeboxCreate(@RequestBody JukeboxCreateRequest dto) {
+        JukeboxCreateResponse response = jukeboxservice.create(dto);
+        return ResponseEntity.ok(response);
     }
 
     // 주크박스 조회
+    @Login
     @GetMapping("/list")
     public ResponseEntity<List<JukeboxListResponse>> jukeboxList(@RequestParam Long mid) {
         List<JukeboxListResponse> list = jukeboxservice.getJukeboxList(mid);
@@ -50,45 +49,39 @@ public class JukeboxController {
     }
 
     // 주크박스 상세조회
+    @Login
     @GetMapping("/detail")
     public ResponseEntity<JukeboxDetailResponse> jukeboxDetail(@RequestParam Long jid) {
         JukeboxDetailResponse response = jukeboxservice.getJukeboxDetail(jid);
         return ResponseEntity.ok(response);
     }
-    
 
     // 주크박스 수정
+    @Login
     @PutMapping("/update")
-    public ResponseEntity<JukeboxUpdateRequest> jukeboxUpdate(@RequestBody JukeboxUpdateRequest request) {
-        Long rows = jukeboxservice.update(request);
-        if (rows > 0) {
-            return ResponseEntity.ok(request);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<Void> jukeboxUpdate(@RequestBody JukeboxUpdateRequest dto) {
+        jukeboxservice.update(dto);
+        return ResponseEntity.noContent().build();
     }
 
     // 주크박스 삭제
-    @DeleteMapping("/delete")
-    public ResponseEntity<Long> jukeboxDelete(@RequestParam Long jid) {
-        Long rows = jukeboxservice.delete(jid);
-        if (rows > 0) {
-            return ResponseEntity.ok(rows);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0L);
-        }
+    @Login
+    @DeleteMapping("/delete/{jid}")
+    public ResponseEntity<Void> jukeboxDelete(@PathVariable("jid") Long jid) {
+        jukeboxservice.delete(jid);
+        return ResponseEntity.noContent().build();
     }
 
     // 주크박스 좋아요
+    @Login
     @PostMapping("/like")
-    public ResponseEntity<String> toggleJukeboxLike(@RequestParam Long jid, @RequestParam Long mid) { 
+    public ResponseEntity<String> toggleJukeboxLike(@RequestParam Long jid, @RequestParam Long mid) {
         boolean isLike = jukeboxLikesService.toggleLike(jid, mid);
-        if(isLike) {
+        if (isLike) {
             return ResponseEntity.ok("좋아요");
         } else {
             return ResponseEntity.ok("좋아요 취소");
         }
     }
-    
 
 }

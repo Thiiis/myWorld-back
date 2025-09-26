@@ -17,7 +17,7 @@
     order by updated_at desc
   </select>
 
-  <select id="countByMid" resultType="Long">
+  <select id="countByMid" resultType="int">
     select count(*) from jukeboxes where mid = #{mid}
   </select>
 

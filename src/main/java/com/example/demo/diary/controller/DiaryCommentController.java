@@ -2,6 +2,7 @@ package com.example.demo.diary.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,9 +45,16 @@ public class DiaryCommentController {
   }
 
   // 댓글 수정
-  @PutMapping("path/{id}")
+  @PutMapping("/{dcid}")
   public ResponseEntity<Void> updateDiaryComment(@PathVariable("did") Long did, @PathVariable("dcid") Long dcid, @RequestBody DiaryCommentUpdateRequest dto) {
     diaryCommentService.updateDiaryComment(did, dcid, dto);
+    return ResponseEntity.noContent().build();
+  }
+
+  // 댓글 삭제
+  @DeleteMapping("{dcid}")
+  public ResponseEntity<Void> deleteDiaryComment(@PathVariable("did") Long did, @PathVariable("dcid") Long dcid) {
+    diaryCommentService.deleteDiaryComment(did, dcid);
     return ResponseEntity.noContent().build();
   }
   

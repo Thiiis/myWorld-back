@@ -8,10 +8,10 @@ import com.example.demo.jukebox.dto.Jukebox;
 
 @Mapper
 public interface JukeboxDao {
-  public Long insert(Jukebox jukebox);
+  public int insert(Jukebox jukebox);
   public Jukebox selectByJid(Long jid);
   public List<Jukebox> selectListByMid(Long mid);
-  public Long countByMid(Long mid);
-  public Long update(Jukebox jukebox);
-  public Long delete(Long jid);
+  public int countByMid(Long mid);
+  public int update(Jukebox jukebox);
+  public int delete(Long jid);
 }

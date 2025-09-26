@@ -37,9 +37,9 @@ public class DiaryComment {
   }
 
   //수정용
-  public DiaryComment(Long dcid, Long did, String content) {
-    this.dcid = dcid;
+  public DiaryComment(Long did, Long dcid, String content) {
     this.did = did;
+    this.dcid = dcid;
     this.content = content;
   }
 
