@@ -3,7 +3,9 @@ package com.example.demo.profile.dto;
 import java.util.Date;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class ProfileAddressUpdateRequest {
     private Long pid;

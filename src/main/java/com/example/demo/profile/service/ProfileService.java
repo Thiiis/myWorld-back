@@ -6,6 +6,7 @@ import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
 import com.example.demo.profile.dto.ProfileAddressUpdateRequest;
 import com.example.demo.profile.dto.ProfileFKUpdateRequest;
+import com.example.demo.profile.dto.ProfileReadResponse;
 import com.example.demo.profile.dto.ProfileUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,30 @@ import lombok.extern.slf4j.Slf4j;
 public class ProfileService {
     private final ProfileDao profileDao;
 
-    public Profile getProfileByPid(Long pid) {
-        return profileDao.selectByPid(pid);
+    // Read
+    public ProfileReadResponse getProfileByPid(Long pid) {
+        Profile profile = profileDao.selectByPid(pid);
+        if (profile == null) {
+            throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
+        }
+
+        return new ProfileReadResponse(
+                profile.getPid(),
+                profile.getNickname(),
+                profile.getBirthdate(),
+                profile.getImgUrl(),
+                profile.getStatusMessage());
     }
 
+    public Profile getProfileByMid(Long mid) {
+        return profileDao.selectByMid(mid);
+    }
+
+    public Profile getProfileByNickname(String nickname) {
+        return profileDao.selectByNickname(nickname);
+    }
+
+    // Update
     // '주소' 업데이트 요청 처리
     public void updateAddress(ProfileAddressUpdateRequest dto) {
         // 1. Mapper로 보낼 '통합 Request' 생성
@@ -46,4 +67,6 @@ public class ProfileService {
 
         // profileDao.update(unifiedDto);
     }
+
+    // Delete
 }

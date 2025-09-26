@@ -2,32 +2,23 @@ package com.example.demo.profile.dto;
 
 import java.util.Date;
 
-import com.example.demo.auth.dto.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
-public class Profile {
-
-    private Long pid; // PK
-    private Long mid; // 멤버 FK
-    private Long jid; // 주크박스 FK
+public class ProfileUpdateResponse {
     private Long tid; // 테마 FK
+    private Long jid; // 주크박스 FK
 
-    private Date createdAt;
     private Date updatedAt;
 
-    private Member member; //1대1관계
-    
     private String nickname; // 회원가입할 때 닉네임 받아옴
-    
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date birthdate; // 생년월일
-    
+
     private String imgName; // 프로필 이미지 파일 이름
     private String imgUrl; // 프로필 이미지 서버 저장 경로
 
@@ -41,15 +32,7 @@ public class Profile {
     private Long latitude; // Y좌표 위도 가로
     private Long longtitude; // X좌표 경도 세로
 
-    private int viewCount  = 0; // 미니홈 조회수
-    
-    // private String viewScope;
-    // Profile Privacy가 있긴 한데 어떻게 할지 몰겟음
-    
-    public Profile(long mid, String nickname, Date birthdate){
-        this.mid = mid;
-        this.nickname = nickname;
-        this.birthdate=birthdate;
-    }
+    private int viewCount; // 미니홈 조회수
 
+    // private String viewScope;
 }

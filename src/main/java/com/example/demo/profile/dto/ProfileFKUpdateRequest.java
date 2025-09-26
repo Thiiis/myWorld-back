@@ -1,7 +1,9 @@
 package com.example.demo.profile.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class ProfileFKUpdateRequest {
     private Long pid;

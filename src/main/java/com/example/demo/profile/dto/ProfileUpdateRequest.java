@@ -7,21 +7,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public class ProfileUpdateRequest {
-    private Long pid; // PK
-    private Long mid; // 멤버 FK
-    private Long tid; // 테마 FK
-    private Long jid; // 주크박스 FK
-
-    private Date createdAt;
-    private Date updatedAt;
-
-    private Member member; // 1대1관계
+    private Long pid;
 
     private String nickname; // 회원가입할 때 닉네임 받아옴
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -37,10 +27,6 @@ public class ProfileUpdateRequest {
     private String postalCode; // 우편번호
     private String mainAddress; // 메인 주소
     private String detailAddress; // 상세 주소, 사용자 입력값, ex. 2동 302호
-    private Long latitude; // Y좌표 위도 가로
-    private Long longtitude; // X좌표 경도 세로
 
-    private int viewCount = 0; // 미니홈 조회수
-
-    private String viewScope;
+    // private String viewScope;
 }

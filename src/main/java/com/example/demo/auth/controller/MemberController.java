@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.auth.dto.LoginRequest;
-import com.example.demo.auth.dto.LoginResponse;
-import com.example.demo.auth.dto.Member;
-import com.example.demo.auth.dto.SignupRequest;
-import com.example.demo.auth.dto.SignupResponse;
-import com.example.demo.auth.dto.UpdateRequest;
+import com.example.demo.auth.dto.MemberLoginRequest;
+import com.example.demo.auth.dto.MemberLoginResponse;
+import com.example.demo.auth.dto.MemberSignupRequest;
+import com.example.demo.auth.dto.MemberSignupResponse;
+import com.example.demo.auth.dto.MemberUpdateRequest;
 import com.example.demo.auth.service.MemberService;
+import com.example.demo.common.dto.ApiResponse;
 import com.example.demo.interceptor.Login;
 
 import jakarta.validation.Valid;
@@ -31,46 +31,40 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponse> signupMember(@Valid @RequestBody SignupRequest dto) {
-        Member member = memberService.signup(dto);
-
-        SignupResponse response = SignupResponse.success(member.getAccount());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
+    public ResponseEntity<MemberSignupResponse> signupMember(@Valid @RequestBody MemberSignupRequest dto) {
+        memberService.signup(dto);
+        MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(),dto.getNickname(),dto.getEmail(),dto.getBirthdate());
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginMember(@Valid @RequestBody LoginRequest dto) {
+    public ResponseEntity<ApiResponse<MemberLoginResponse>> loginMember(@Valid @RequestBody MemberLoginRequest dto) {
         try {
             // 서비스에 로그인 요청을 보내고 성공 시 JWT를 받음
             String jwt = memberService.login(dto);
-
             // 성공 응답 DTO 생성
-            LoginResponse response = LoginResponse.success(dto.getAccount(), jwt);
-            return ResponseEntity.ok(response);
+            MemberLoginResponse result = new MemberLoginResponse(dto.getAccount(), jwt);
+            return ResponseEntity.ok(ApiResponse.success(result,"로그인 성공!"));
 
         } catch (IllegalArgumentException e) {
-            // 서비스에서 예외 발생 시(로그인 실패) 실패 응답 DTO 생성
-            LoginResponse response = LoginResponse.fail(e.getMessage());
             // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.fail(401,"로그인 실패: "+e.getMessage()));
         }
     }
 
     @Login
     @PutMapping("/update")
-    public ResponseEntity<Member> updateMember(@RequestBody UpdateRequest dto) {
+    public ResponseEntity<String> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
         memberService.update(dto);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("수정 완료되었습니다.");
     }
 
     // delete 둘 중에 하나 선택, 개발하면서 생각해보기
     @Login
     @DeleteMapping("/delete/mid/{mid}")
-    public ResponseEntity<Void> deleteMember(@PathVariable("mid") Long mid) {
+    public ResponseEntity<String> deleteMember(@Valid @PathVariable("mid") Long mid) {
         memberService.deleteByMid(mid);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("삭제 완료되었습니다.");
     }
 
 }
