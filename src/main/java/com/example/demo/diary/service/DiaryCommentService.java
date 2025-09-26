@@ -1,0 +1,53 @@
+package com.example.demo.diary.service;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.diary.dao.DiaryCommentDao;
+import com.example.demo.diary.dto.DiaryComment;
+import com.example.demo.diary.dto.request.DiaryCommentCreateRequest;
+import com.example.demo.diary.dto.request.DiaryCommentUpdateRequest;
+import com.example.demo.diary.dto.response.DiaryCommentCreateResponse;
+import com.example.demo.diary.dto.response.DiaryCommentReadResponse;
+import com.example.demo.diary.dto.response.DiaryReadResponse;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class DiaryCommentService {
+
+  private final DiaryCommentDao diaryCommentDao;
+
+  // 댓글 생성
+  @Transactional
+  public DiaryCommentCreateResponse createDiaryComment(Long did, DiaryCommentCreateRequest dto) {
+    //객체생성(entity DTO에 값 주입)
+    DiaryComment comment = new DiaryComment(did, dto.getMid(), dto.getParentDcid(), dto.getContent());
+    //dao에 전달
+    diaryCommentDao.insert(comment);
+    //responseDTO에 단건조회(DB에 값을 클라이언트에 보내기 위함) 값 담기
+    DiaryComment savedComment = diaryCommentDao.selectByDcid(comment.getDcid());
+    return new DiaryCommentCreateResponse(savedComment.getDcid(), savedComment.getDid(), savedComment.getMid(), savedComment.getParentDcid(), savedComment.getContent(), savedComment.getCreateAt());
+  }
+
+  // 댓글 조회
+  public DiaryCommentReadResponse getDiaryComment(Long did, Long dcid) {
+    //조회(보안을 위해 did와 dcid를 모두 사용하여 조회-어떤 id값인지 모름)
+    DiaryComment comment = diaryCommentDao.selectByDidAndDcid(did, dcid);
+
+    return new DiaryCommentReadResponse(comment.getDcid(), comment.getDid(), comment.getMid(), comment.getParentDcid(), comment.getContent(), comment.getCreateAt(), comment.getUpdateAt());
+  }
+
+  // 댓글 수정
+  @Transactional
+  public void updateDiaryComment(Long dcid, Long did, DiaryCommentUpdateRequest dto) {
+    // [보안 로직 추가 예정]: 실제 사용자의 mid를 확인하여 수정 권한이 있는지 검증해야 합니다.
+
+    //객체에 담기
+    DiaryComment comment = new DiaryComment(dcid, did, dto.getContent());
+    diaryCommentDao.update(comment);
+  }
+}

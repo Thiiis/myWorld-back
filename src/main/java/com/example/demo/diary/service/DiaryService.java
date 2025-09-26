@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.diary.dao.AttachmentDao;
@@ -33,6 +34,7 @@ public class DiaryService {
   private final AttachmentDao attachmentDao;
 
   // 일기 생성
+  @Transactional
   public DiaryCreateResponse createDiary(DiaryCreateRequest dto, List<MultipartFile> files) {
     // 1) Diary 저장
     Diary diary = new Diary(dto.getMid(), dto.getTitle(), dto.getContent(), dto.getViewScope(), dto.getEmo(), dto.getWeather());
@@ -99,8 +101,7 @@ public class DiaryService {
     List<DiaryReadResponse> list = diaries.stream().map(d -> {
       Attachment representative = attachmentDao.selectFeaturedByDid(d.getDid());
       AttachmentCreateResponse repResponse = representative != null
-          ? new AttachmentCreateResponse(representative.getAid(), representative.getAname(), representative.getAtype(),
-              "/attachments/" + representative.getAid())
+          ? new AttachmentCreateResponse(representative.getAid(), representative.getAname(), representative.getAtype(), "/attachments/" + representative.getAid())
           : null;
       return new DiaryReadResponse(d.getDid(), d.getMid(), d.getTitle(), d.getContent(), d.getViewScope(), d.getEmo(), d.getWeather(), d.getCreatedAt(), d.getUpdatedAt(), null, repResponse);
     }).toList();
@@ -109,7 +110,6 @@ public class DiaryService {
 
   // 일기 상세 읽기
   public DiaryReadResponse getDiary(Long did) {
-
     // 1. 일기 본문 조회
     Diary diary = diaryDao.selectByDid(did);
 
@@ -121,19 +121,15 @@ public class DiaryService {
     Attachment representative = attachmentDao.selectFeaturedByDid(did);
 
     // 4. Diary -> Response 변환
-    List<AttachmentCreateResponse> attachmentResponses = attachments.stream().map(a -> new AttachmentCreateResponse(
-        a.getAid(), a.getAname(), a.getAtype(), "/attachments/" + a.getAid())).toList();
-
-    return new DiaryReadResponse(diary.getDid(), diary.getMid(), diary.getTitle(), diary.getContent(),
-        diary.getViewScope(), diary.getEmo(), diary.getWeather(), diary.getCreatedAt(), diary.getUpdatedAt(),
-        attachmentResponses,
-        representative != null
-            ? new AttachmentCreateResponse(representative.getAid(), representative.getAname(),
-                representative.getAtype(), "/attachments/" + representative.getAid())
-            : null);
+    List<AttachmentCreateResponse> attachmentResponses = attachments.stream().map(a -> new AttachmentCreateResponse( a.getAid(), a.getAname(), a.getAtype(), "/attachments/" + a.getAid())).toList();
+    // 5. 컨트롤러로 response타입 객체에 값 담아서 반환
+    return new DiaryReadResponse(diary.getDid(), diary.getMid(), diary.getTitle(), diary.getContent(), diary.getViewScope(), diary.getEmo(), diary.getWeather(), diary.getCreatedAt(), diary.getUpdatedAt(),attachmentResponses, representative != null
+                                 ? new AttachmentCreateResponse(representative.getAid(), representative.getAname(), representative.getAtype(), "/attachments/" + representative.getAid())
+                                 : null);
   }
 
   // 수정
+  @Transactional
   public void updateDiary(DiaryUpdateRequest dto, List<MultipartFile> files) {
     // 0) MID 값 조회
     Diary existingDiary = diaryDao.selectByDid(dto.getDid());
@@ -173,11 +169,13 @@ public class DiaryService {
     }
 
   // 단건 삭제
+  @Transactional
   public void deleteDiary(Long did) {
     diaryDao.delete(did);
   }
 
   // 다중 삭제
+  @Transactional
   public void deleteDiaries(List<Long> dids) {
     diaryDao.deleteDiaries(dids);
   }

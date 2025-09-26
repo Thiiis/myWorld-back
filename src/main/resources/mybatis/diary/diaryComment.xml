@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.diary.dao.DiaryCommentDao">
+  <insert id="insert" parameterType="DiaryComment" useGeneratedKeys="true" keyProperty="dcid" keyColumn="DCID">
+    INSERT INTO DIARY_COMMENT (DID, MID, PARENT_DCID, CONTENT, CREATED_AT)
+    VALUES (#{did}, #{mid}, #{parentDcid}, #{content}, SYSTIMESTAMP)
+  </insert>
+  <!--insert용 조회-->
+  <select id="selectByDcid" parameterType="Long" resultType="DiaryComment">
+    SELECT DCID as dcid, DID as did, MID as mid, PARENT_DCID as parentDcid, CONTENT as content, CREATED_AT as createAt, UPDATED_AT as updateAt
+    FROM DIARY_COMMENT
+    WHERE DCID = #{dcid}
+  </select>
+  <!--상세조회 Read용-->
+  <select id="selectByDidAndDcid" parameterType="Long" resultType="DiaryComment">
+    SELECT DCID as dcid, DID as did, MID as mid, PARENT_DCID as parentDcid, CONTENT as content, CREATED_AT as createAt, UPDATED_AT as updateAt
+    FROM DIARY_COMMENT
+    WHERE DID = #{did} AND DCID = #{dcid}
+  </select>
+</mapper>
