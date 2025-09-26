@@ -39,6 +39,7 @@ public class GuestBoardController {
   }
 
   // 방명록 조회
+  @Login
   @GetMapping("/list")
   public ResponseEntity<List<GuestBoardListResponse>> guestBoardList(
       @RequestParam(defaultValue = "0") Long offset,
