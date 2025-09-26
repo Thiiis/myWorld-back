@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProfileUpdateRequest {
     private Long pid;
-    private Long mid;
 
+    private Long mid;
     private Long jid;
     private Long tid;
 
@@ -28,9 +28,9 @@ public class ProfileUpdateRequest {
     private String intro; // 자기소개, CLOB
 
     // 주소
-    private String postalCode; // 우편번호
-    private String mainAddress; // 메인 주소
-    private String detailAddress; // 상세 주소, 사용자 입력값, ex. 2동 302호
+    // private String postalCode; // 우편번호
+    // private String mainAddress; // 메인 주소
+    // private String detailAddress; // 상세 주소, 사용자 입력값, ex. 2동 302호
 
     // private String viewScope;
 }

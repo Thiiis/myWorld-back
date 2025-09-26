@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.dto.ApiResponse;
-import com.example.demo.profile.dto.Profile;
-import com.example.demo.profile.dto.ProfileReadRequest;
 import com.example.demo.profile.dto.ProfileReadResponse;
 import com.example.demo.profile.service.ProfileService;
 
@@ -21,9 +19,8 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping("/detail")
-    public ResponseEntity<ApiResponse<ProfileReadResponse>> getProfileByPid(ProfileReadRequest dto) {
-        Profile profile = profileService.getByPid(dto.getPid());
-        ProfileReadResponse result = new ProfileReadResponse(dto.getPid(), dto.getMid());
+    public ResponseEntity<ApiResponse<ProfileReadResponse>> getProfileDetail(@RequestParam("pid") Long pid) {
+        ProfileReadResponse result = profileService.getProfile(pid);
         return ResponseEntity.ok(ApiResponse.success(result, null));
     }
 

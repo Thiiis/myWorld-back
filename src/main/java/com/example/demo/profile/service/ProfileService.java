@@ -4,10 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
-import com.example.demo.profile.dto.ProfileAddressUpdateRequest;
-import com.example.demo.profile.dto.ProfileFKUpdateRequest;
 import com.example.demo.profile.dto.ProfileReadResponse;
-import com.example.demo.profile.dto.ProfileUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,13 +16,14 @@ public class ProfileService {
     private final ProfileDao profileDao;
 
     // Read
-    public ProfileReadResponse getProfileDetail(Long pid) {
+    public ProfileReadResponse getProfile(Long pid) {
         Profile profile = profileDao.selectByPid(pid);
         if (profile == null) {
             throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
         }
-
-        return new ProfileReadResponse(pid, pid, null, null, null, null, null, null, null)
+        return new ProfileReadResponse(profile.getMid(),profile.getJid(),profile.getTid(),
+        profile.getCreatedAt(),profile.getNickname(),profile.getBirthdate(),profile.getImgName(),
+        profile.getImgUrl(),profile.getStatusMessage(),profile.getIntro());
     }
 
     // public Profile getProfileByMid(Long mid) {

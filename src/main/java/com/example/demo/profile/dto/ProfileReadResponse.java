@@ -10,6 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class ProfileReadResponse {
+    private Long mid; // 멤버 FK
     private Long jid; // 주크박스 FK
     private Long tid; // 테마 FK
 

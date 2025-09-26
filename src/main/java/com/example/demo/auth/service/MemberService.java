@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.auth.dao.MemberDao;
 import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.MemberLoginRequest;
-import com.example.demo.auth.dto.MemberReadRequest;
 import com.example.demo.auth.dto.MemberReadResponse;
 import com.example.demo.auth.dto.MemberSignupRequest;
 import com.example.demo.auth.dto.MemberSignupResponse;
@@ -78,8 +77,8 @@ public String login(MemberLoginRequest dto) {
 }
   // 프로필에서만 생년월일, 닉네임 보이게 할 것이냐...말 것이냐 그것이 문제로다...
   @Transactional(readOnly = true)
-  public MemberReadResponse getMemberDetail(MemberReadRequest dto) {
-      Member member = memberDao.selectByMid(dto.getMid());
+  public MemberReadResponse getMember(Long mid) {
+      Member member = memberDao.selectByMid(mid);
       if (member == null) {
           throw new IllegalArgumentException("존재하지 않는 회원입니다.");
       }
