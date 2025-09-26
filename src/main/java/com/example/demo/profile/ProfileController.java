@@ -2,12 +2,13 @@ package com.example.demo.profile;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.common.dto.ApiResponse;
+import com.example.demo.profile.dto.Profile;
+import com.example.demo.profile.dto.ProfileReadRequest;
 import com.example.demo.profile.dto.ProfileReadResponse;
 import com.example.demo.profile.service.ProfileService;
 
@@ -20,14 +21,10 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping("/detail")
-    public ResponseEntity<ApiResponse<ProfileReadResponse>> getProfile(@RequestParam("mid") Long mid) {
-        profileService.getProfileByMid(mid);
+    public ResponseEntity<ApiResponse<ProfileReadResponse>> getProfileByPid(ProfileReadRequest dto) {
+        Profile profile = profileService.getByPid(dto.getPid());
+        ProfileReadResponse result = new ProfileReadResponse(dto.getPid(), dto.getMid());
         return ResponseEntity.ok(ApiResponse.success(result, null));
-    }
-
-    @PutMapping("/update")
-    public void updateProfile() {
-
     }
 
 }

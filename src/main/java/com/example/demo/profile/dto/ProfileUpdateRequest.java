@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProfileUpdateRequest {
     private Long pid;
+    private Long mid;
+
+    private Long jid;
+    private Long tid;
 
     private String nickname; // 회원가입할 때 닉네임 받아옴
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")

@@ -29,8 +29,8 @@ public class ProfileUpdateResponse {
     private String postalCode; // 우편번호
     private String mainAddress; // 메인 주소
     private String detailAddress; // 상세 주소, 사용자 입력값, ex. 2동 302호
-    private Long latitude; // Y좌표 위도 가로
-    private Long longtitude; // X좌표 경도 세로
+    // private Long latitude; // Y좌표 위도 가로
+    // private Long longtitude; // X좌표 경도 세로
 
     private int viewCount; // 미니홈 조회수
 

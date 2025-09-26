@@ -57,8 +57,8 @@ public class MemberController {
     }
 
     @GetMapping("/detail/{mid}")
-    public ResponseEntity<ApiResponse<MemberReadResponse>> getMemberByMid (@RequestParam("mid") String mid) {
-        MemberReadResponse result = memberService.getByMid(mid);
+    public ResponseEntity<ApiResponse<MemberReadResponse>> getMember () {
+        MemberReadResponse result = memberService.getMemberDetail(mid);
 
         return ResponseEntity.ok(ApiResponse.success(result,null));
     }
