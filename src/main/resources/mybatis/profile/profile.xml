@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.profile.dao.ProfileDao">
   <insert id="insert" parameterType="Profile">
-    INSERT INTO PROFILES (NICKNAME, mid)
-    VALUES (#{nickname}, #{mid})
+    INSERT INTO PROFILES (MID, NICKNAME, BIRTHDATE)
+    VALUES (#{mid}, #{nickname}, #{birthdate})
   </insert>
   
   <!-- <select id="existsByNickname" parameterType="String" resultType="int">
@@ -13,26 +13,34 @@
   </select> -->
 
   <select id="selectByPid" parameterType="Long" resultType="Profile">
-    SELECT (*)
+    SELECT *
     FROM profiles
     WHERE pid = #{pid}
   </select>
   
   <select id="selectByMid" parameterType="Long" resultType="Profile">
-    SELECT (*)
+    SELECT *
     FROM profiles
     WHERE mid = #{mid}
   </select>
 
-  <select id="selectByNickname" parameterType="Long" resultType="Profile">
-    SELECT (*)
+  <select id="selectByNickname" parameterType="String" resultType="Profile">
+    SELECT *
     FROM profiles
     WHERE nickname = #{nickname}
   </select>
 
+  <!-- <select id="findAll" resultType="Profile">
+      SELECT * FROM PROFILES
+  </select> -->
+
+
   <update id="updateProfile" parameterType="com.example.demo.profile.dto.ProfileUpdateRequest">
     UPDATE PROFILE_TABLE
     <set>
+        <if test="mid != null"> MID = #{mid}, </if>
+        <if test="jid != null"> JID = #{jid}, </if>
+        <if test="tid != null"> TID = #{tid}, </if>
         <if test="nickname != null"> NICKNAME = #{nickname}, </if>
         <if test="birthdate != null"> BIRTHDATE = #{birthdate}, </if>
         <if test="statusMessage != null"> STATUS_MESSAGE = #{statusMessage}, </if>

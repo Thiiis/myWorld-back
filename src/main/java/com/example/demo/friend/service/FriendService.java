@@ -9,8 +9,8 @@ import com.example.demo.friend.dao.FriendDao;
 import com.example.demo.friend.dto.Friend;
 import com.example.demo.friend.dto.FriendCreateRequest;
 import com.example.demo.friend.dto.FriendCreateResponse;
-import com.example.demo.friend.dto.FriendListResponse;
-import com.example.demo.friend.dto.FriendRequestListResponse;
+// import com.example.demo.friend.dto.FriendListResponse;
+// import com.example.demo.friend.dto.FriendRequestListResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,13 +43,13 @@ public class FriendService {
   }
 
   //memeber 구현 완료 후 수정
-  public List<FriendRequestListResponse> getFriendRequestList(Long mid) {
-    return friendDao.selectByAccId(mid);
-  }
+  // public List<FriendRequestListResponse> getFriendRequestList(Long mid) {
+  //   return friendDao.selectByAccId(mid);
+  // }
 
-  public List<FriendListResponse> getFriendList(Long mid) {
-    return friendDao.selectFriendsByMid(mid);
-  }
+  // public List<FriendListResponse> getFriendList(Long mid) {
+  //   return friendDao.selectFriendsByMid(mid);
+  // }
 
   public void deleteFriend(Long id) {
     Friend friend = friendDao.selectById(id);

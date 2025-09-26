@@ -9,13 +9,11 @@ import com.example.demo.auth.dto.Member;
 @Mapper
 public interface MemberDao {
      void insert(Member member);
+     Member selectByAccount(String account);
      Member selectByMid(Long mid);
-     Member selectByAccount(@Param("account") String account);
-     int update(Member member);
+     void update(@Param("mid") Long mid, @Param("email") String email, @Param("pwd") String pwd);
      int deleteByMid(Long mid);
-     int deleteByAccount(String account);
 
-    // MemberMapper.xml의 id="existsByAccount" 쿼리를 호출합니다.
-     int existsByAccount(String account);
+     int countByAccount(String account);
     
 }

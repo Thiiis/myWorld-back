@@ -3,12 +3,12 @@ package com.example.demo.auth.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import com.example.demo.auth.dao.MemberDao;
 import com.example.demo.auth.dto.LoginRequest;
 import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.SignupRequest;
+import com.example.demo.auth.dto.UpdateRequest;
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
 
@@ -26,17 +26,17 @@ public class MemberService {
   // private final JwtService jwtService;
 
   @Transactional
-  public Member signup(SignupRequest request) {
-    if (!request.getPwd().equals(request.getPwdConfirm())) {
+  public Member signup(SignupRequest dto) {
+    if (!dto.getPwd().equals(dto.getPwdConfirm())) {
       throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
-    int count = memberDao.existsByAccount(request.getAccount());
+    int count = memberDao.countByAccount(dto.getAccount());
     if (count > 0) {
       // 이미 아이디가 존재하면 예외를 발생시킵니다.
       throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
     } else {
-      String encodedPassword = passwordEncoder.encode(request.getPwd());
-      Member member = new Member(request.getAccount(), request.getEmail(), encodedPassword);
+      String encodedPassword = passwordEncoder.encode(dto.getPwd());
+      Member member = new Member(dto.getAccount(), dto.getEmail(), encodedPassword);
       memberDao.insert(member);
       // 2. member.getId()에 유효한 값이 들어왔는지 확인!
       // (디버깅으로 member 객체의 id 값을 꼭 확인해보세요)
@@ -46,21 +46,21 @@ public class MemberService {
       }
 
       // 3. 가져온 member.getId()로 Profile 생성
-      Profile profile = new Profile(request.getNickname(), member.getMid());
+      Profile profile = new Profile(member.getMid(), dto.getNickname(), dto.getBirthdate());
       profileDao.insert(profile);
       return member;
     }
   }
 
-  public String login(LoginRequest request) {
+  public String login(LoginRequest dto) {
     // 1. 회원 아이디 조회
-    Member member = memberDao.selectByAccount(request.getAccount());
+    Member member = memberDao.selectByAccount(dto.getAccount());
     // 2. 없으면 던지기
     if (member == null) {
       throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
     }
     // 3. 비밀번호 비교
-    if (!passwordEncoder.matches(request.getPwd(), member.getPwd())) {
+    if (!passwordEncoder.matches(dto.getPwd(), member.getPwd())) {
       // 비밀번호가 일치하지 않으면 예외 발생
       throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
     }
@@ -68,56 +68,30 @@ public class MemberService {
     return jwtService.createJWT(member.getAccount(), member.getEmail());
   }
 
-  public Member getMemberByAccount(String account) {
-    Member member = memberDao.selectByAccount(account);
-    return member;
-  }
+@Transactional
+public void update(UpdateRequest dto) {
+    // 이메일과 비밀번호를 수정하려면, 비밀번호가 빈 문자열로 넘어오는지 체크
+    String email = dto.getEmail();
+    String pwd = dto.getPwd();
+    Long mid = dto.getMid();
 
-  public Member getMemberByMid(Long mid) {
-    Member member = memberDao.selectByMid(mid);
-    return member;
-  }
-
-  // 이메일이랑 패스워드만 받아서 해도 되지않나...
-  public Member update(Member member) {
-    Member dbmember = memberDao.selectByAccount(member.getAccount());
-    if (dbmember == null) {
-      return null;
-    } else {
-      if (StringUtils.hasText(member.getPwd())) {
-        dbmember.setPwd(member.getPwd());
-      }
-      if (StringUtils.hasText(member.getEmail())) {
-        dbmember.setEmail(member.getEmail());
-      }
+    // 이메일만 수정할 경우 비밀번호를 null로 보내지 않도록 확인
+    if (email == null || email.isEmpty()) {
+        throw new IllegalArgumentException("이메일을 입력해주세요.");
     }
-    memberDao.update(dbmember);
-    dbmember = memberDao.selectByAccount(member.getAccount());
-    return dbmember;
 
-  }
-
-  public enum RemoveResult {
-    SUCCESS,
-    FAIL
-  }
-
-  public RemoveResult deleteByAccount(String account) {
-    int rows = memberDao.deleteByAccount(account);
-    if (rows == 0) {
-      return RemoveResult.FAIL;
-    } else {
-      return RemoveResult.SUCCESS;
+    // 비밀번호가 null이 아닌 경우에만 비밀번호 업데이트
+    if (pwd != null && !pwd.isEmpty()) {
+        pwd = passwordEncoder.encode(pwd); // 비밀번호 암호화
     }
-  }
+    memberDao.update(mid,email,pwd);
 
-  public RemoveResult deleteByMid(Long mid) {
+}
+
+
+  public int deleteByMid(Long mid) {
     int rows = memberDao.deleteByMid(mid);
-    if (rows == 0) {
-      return RemoveResult.FAIL;
-    } else {
-      return RemoveResult.SUCCESS;
-    }
+    return rows;
   }
 
 }
