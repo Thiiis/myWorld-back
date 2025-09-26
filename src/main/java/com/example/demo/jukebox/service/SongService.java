@@ -75,8 +75,8 @@ public class SongService {
 
 
   // 음악 추가하기
-  public SongCreateResponse create(SongCreateRequest request) {
-    String videoId = request.getVideoId();
+  public SongCreateResponse create(SongCreateRequest dto) {
+    String videoId = dto.getVideoId();
 
     // YouTube API 호출
     RestTemplate restTemplate = new RestTemplate();
@@ -97,7 +97,7 @@ public class SongService {
     Long duration = parseDuration(durationStr);
 
     // 2. DB 저장
-    Song song = new Song(request.getMid(), title, artist, duration, videoId);
+    Song song = new Song(dto.getMid(), title, artist, duration, videoId);
     songDao.insert(song);
 
     Song dbSong = songDao.selectBySid(song.getSid());
@@ -121,7 +121,7 @@ public class SongService {
 
 
   // 음악 삭제하기
-  public Long delete(Long sid) {
+  public int delete(Long sid) {
     return songDao.delete(sid);
   }
 }

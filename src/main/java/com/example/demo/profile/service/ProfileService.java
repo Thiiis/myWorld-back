@@ -21,14 +21,6 @@ public class ProfileService {
         return profileDao.selectByPid(pid);
     }
 
-    public Profile getProfileByMid(Long mid) {
-        return profileDao.selectByMid(mid);
-    }
-
-    public Profile getProfileByNickname(String nickname) {
-        return profileDao.selectByNickname(nickname);
-    }
-
    // '텍스트' 업데이트 요청 처리
     public void updateText(ProfileTextUpdateRequest textDto) {
         // 1. Mapper로 보낼 '통합 Request' 생성

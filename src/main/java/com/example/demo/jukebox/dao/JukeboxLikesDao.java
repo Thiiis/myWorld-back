@@ -6,7 +6,7 @@ import com.example.demo.jukebox.dto.JukeboxLikes;
 
 @Mapper
 public interface JukeboxLikesDao {
-  public Long insert(JukeboxLikes jukeboxLikes);
+  public int insert(JukeboxLikes jukeboxLikes);
   public JukeboxLikes selectByJidAndMid(Long jid, Long mid);
-  public Long delete(Long jid, Long mid);
+  public int delete(Long jid, Long mid);
 }

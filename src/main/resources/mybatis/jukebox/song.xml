@@ -7,11 +7,11 @@
     values (#{mid}, #{title}, #{artist}, #{videoId}, #{duration})
   </insert>
 
-  <select id="selectBySid" resultType="Song">
+  <select id="selectBySid" parameterType="Long" resultType="Song">
     select * from songs where sid = #{sid}
   </select>
 
-  <select id="selectByJid" resultType="Song">
+  <select id="selectByJid" parameterType="Long" resultType="Song">
     select * from songs where jid = #{jid} order by created_at desc
   </select>
 
