@@ -58,12 +58,12 @@ public class MemberController {
         }
     }
 
-    // @Login
-    // @PutMapping("/update")
-    // public ResponseEntity<Member> updateMember(@RequestBody UpdateRequest dto) {
-    //     Member updated = memberService.update(dto);
-    //     return ResponseEntity.ok(updated);
-    // }
+    @Login
+    @PutMapping("/update")
+    public ResponseEntity<Member> updateMember(@RequestBody UpdateRequest dto) {
+        memberService.update(dto);
+        return ResponseEntity.noContent().build();
+    }
 
     // delete 둘 중에 하나 선택, 개발하면서 생각해보기
     @Login

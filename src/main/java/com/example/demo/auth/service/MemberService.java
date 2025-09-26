@@ -68,25 +68,25 @@ public class MemberService {
     return jwtService.createJWT(member.getAccount(), member.getEmail());
   }
 
-// @Transactional
-// public Member update(UpdateRequest dto) {
-//     // 이메일과 비밀번호를 수정하려면, 비밀번호가 빈 문자열로 넘어오는지 체크
-//     String email = dto.getEmail();
-//     String pwd = dto.getPwd();
-//     // Long mid = dto.getMid();
+@Transactional
+public void update(UpdateRequest dto) {
+    // 이메일과 비밀번호를 수정하려면, 비밀번호가 빈 문자열로 넘어오는지 체크
+    String email = dto.getEmail();
+    String pwd = dto.getPwd();
+    Long mid = dto.getMid();
 
-//     // 이메일만 수정할 경우 비밀번호를 null로 보내지 않도록 확인
-//     if (email != null && email.isEmpty()) {
-//         throw new IllegalArgumentException("이메일을 입력해주세요.");
-//     }
+    // 이메일만 수정할 경우 비밀번호를 null로 보내지 않도록 확인
+    if (email == null || email.isEmpty()) {
+        throw new IllegalArgumentException("이메일을 입력해주세요.");
+    }
 
-//     // 비밀번호가 null일 경우, 비밀번호를 업데이트하지 않도록 처리
-//     if (pwd != null && !pwd.isEmpty()) {
-//         pwd = passwordEncoder.encode(pwd); // 비밀번호 암호화
-//     }
+    // 비밀번호가 null이 아닌 경우에만 비밀번호 업데이트
+    if (pwd != null && !pwd.isEmpty()) {
+        pwd = passwordEncoder.encode(pwd); // 비밀번호 암호화
+    }
+    memberDao.update(mid,email,pwd);
 
-
-// }
+}
 
 
   public int deleteByMid(Long mid) {
