@@ -40,8 +40,7 @@ public class Diary {
         this.weather = weather;
     }
 
-    // 2. ⭐️ 업데이트용 (DID 필요, MID도 포함하여 시그니처 구분) ⭐️
-    // 7개의 인자를 받도록 변경하여 1번 생성자(6개 인자)와 시그니처를 완전히 다르게 만듭니다.
+    // 2. ⭐️ 업데이트용 (DID 필요, MID도 포함하여 시그니처 구분) ⭐️ // 7개의 인자를 받도록 변경하여 1번 생성자(6개 인자)와 시그니처를 완전히 다르게 만듭니다.
     public Diary(Long did, Long mid, String title, String content, ViewScope viewScope, Emo emo, Weather weather) {
         this.did = did; // ⬅️ DID에 올바르게 할당
         this.mid = mid; // MID도 할당 (Service에서 조회하여 가져와야 함)

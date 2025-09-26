@@ -14,7 +14,6 @@ import com.example.demo.diary.dao.DiaryDao;
 import com.example.demo.diary.dto.Attachment;
 import com.example.demo.diary.dto.Diary;
 import com.example.demo.diary.dto.Pager;
-import com.example.demo.diary.dto.request.AttachmentUpdateRequest;
 import com.example.demo.diary.dto.request.DiaryCreateRequest;
 import com.example.demo.diary.dto.request.DiaryUpdateRequest;
 import com.example.demo.diary.dto.response.AttachmentCreateResponse;
@@ -45,7 +44,7 @@ public class DiaryService {
     List<AttachmentCreateResponse> attachmentCreateResponses = new ArrayList<>();
     // 2-1)첨부파일이 있으면 Attachment 저장
     if (files != null && !files.isEmpty()) {
-
+      //사진이 10장 이상이면 예외를 던진다.
       if (files.size() > 10) {
         throw new IllegalArgumentException("첨부파일은 최대 10개까지");
       }
@@ -63,8 +62,7 @@ public class DiaryService {
           byte[] fileData = bos.toByteArray();
 
           // Attachment 객체 생성
-          Attachment attachment = new Attachment(diary.getDid(), file.getOriginalFilename(), file.getContentType(),
-              fileData);
+          Attachment attachment = new Attachment(diary.getDid(), file.getOriginalFilename(), file.getContentType(), fileData);
 
           // Insert
           attachmentDao.insert(attachment);
@@ -74,9 +72,7 @@ public class DiaryService {
 
           // 클라이언트 전달용 DTO 생성 ,url은 /attachments/{aid} 이런 식으로 접근 가능하게 설계
           String url = "/attachments/" + aid;
-          attachmentCreateResponses
-              .add(new AttachmentCreateResponse(aid, attachment.getAname(), attachment.getAtype(), url));
-
+          attachmentCreateResponses.add(new AttachmentCreateResponse(aid, attachment.getAname(), attachment.getAtype(), url));
         } catch (IOException e) {
           throw new RuntimeException("파일 업로드 처리 중 오류 발생: " + file.getOriginalFilename(), e);
         }
@@ -102,17 +98,12 @@ public class DiaryService {
     // 2. Response 변환(대표 이미지 1장만) / 리턴하기 위한 타입 변환(Diary -> DiaryReadResponse)
     List<DiaryReadResponse> list = diaries.stream().map(d -> {
       Attachment representative = attachmentDao.selectFeaturedByDid(d.getDid());
-
       AttachmentCreateResponse repResponse = representative != null
           ? new AttachmentCreateResponse(representative.getAid(), representative.getAname(), representative.getAtype(),
               "/attachments/" + representative.getAid())
           : null;
-
-      return new DiaryReadResponse(d.getDid(), d.getMid(), d.getTitle(), d.getContent(), d.getViewScope(), d.getEmo(),
-          d.getWeather(), d.getCreatedAt(), d.getUpdatedAt(), null, repResponse);
-
+      return new DiaryReadResponse(d.getDid(), d.getMid(), d.getTitle(), d.getContent(), d.getViewScope(), d.getEmo(), d.getWeather(), d.getCreatedAt(), d.getUpdatedAt(), null, repResponse);
     }).toList();
-
     return new DiaryPageResponse(pager, list);
   }
 
@@ -122,8 +113,7 @@ public class DiaryService {
     // 1. 일기 본문 조회
     Diary diary = diaryDao.selectByDid(did);
 
-    // 첨부파일 조회해서 응답 객체에 세팅(Service 안에서 첨부조회까지 처리), adata가 null로 응답해주어야 하고, 메타데이터만
-    // 내려주어야 한다.(실제 BLOB은 노출 안하게 하기 위함 + 성능향상)
+    // 첨부파일 조회해서 응답 객체에 세팅(Service 안에서 첨부조회까지 처리), adata가 null로 응답해주어야 하고, 메타데이터만 내려주어야 한다.(실제 BLOB은 노출 안하게 하기 위함 + 성능향상)
     // 2. 첨부파일 메타데이터 조회
     List<Attachment> attachments = attachmentDao.selectAttachmentsByDid(did);
 
@@ -182,9 +172,13 @@ public class DiaryService {
       }
     }
 
-  // 삭제
+  // 단건 삭제
   public void deleteDiary(Long did) {
     diaryDao.delete(did);
   }
 
+  // 다중 삭제
+  public void deleteDiaries(List<Long> dids) {
+    diaryDao.deleteDiaries(dids);
+  }
 }

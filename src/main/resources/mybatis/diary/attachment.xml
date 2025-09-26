@@ -52,10 +52,4 @@
     DELETE FROM ATTACHMENTS WHERE AID = #{aid}
   </delete>
 
-  <!-- 특정 Diary의 첨부 전체 삭제 
-  <delete id="deleteAttachmentsByDid" parameterType="long">
-    DELETE FROM ATTACHMENTS
-    WHERE DID = #{did}
-  </delete> -->
-
 </mapper>

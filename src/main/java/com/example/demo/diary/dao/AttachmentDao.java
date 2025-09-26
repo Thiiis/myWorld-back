@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.diary.dto.Attachment;
-import com.example.demo.diary.dto.request.AttachmentUpdateRequest;
 
 @Mapper
 public interface AttachmentDao {
@@ -22,6 +21,5 @@ public interface AttachmentDao {
 
   //삭제
   int delete(Long aid);                         // 첨부파일 삭제
-  //int deleteAttachmentsByDid(Long did);                // 특정 일기 첨부 전체 삭제
   
 }

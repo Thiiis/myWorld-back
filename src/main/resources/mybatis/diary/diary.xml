@@ -56,10 +56,19 @@
       WHERE DID = #{did}
     </update>
 
-    <!-- 삭제 -->
+    <!-- 단건 삭제 -->
     <delete id="delete" parameterType="Long">
       DELETE FROM DIARYS
       WHERE DID = #{did}
     </delete>
+
+    <!-- 다중 삭제 -->
+     <delete id="deleteDiaries" parameterType="java.util.List">
+      DELETE FROM DIARYS
+      WHERE DID IN
+      <foreach collection="list" item="did" open="(" separator="," close=")">
+        #{did}
+      </foreach>
+     </delete>
 
   </mapper>

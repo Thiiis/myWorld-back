@@ -6,9 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -25,8 +25,6 @@ import com.example.demo.diary.service.DiaryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Slf4j
 @RestController
@@ -73,10 +71,17 @@ public class DiaryController {
     return ResponseEntity.noContent().build();
   }
 
-  //삭제
+  // 단일 삭제
   @DeleteMapping("/delete")
   public ResponseEntity<Void> deleteDiary(@PathVariable("did") Long did) {
     diaryService.deleteDiary(did);
+    return ResponseEntity.noContent().build();
+  }
+
+  // 다중 삭제(여러 아이디를 받을 때에는 쿼리 파라미터를 사용하는 것이 일반적)
+  @DeleteMapping("/delete-list")
+  public ResponseEntity<Void> deleteDiaries(@RequestParam("did") List<Long> dids) {
+    diaryService.deleteDiaries(dids);
     return ResponseEntity.noContent().build();
   }
 }
