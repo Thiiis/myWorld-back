@@ -41,6 +41,7 @@ public class JukeboxController {
     }
 
     // 주크박스 조회
+    @Login
     @GetMapping("/list")
     public ResponseEntity<List<JukeboxListResponse>> jukeboxList(@RequestParam Long mid) {
         List<JukeboxListResponse> list = jukeboxservice.getJukeboxList(mid);
@@ -48,6 +49,7 @@ public class JukeboxController {
     }
 
     // 주크박스 상세조회
+    @Login
     @GetMapping("/detail")
     public ResponseEntity<JukeboxDetailResponse> jukeboxDetail(@RequestParam Long jid) {
         JukeboxDetailResponse response = jukeboxservice.getJukeboxDetail(jid);
@@ -55,6 +57,7 @@ public class JukeboxController {
     }
 
     // 주크박스 수정
+    @Login
     @PutMapping("/update")
     public ResponseEntity<Void> jukeboxUpdate(@RequestBody JukeboxUpdateRequest dto) {
         jukeboxservice.update(dto);
@@ -62,6 +65,7 @@ public class JukeboxController {
     }
 
     // 주크박스 삭제
+    @Login
     @DeleteMapping("/delete/{jid}")
     public ResponseEntity<Void> jukeboxDelete(@PathVariable("jid") Long jid) {
         jukeboxservice.delete(jid);
@@ -69,6 +73,7 @@ public class JukeboxController {
     }
 
     // 주크박스 좋아요
+    @Login
     @PostMapping("/like")
     public ResponseEntity<String> toggleJukeboxLike(@RequestParam Long jid, @RequestParam Long mid) {
         boolean isLike = jukeboxLikesService.toggleLike(jid, mid);
