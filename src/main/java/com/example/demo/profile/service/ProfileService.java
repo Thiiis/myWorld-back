@@ -21,28 +21,6 @@ public class ProfileService {
         return profileDao.selectByPid(pid);
     }
 
-    public Profile getProfileByMid(Long mid) {
-        return profileDao.selectByMid(mid);
-    }
-
-    public Profile getProfileByNickname(String nickname) {
-        return profileDao.selectByNickname(nickname);
-    }
-
-   // '텍스트' 업데이트 요청 처리
-    public void updateText(ProfileTextUpdateRequest textDto) {
-        // 1. Mapper로 보낼 '통합 Request' 생성
-        ProfileUpdateRequest unifiedRequest = new ProfileUpdateRequest();
-
-        // 2. 필수 값(pid)과 섹션에 맞는 값(text)을 통합 Request에 복사
-        unifiedRequest.setPid(textDto.getPid());
-        unifiedRequest.setStatusMessage(textDto.getStatusMessage());
-        unifiedRequest.setIntro(textDto.getIntro());
-
-        // 3. 통합 Request를 Mapper의 단일 update 메소드로 전달
-        // profileDao.update(unifiedRequest);
-    }
-
     // '주소' 업데이트 요청 처리
     public void updateAddress(ProfileAddressUpdateRequest dto) {
         // 1. Mapper로 보낼 '통합 Request' 생성
