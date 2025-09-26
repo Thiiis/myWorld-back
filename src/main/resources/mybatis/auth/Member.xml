@@ -31,7 +31,7 @@
       WHERE account = #{account}
   </select>
 
-  <update id="update" parameterType="com.example.demo.auth.dto.UpdateRequest">
+  <update id="update" parameterType="com.example.demo.auth.dto.MemberUpdateRequest">
       UPDATE MEMBERS
       SET EMAIL = #{email},
           PWD = #{pwd}

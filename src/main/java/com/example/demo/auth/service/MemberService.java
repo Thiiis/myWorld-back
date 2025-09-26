@@ -48,11 +48,11 @@ public class MemberService {
       throw new RuntimeException("멤버 ID를 가져오지 못했습니다.");
     }
     if(profileDao.countByNickname(dto.getNickname()) > 0){
-      throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+    throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
     }
-    // 가져온 member.getId()로 Profile 생성
     Profile profile = new Profile(member.getMid(), dto.getNickname(), dto.getBirthdate());
     profileDao.insert(profile);
+    // 가져온 member.getId()로 Profile 생성
 
     // DB 최신 업뎃 반영
       return new MemberSignupResponse(member.getAccount(), profile.getNickname(), member.getEmail(),profile.getBirthdate());
