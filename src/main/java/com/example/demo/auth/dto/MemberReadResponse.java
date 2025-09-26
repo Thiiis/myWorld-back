@@ -1,6 +1,7 @@
 package com.example.demo.auth.dto;
 
-import java.util.Date;
+// import com.fasterxml.jackson.annotation.JsonFormat;
+// import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,9 @@ import lombok.Getter;
 public class MemberReadResponse {
     private String account;
     private String email;
-    private String nickname; // 프로필 연동
-    private Date birthdate;  // 프로필 연동
+
+    // private String nickname;
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    // private Data birthdate;
+
 }

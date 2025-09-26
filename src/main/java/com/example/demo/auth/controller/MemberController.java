@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.auth.dto.MemberLoginRequest;
 import com.example.demo.auth.dto.MemberLoginResponse;
+import com.example.demo.auth.dto.MemberReadResponse;
 import com.example.demo.auth.dto.MemberSignupRequest;
 import com.example.demo.auth.dto.MemberSignupResponse;
 import com.example.demo.auth.dto.MemberUpdateRequest;
@@ -22,6 +23,9 @@ import com.example.demo.interceptor.Login;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -51,6 +55,14 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.fail(401,"로그인 실패: "+e.getMessage()));
         }
     }
+
+    @GetMapping("/detail/{mid}")
+    public ResponseEntity<ApiResponse<MemberReadResponse>> getMemberByMid (@RequestParam("mid") String mid) {
+        MemberReadResponse result = memberService.getByMid(mid);
+
+        return ResponseEntity.ok(ApiResponse.success(result,null));
+    }
+    
 
     @Login
     @PutMapping("/update")
