@@ -54,7 +54,7 @@ public class FriendService {
   public void deleteFriend(Long id) {
     Friend friend = friendDao.selectById(id);
     //검증 로직 추가 필요
-    friendDao.deleteFriend(id);
+    friendDao.delete(id);
   }
 
 }
