@@ -18,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 public class TrackService {
   private final TrackDao trackDao;
 
-  public TrackCreateResponse create(TrackCreateRequest request) {
-    Track track = new Track(request.getJid(), request.getSid(), request.getTrackOrder());
+  public TrackCreateResponse create(TrackCreateRequest dto) {
+    Track track = new Track(dto.getJid(), dto.getSid(), dto.getTrackOrder());
     trackDao.insert(track);
     Track dbTrack = trackDao.selectByTrid(track.getTrid());
     return new TrackCreateResponse(dbTrack.getTrid(), dbTrack.getJid(), dbTrack.getSid(), dbTrack.getTrackOrder());
@@ -30,7 +30,7 @@ public class TrackService {
     return songs.stream().map(song -> new TrackListResponse(song.getTitle(), song.getArtist())).toList();
   }
 
-  public Long delete(Long trid) {
+  public int delete(Long trid) {
     return trackDao.delete(trid);
   }
 }

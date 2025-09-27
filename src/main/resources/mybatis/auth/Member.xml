@@ -12,36 +12,33 @@
     values (#{account}, #{email}, #{pwd})
   </insert>
 
-  <select id="existsByAccount" parameterType="String" resultType="int">
+  
+  <select id="selectByMid" parameterType="Long" resultType="Member">
+    SELECT mid, account, email, pwd
+    FROM members
+    WHERE mid = #{mid}
+  </select>
+
+  <select id="selectByAccount" parameterType="String" resultType="Member">
+    SELECT mid, account, email, pwd
+    FROM members
+    WHERE account = #{account}
+  </select>
+
+  <select id="countByAccount" parameterType="String" resultType="int">
       SELECT COUNT(*)
       FROM members
       WHERE account = #{account}
   </select>
 
-  <select id="selectByAccount" parameterType="String" resultType="Member">
-    select mid, account,email, pwd
-    from Members
-    where account=#{account}
-  </select>
-
-  <select id="selectByMid" parameterType="Long" resultType="Member">
-    SELECT mid, account, email, password
-    FROM members
-    WHERE mid = #{mid}
-  </select>
-
-  <update id="update" parameterType="Member"> 
-    update Members
-    set account=#{account},
-        email=#{email},
-        pwd=#{pwd}
-    where account=#{account}
+  <update id="update" parameterType="com.example.demo.auth.dto.MemberUpdateRequest">
+      UPDATE MEMBERS
+      SET EMAIL = #{email},
+          PWD = #{pwd}
+      WHERE MID = #{mid}
   </update>
 
-  <delete id="deleteByAccount" parameterType="String">
-    delete from Members
-    where account=#{account} 
-  </delete>
+
 
   <delete id="deleteByMid" parameterType="Long"> 
     delete from Members

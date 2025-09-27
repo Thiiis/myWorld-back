@@ -25,12 +25,18 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
     // 전처리
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        log.info("전처리 실행");
 
         // preflight request 로 요청한 것은 통과
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             return true;
         }
+
+        // ⭐ <효범>여기// 추가 정적 리소스(ResourceHttpRequestHandler) 같은 경우는 그냥 통과 
+        if (!(handler instanceof HandlerMethod)) {
+            // (Spring MVC가 넘겨주는 handler가 항상 HandlerMethod일 거라고 가정하고 무조건 캐스팅하다 보니,정적 리소스 요청이나 특수 요청일 때 ResourceHttpRequestHandler가 들어오면서 ClassCastException 터진 겁니다.)
+            return true;
+        }
+
         // 1) 요청 매핑 매소드에 @Login이 붙어있는지 확인
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Login login = handlerMethod.getMethodAnnotation(Login.class);

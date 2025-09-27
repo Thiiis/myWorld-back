@@ -21,16 +21,16 @@ public class GuestBoardService {
   private final GuestBoardDao guestBoardDao;
 
   // board create
-  public GuestBoardCreateResponse create(GuestBoardCreateRequest request) {
-    GuestBoard guestBoard = new GuestBoard(request.getGid(), request.getPid(), request.getContent(), request.getViewScope());
+  public GuestBoardCreateResponse create(GuestBoardCreateRequest dto) {
+    GuestBoard guestBoard = new GuestBoard(dto.getGid(), dto.getPid(), dto.getContent(), dto.getViewScope());
     guestBoardDao.insert(guestBoard);
     GuestBoard dbGuestBoard = guestBoardDao.selectByGbid(guestBoard.getGbid());
     return new GuestBoardCreateResponse(dbGuestBoard.getGbid(), dbGuestBoard.getCreatedAt(), dbGuestBoard.getUpdatedAt());
   }
 
   // board list
-  public List<GuestBoardListResponse> getGuestBoardList(GuestBoardListRequest request) {
-    List<GuestBoard> list = guestBoardDao.select(request.getOffset(), request.getLimit());
+  public List<GuestBoardListResponse> getGuestBoardList(GuestBoardListRequest dto) {
+    List<GuestBoard> list = guestBoardDao.select(dto.getOffset(), dto.getLimit());
     return list.stream().map(g -> new GuestBoardListResponse(g.getGbid(), g.getGid(), g.getContent(), g.getViewScope(), g.getCreatedAt(), g.getUpdatedAt())).toList();
   }
 
@@ -40,12 +40,12 @@ public class GuestBoardService {
   }
 
   // board update
-  public Long update(GuestBoardUpdateRequest request) {
-    GuestBoard guestBoard = new GuestBoard(request.getGbid(), request.getContent(), request.getViewScope());
+  public int update(GuestBoardUpdateRequest dto) {
+    GuestBoard guestBoard = new GuestBoard(dto.getGbid(), dto.getContent(), dto.getViewScope());
     return guestBoardDao.update(guestBoard);
   }
 
-  public Long delete(Long gbid) {
+  public int delete(Long gbid) {
     return guestBoardDao.delete(gbid);
   }
 } 

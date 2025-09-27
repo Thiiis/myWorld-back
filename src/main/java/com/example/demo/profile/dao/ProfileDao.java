@@ -10,12 +10,12 @@ import com.example.demo.profile.dto.ProfileUpdateRequest;
      void insert(Profile profile); //Create
 
      // Read
-     //  int existsByNickname(String nickname);
+     int countByNickname(String nickname);
      Profile selectByPid(Long pid);
-     Profile selectByMid(Long mid);
-     Profile selectByNickname(String nickname);
+    //  Profile selectByMid(Long mid);
+    //  Profile selectByNickname(String nickname);
     // Update
-     void updateBirthdate(ProfileUpdateRequest dto);
+
     // Delete
     //  int delete(int pid);
     //  int delete(String pname);

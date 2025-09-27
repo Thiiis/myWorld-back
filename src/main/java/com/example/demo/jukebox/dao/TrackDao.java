@@ -9,8 +9,8 @@ import com.example.demo.jukebox.dto.Track;
 
 @Mapper
 public interface TrackDao {
-  public Long insert(Track track);
+  public int insert(Track track);
   public Track selectByTrid(Long Trid);
   public List<Song> selectSongsByJid(Long jid);
-  public Long delete(Long trid);
+  public int delete(Long trid);
 }

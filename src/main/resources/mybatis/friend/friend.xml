@@ -15,7 +15,7 @@
         WHERE FID = #{fid}
      </update>
 
-     <resultMap id="FriendRequestListResponseMap" type="com.example.demo.friend.dto.FriendRequestListResponse">
+     <resultMap id="FriendRequestListResponseMap" type="FriendRequestListResponse">
         <id property="fid" column="FID"/>
         <result property="createdAt" column="CREATED_AT"/>
         <association property="requester" javaType="com.example.demo.common.dto.ProfileInfo">
@@ -36,7 +36,7 @@
         ORDER BY f.CREATED_AT DESC
     </select>
 
-    <resultMap id="FriendListResponseMap" type="com.example.demo.friend.dto.FriendListResponse">
+    <resultMap id="FriendListResponseMap" type="FriendListResponse">
         <id property="fid" column="FID"/>
         <result property="createdAt" column="CREATED_AT"/>
         <association property="friendInfo" javaType="com.example.demo.common.dto.ProfileInfo">
