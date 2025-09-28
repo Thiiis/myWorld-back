@@ -9,12 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JukeboxCreateResponse {
   private Long jid;
+  private String title;
+  private String content;
   private Date createdAt;
-  private Date updatedAt;
 
-  public JukeboxCreateResponse(Long jid, Date createdAt, Date updatedAt) {
+  public JukeboxCreateResponse(Long jid, String title, String content, Date createdAt) {
     this.jid = jid;
+    this.title = title;
+    this.content = content;
     this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
   }
 }

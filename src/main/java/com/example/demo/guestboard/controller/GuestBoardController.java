@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.auth.dto.Member;
+import com.example.demo.auth.service.JwtService;
+import com.example.demo.auth.service.MemberService;
 import com.example.demo.guestboard.dto.GuestBoardCreateRequest;
 import com.example.demo.guestboard.dto.GuestBoardCreateResponse;
 import com.example.demo.guestboard.dto.GuestBoardListRequest;
@@ -21,6 +24,7 @@ import com.example.demo.guestboard.dto.GuestBoardUpdateRequest;
 import com.example.demo.guestboard.service.GuestBoardService;
 import com.example.demo.interceptor.Login;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,23 +33,36 @@ import lombok.RequiredArgsConstructor;
 public class GuestBoardController {
 
   private final GuestBoardService guestBoardService;
+  private final JwtService jwtService;
+  private final MemberService memberService;
 
   // 방명록 생성
   @Login
-  @PostMapping("/create")
-  public ResponseEntity<GuestBoardCreateResponse> guestBoardCreate(@RequestBody GuestBoardCreateRequest dto) {
-    GuestBoardCreateResponse response = guestBoardService.create(dto);
+  @PostMapping("/create/{hostid}")
+  public ResponseEntity<GuestBoardCreateResponse> guestBoardCreate(
+      @PathVariable Long hostid,
+      @RequestBody GuestBoardCreateRequest dto,
+      HttpServletRequest request) {
+
+    String authorization = request.getHeader("Authorization");
+    String jwt = authorization.substring(7);
+
+    String account = jwtService.getClaims(jwt).get("account");
+    Member member = memberService.getMember(account);
+
+    GuestBoardCreateResponse response = guestBoardService.create(hostid, member.getMid(), dto);
     return ResponseEntity.ok(response);
   }
 
   // 방명록 조회
-  @Login
+  // @Login
   @GetMapping("/list")
   public ResponseEntity<List<GuestBoardListResponse>> guestBoardList(
+      @RequestParam Long mid,
       @RequestParam(defaultValue = "0") Long offset,
       @RequestParam(defaultValue = "10") Long limit) {
 
-    GuestBoardListRequest dto = new GuestBoardListRequest(offset, limit);
+    GuestBoardListRequest dto = new GuestBoardListRequest(mid, offset, limit);
     List<GuestBoardListResponse> list = guestBoardService.getGuestBoardList(dto);
 
     if (list.isEmpty()) {
@@ -56,7 +73,7 @@ public class GuestBoardController {
   }
 
   // 방명록 수정
-  @Login
+  // @Login
   @PutMapping("/update")
   public ResponseEntity<Void> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest dto) {
     guestBoardService.update(dto);
@@ -64,7 +81,7 @@ public class GuestBoardController {
   }
 
   // 방명록 삭제
-  @Login
+  // @Login
   @DeleteMapping("/delete/{gbid}")
   public ResponseEntity<Void> guestBoardDelete(@PathVariable("gbid") Long gbid) {
     guestBoardService.delete(gbid);

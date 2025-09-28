@@ -28,7 +28,7 @@ public class JukeboxService {
     Jukebox jukebox = new Jukebox(dto.getMid(), dto.getTitle(), dto.getContent());
     jukeboxDao.insert(jukebox);
     Jukebox dbJukebox = jukeboxDao.selectByJid(jukebox.getJid());
-    return new JukeboxCreateResponse(dbJukebox.getJid(), dbJukebox.getCreatedAt(), dbJukebox.getUpdatedAt());
+    return new JukeboxCreateResponse(dbJukebox.getJid(), dbJukebox.getTitle(), dbJukebox.getContent(), dbJukebox.getCreatedAt());
   }
 
   public int update(JukeboxUpdateRequest dto) {
