@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.friend.dto.FriendCreateRequest;
 import com.example.demo.friend.dto.FriendCreateResponse;
-// import com.example.demo.friend.dto.FriendListResponse;
-// import com.example.demo.friend.dto.FriendRequestListResponse;
+import com.example.demo.friend.dto.FriendListResponse;
+import com.example.demo.friend.dto.FriendRequestListResponse;
 import com.example.demo.friend.service.FriendService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,37 +37,37 @@ public class FriendController {
     }
 
     // 친구 수락
-    @PutMapping("/{id}/accept")
-    public ResponseEntity<Void> acceptFriend(@PathVariable("id") Long id) {
-        friendService.acceptFriend(id);
+    @PutMapping("/{fid}/accept")
+    public ResponseEntity<Void> acceptFriend(@PathVariable("fid") Long fid) {
+        friendService.acceptFriend(fid);
         return ResponseEntity.noContent().build();
     }
 
     //친구 거절
-    @PutMapping("/{id}/reject")
-    public ResponseEntity<Void> rejectFriend(@PathVariable("id") Long id) {
-    friendService.rejectFriend(id);
+    @PutMapping("/{fid}/reject")
+    public ResponseEntity<Void> rejectFriend(@PathVariable("fid") Long fid) {
+    friendService.rejectFriend(fid);
     return ResponseEntity.noContent().build();
     }
 
-    // //친구 요청 조회
-    // @GetMapping("/pending")
-    // //쿼리파람(임시) -> JWT 구현하면 변경
-    // public ResponseEntity<List<FriendRequestListResponse>> getFriendRequestList(@RequestParam("mid") Long mid) {
-    //     List<FriendRequestListResponse> requests = friendService.getFriendRequestList(mid);
-    //     return ResponseEntity.ok(requests); 
-    // }
+    //친구 요청 조회
+    @GetMapping("/pending")
+    //쿼리파람(임시) -> JWT 구현하면 변경
+    public ResponseEntity<List<FriendRequestListResponse>> getFriendRequestList(@RequestParam("mid") Long mid) {
+        List<FriendRequestListResponse> requests = friendService.getFriendRequestList(mid);
+        return ResponseEntity.ok(requests); 
+    }
 
-    // //친구 목록 조회 -> 친구 목록 내 검색은 프론트에서 구현
-    // @GetMapping("/{mid}/list")
-    // public ResponseEntity<List<FriendListResponse>> getFriendList(@PathVariable("mid") Long mid) {
-    //     List<FriendListResponse> friends = friendService.getFriendList(mid);
-    //     return ResponseEntity.ok(friends);
-    // }
+    //친구 목록 조회 -> 친구 목록 내 검색은 프론트에서 구현
+    @GetMapping("/{mid}/list")
+    public ResponseEntity<List<FriendListResponse>> getFriendList(@PathVariable("mid") Long mid) {
+        List<FriendListResponse> friends = friendService.getFriendList(mid);
+        return ResponseEntity.ok(friends);
+    }
 
     //친구 삭제 -> 소프트 딜리트 고민
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFriend(@PathVariable("id") Long id) {
+    @DeleteMapping("/{fid}")
+    public ResponseEntity<Void> deleteFriend(@PathVariable("fid") Long id) {
         friendService.deleteFriend(id);
         return ResponseEntity.noContent().build();  
     }
