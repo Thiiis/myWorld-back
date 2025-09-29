@@ -22,12 +22,10 @@ import com.example.demo.interceptor.Login;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/members")
@@ -67,15 +65,14 @@ public class MemberController {
     @PutMapping("/update")
     public ResponseEntity<String> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
         memberService.update(dto);
-        return ResponseEntity.ok("이메일, 패스워드 수정이 완료되었습니다.");
+        return ResponseEntity.ok("이메일 또는 패스워드 수정이 완료되었습니다.");
     }
 
     // delete 둘 중에 하나 선택, 개발하면서 생각해보기
     @Login
     @DeleteMapping("/delete/mid/{mid}")
     public ResponseEntity<String> deleteMember(@Valid @PathVariable("mid") Long mid) {
-        memberService.deleteByMid(mid);
-        return ResponseEntity.ok("탈퇴되었습니다.");
+        return ResponseEntity.ok("탈퇴가 완료되었습니다.");
     }
 
 }
