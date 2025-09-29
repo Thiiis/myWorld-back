@@ -11,17 +11,18 @@ import com.example.demo.friend.dto.FriendCreateRequest;
 import com.example.demo.friend.dto.FriendCreateResponse;
 import com.example.demo.friend.dto.FriendListResponse;
 import com.example.demo.friend.dto.FriendRequestListResponse;
+import com.example.demo.friend.enums.FriendStatus;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class FriendService {
 
   private final FriendDao friendDao;
 
   //memeber 구현 완료 후 수정
+  @Transactional
   public FriendCreateResponse createFriend(FriendCreateRequest dto) {
     Friend friend = new Friend(dto.getReqId(), dto.getAccId());
     friendDao.insert(friend);
@@ -30,15 +31,17 @@ public class FriendService {
     // return new FriendResponse(friend);
   }
 
+  @Transactional
   public void acceptFriend(Long id) {
     Friend friend = friendDao.selectById(id);
-    friend.accept();
+    friend.setStatus(FriendStatus.ACCEPTED.name());
     friendDao.updateStatus(friend);
   }
 
+  @Transactional
   public void rejectFriend(Long id) {
     Friend friend = friendDao.selectById(id);
-    friend.reject();
+    friend.setStatus(FriendStatus.REJECTED.name());
     friendDao.updateStatus(friend);
   }
 
@@ -51,6 +54,7 @@ public class FriendService {
     return friendDao.selectFriendsByMid(mid);
   }
 
+  @Transactional
   public void deleteFriend(Long id) {
     Friend friend = friendDao.selectById(id);
     //검증 로직 추가 필요

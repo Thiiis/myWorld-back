@@ -13,7 +13,7 @@ public interface FriendDao {
     // 친구 요청
     void insert(Friend friend);
     // 친구(관계) 조회
-    Friend selectById(Long id);
+    Friend selectById(Long fid);
     // 상태 변경
     void updateStatus(Friend friend);
     //친구 요청 조회
@@ -21,5 +21,5 @@ public interface FriendDao {
     //친구 목록 조회
     List<FriendListResponse> selectFriendsByMid(Long mid);
     //친구 삭제
-    void delete(Long id);
+    void delete(Long fid);
 }

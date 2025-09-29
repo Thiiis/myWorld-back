@@ -4,9 +4,10 @@ import java.util.Date;
 
 import com.example.demo.friend.enums.FriendStatus;
 
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class Friend {
     private Long fid;
     private Long reqId;
@@ -19,13 +20,5 @@ public class Friend {
         this.reqId = reqId;
         this.accId = accId;
         // this.createdAt = Date.now().
-    }
-     
-    public void accept() {
-        this.status = FriendStatus.ACCEPTED.name();
-    }
-     
-    public void reject() {
-        this.status = FriendStatus.REJECTED.name();
     }
 }
