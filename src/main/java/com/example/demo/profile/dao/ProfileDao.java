@@ -13,6 +13,7 @@ import com.example.demo.profile.dto.ProfileUpdateRequest;
     int countByNickname(String nickname);
     Profile selectByPid(Long pid);
     //  Profile selectByMid(Long mid);
+    Profile selectByMid(Long mid);
     //  Profile selectByNickname(String nickname);
     // Update
 

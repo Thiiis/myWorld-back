@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class Member {
     private Long mid;
-    private Date cretedAt;
+    private Date createdAt;
     private Date updatedAt;
 
     private String account;

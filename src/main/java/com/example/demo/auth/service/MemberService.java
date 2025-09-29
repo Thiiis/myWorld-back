@@ -77,8 +77,11 @@ public String login(MemberLoginRequest dto) {
 }
   // 프로필에서만 생년월일, 닉네임 보이게 할 것이냐...말 것이냐 그것이 문제로다...
   @Transactional(readOnly = true)
-  public MemberReadResponse getMember(Long mid) {
-      Member member = memberDao.selectByMid(mid);
+  // 예원 -> selectByMid에서 selectByAccount로 수정
+  // 리턴값도 MemberReadResponse에서 Member로 수정
+  public Member getMember(String account) {
+      Member member = memberDao.selectByAccount(account);
+      
       if (member == null) {
           throw new IllegalArgumentException("존재하지 않는 회원입니다.");
       }
@@ -86,12 +89,13 @@ public String login(MemberLoginRequest dto) {
       // if(profile == null){
       //     throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
       // }
-      return new MemberReadResponse(
-          member.getAccount(),
-          member.getEmail()
-          // ,profile.getNickname()
-          // ,profile.getBirthdate()
-      );
+      return member;
+      // return new MemberReadResponse(
+      //     member.getAccount(),
+      //     member.getEmail()
+      //     // ,profile.getNickname()
+      //     // ,profile.getBirthdate()
+      // );
   }
 
   // 이메일이나 비밀번호 수정을 한꺼번에 할수있게 선택적으로 할건지

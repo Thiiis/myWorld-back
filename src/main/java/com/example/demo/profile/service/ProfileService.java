@@ -27,9 +27,9 @@ public class ProfileService {
         profile.getImgUrl(),profile.getStatusMessage(),profile.getIntro());
     }
 
-    // public Profile getProfileByMid(Long mid) {
-    //     return profileDao.selectByMid(mid);
-    // }
+    public Profile getProfileByMid(Long mid) {
+        return profileDao.selectByMid(mid);
+    }
 
     // public Profile getProfileByNickname(String nickname) {
     //     return profileDao.selectByNickname(nickname);

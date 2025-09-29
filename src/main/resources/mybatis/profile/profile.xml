@@ -17,12 +17,12 @@
     FROM profiles
     WHERE pid = #{pid}
   </select>
-<!--   
+   
   <select id="selectByMid" parameterType="Long" resultType="Profile">
     SELECT *
     FROM profiles
     WHERE mid = #{mid}
-  </select> -->
+  </select> 
 
   <!-- <select id="selectByNickname" parameterType="String" resultType="Profile">
     SELECT *
