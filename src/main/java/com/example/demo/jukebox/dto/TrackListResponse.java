@@ -1,8 +1,8 @@
 package com.example.demo.jukebox.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class TrackListResponse {
   private String title;
   private String artist;

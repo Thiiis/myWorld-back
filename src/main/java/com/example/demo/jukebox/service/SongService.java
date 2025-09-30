@@ -32,47 +32,52 @@ public class SongService {
   // 관련 높은 10개만 가져오기
   public List<SongSearchResponse> searchSongs(String search) {
     String url = "https://www.googleapis.com/youtube/v3/search"
-      + "?part=snippet" // 제목, 채널 이름
-      + "&type=video" // 동영상만 검색
-      + "&videoCategoryId=10" // 음악 카테고리
-      + "&maxResults=10"
-      + "&q=" + search
-      + "&key=" + apiKey;
+        + "?part=snippet" // 제목, 채널 이름
+        + "&type=video" // 동영상만 검색
+        + "&videoCategoryId=10" // 음악 카테고리
+        + "&maxResults=10"
+        + "&q=" + search
+        + "&key=" + apiKey;
 
     // HTTP 통신 처리. 요청을 보내기 위해 RestTemplate 객체 생성
     RestTemplate restTemplate = new RestTemplate();
-    // HTTP GET 요청
+    // HTTP GET 요청. GET 요청에 대한 결과를 객체로 반환. json 문자열 형태
     String response = restTemplate.getForObject(url, String.class);
 
     JsonNode root = null;
     try {
+      // JSON 문자열 → 트리
       root = new ObjectMapper().readTree(response);
     } catch (JsonMappingException e) {
+      // 매핑 과정에서 구조 불일치가 생겼을 때 예외 처리
       e.printStackTrace();
     } catch (JsonProcessingException e) {
+      // JSON 파싱 전반에서 발생하는 예외 처리
       e.printStackTrace();
     }
+
     List<SongSearchResponse> results = new ArrayList<>();
 
+    // 응답 JSON의 items 배열 순회
     for (JsonNode item : root.get("items")) {
-        JsonNode idNode = item.get("id");
-        
-        // null 체크. videoId가 null이면 건너뛰기
-        if (idNode == null || !idNode.has("videoId")) {
-            continue;
-        }
+      // id 노드 꺼내기
+      JsonNode idNode = item.get("id");
 
-        String videoId = idNode.get("videoId").asText();
-        String title = item.get("snippet").get("title").asText();
-        String artist = item.get("snippet").get("channelTitle").asText();
-        String thumbnail = item.get("snippet").get("thumbnails").get("default").get("url").asText();
+      // null 체크. videoId가 null이면 건너뛰기
+      if (idNode == null || !idNode.has("videoId")) {
+        continue;
+      }
 
-        results.add(new SongSearchResponse(videoId, title, artist, thumbnail));
+      String videoId = idNode.get("videoId").asText();
+      String title = item.get("snippet").get("title").asText();
+      String artist = item.get("snippet").get("channelTitle").asText();
+      String thumbnail = item.get("snippet").get("thumbnails").get("default").get("url").asText();
+
+      results.add(new SongSearchResponse(videoId, title, artist, thumbnail));
     }
 
     return results;
   }
-
 
   // 음악 추가하기
   public SongCreateResponse create(SongCreateRequest dto) {
@@ -105,20 +110,26 @@ public class SongService {
   }
 
   private Long parseDuration(String duration) {
-    // "PT3M15S" → 195초
-    int minutes = 0, seconds = 0;
-    String time = duration.replace("PT", "");
-    if (time.contains("M")) {
-      String[] parts = time.split("M");
-      minutes = Integer.parseInt(parts[0]);
-      time = parts[1];
-    }
-    if (time.contains("S")) {
-      seconds = Integer.parseInt(time.replace("S", ""));
+    int minutes = 0;
+    int seconds = 0;
+
+    int number = 0;
+    for (int i = 2; i < duration.length(); i++) { // "PT"는 건너뛰고 시작
+      char c = duration.charAt(i);
+
+      if (c >= '0' && c <= '9') {
+        // 문자 '0' ~ '9'를 숫자로 변환
+        number = number * 10 + (c - '0');
+      } else if (c == 'M') {
+        minutes = number;
+        number = 0; // 초기화
+      } else if (c == 'S') {
+        seconds = number;
+        number = 0; // 초기화
+      }
     }
     return (long) (minutes * 60 + seconds);
   }
-
 
   // 음악 삭제하기
   public int delete(Long sid) {

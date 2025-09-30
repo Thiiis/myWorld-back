@@ -7,17 +7,18 @@ import com.example.demo.profile.dto.ProfileUpdateRequest;
 
 @Mapper
  public interface ProfileDao {
-     void insert(Profile profile); //Create
+    void insert(Profile profile); //Create
 
-     // Read
-     int countByNickname(String nickname);
-     Profile selectByPid(Long pid);
+    // Read
+    int countByNickname(String nickname);
+    Profile selectByPid(Long pid);
     //  Profile selectByMid(Long mid);
+    Profile selectByMid(Long mid);
     //  Profile selectByNickname(String nickname);
     // Update
 
     // Delete
-    //  int delete(int pid);
+    int deleteByPid(Long pid);
     //  int delete(String pname);
     
 }

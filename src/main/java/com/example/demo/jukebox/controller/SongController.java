@@ -25,22 +25,22 @@ import lombok.RequiredArgsConstructor;
 public class SongController {
   private final SongService songService;
 
-  @PostMapping("/create")
-  public ResponseEntity<SongCreateResponse> songCreate(@RequestBody SongCreateRequest dto) {
-    SongCreateResponse response = songService.create(dto);
-    return ResponseEntity.ok(response);
-  }
+  // @PostMapping("/create")
+  // public ResponseEntity<SongCreateResponse> songCreate(@RequestBody SongCreateRequest dto) {
+  //   SongCreateResponse response = songService.create(dto);
+  //   return ResponseEntity.ok(response);
+  // }
 
-  @GetMapping("/search")
-  public List<SongSearchResponse> searchSongs(@RequestParam String query) {
-    return songService.searchSongs(query);
-  }
+  // @GetMapping("/search")
+  // public List<SongSearchResponse> searchSongs(@RequestParam String query) {
+  //   return songService.searchSongs(query);
+  // }
 
-  @DeleteMapping("/delete/{sid}")
-  public ResponseEntity<Void> jukeboxDelete(@PathVariable("sid") Long sid) {
-    songService.delete(sid);
-    return ResponseEntity.noContent().build();
+  // @DeleteMapping("/delete/{sid}")
+  // public ResponseEntity<Void> jukeboxDelete(@PathVariable("sid") Long sid) {
+  //   songService.delete(sid);
+  //   return ResponseEntity.noContent().build();
 
-  }
+  // }
 
 }

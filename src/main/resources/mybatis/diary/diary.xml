@@ -3,8 +3,8 @@
 
   <mapper namespace="com.example.demo.diary.dao.DiaryDao">
     <insert id="insert" parameterType="Diary" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
-        INSERT INTO DIARYS (MID, TITLE, CONTENT, VIEW_SCOPE, EMO, WEATHER, CREATED_AT, UPDATED_AT)
-    VALUES (#{mid}, #{title}, #{content}, #{viewScope}, #{emo}, #{weather}, SYSTIMESTAMP, SYSTIMESTAMP)
+        INSERT INTO DIARYS (MID, TITLE, CONTENT, EMO, WEATHER, CREATED_AT, UPDATED_AT)
+    VALUES (#{mid}, #{title}, #{content}, #{emo}, #{weather}, SYSTIMESTAMP, SYSTIMESTAMP)
     </insert>
 
     <!--단건 조회-->
@@ -41,7 +41,7 @@
     <!-- 수정 -->
     <update id="update" parameterType="Diary">
       UPDATE DIARYS
-      SET TITLE = #{title}, CONTENT = #{content}, EMO = #{emo}, WEATHER = #{weather}, VIEW_SCOPE = #{viewScope}, UPDATED_AT = SYSTIMESTAMP
+      SET TITLE = #{title}, CONTENT = #{content}, EMO = #{emo}, WEATHER = #{weather}, UPDATED_AT = SYSTIMESTAMP
       WHERE DID = #{did}
     </update>
 

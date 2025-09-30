@@ -2,9 +2,9 @@ package com.example.demo.jukebox.dto;
 
 import java.util.Date;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class JukeboxDetailResponse {
   private Long jid;
   private String title;

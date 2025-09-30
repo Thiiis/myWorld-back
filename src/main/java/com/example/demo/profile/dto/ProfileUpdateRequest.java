@@ -2,16 +2,13 @@ package com.example.demo.profile.dto;
 
 import java.util.Date;
 
-import com.example.demo.auth.dto.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-@Getter
-@NoArgsConstructor
+@Data
 public class ProfileUpdateRequest {
-    private Long pid;
+    // private Long pid; //pid 들어가니까 필요없지않나
 
     private Long mid;
     private Long jid;
@@ -27,10 +24,5 @@ public class ProfileUpdateRequest {
     private String statusMessage; // 상태메세지 VARCHAR2(255)
     private String intro; // 자기소개, CLOB
 
-    // 주소
-    // private String postalCode; // 우편번호
-    // private String mainAddress; // 메인 주소
-    // private String detailAddress; // 상세 주소, 사용자 입력값, ex. 2동 302호
-
-    // private String viewScope;
+    private String mainAddress; // 메인 주소
 }

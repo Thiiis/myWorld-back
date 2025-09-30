@@ -25,8 +25,7 @@ public class MemberService {
   private final ProfileDao profileDao;
   private final JwtService jwtService;
 
-  // SecurityConfig에 등록한 Bean을 주입받음
-  private final PasswordEncoder passwordEncoder; 
+  private final PasswordEncoder passwordEncoder;
 
   @Transactional
   public MemberSignupResponse signup(MemberSignupRequest dto) {
@@ -75,27 +74,18 @@ public String login(MemberLoginRequest dto) {
     // 3. JWT 발급
     return jwtService.createJWT(member.getAccount(), member.getEmail());
 }
-  // 프로필에서만 생년월일, 닉네임 보이게 할 것이냐...말 것이냐 그것이 문제로다...
+
   @Transactional(readOnly = true)
-  public MemberReadResponse getMember(Long mid) {
-      Member member = memberDao.selectByMid(mid);
+  public MemberReadResponse getMember(String account) {
+      Member member = memberDao.selectByAccount(account);
+      
       if (member == null) {
           throw new IllegalArgumentException("존재하지 않는 회원입니다.");
       }
-      // Profile profile = profileDao.selectByMid(mid);
-      // if(profile == null){
-      //     throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
-      // }
-      return new MemberReadResponse(
-          member.getAccount(),
-          member.getEmail()
-          // ,profile.getNickname()
-          // ,profile.getBirthdate()
-      );
+      return new MemberReadResponse(member.getMid(), member.getAccount(), member.getEmail());
   }
 
-  // 이메일이나 비밀번호 수정을 한꺼번에 할수있게 선택적으로 할건지
-  // 이메일, 비밀번호 수정 따로따로 뺄건지 확인 >> 이러면 UpdateRequest 두개 들어가고 귀찮은데...
+  
   @Transactional
   public void update(MemberUpdateRequest dto) {
     Long mid = dto.getMid();
@@ -111,7 +101,6 @@ public String login(MemberLoginRequest dto) {
         pwd = passwordEncoder.encode(pwd); // 비밀번호 암호화
     }
     memberDao.update(mid,email,pwd);
-
   }
 
 

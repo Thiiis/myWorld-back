@@ -1,11 +1,9 @@
 package com.example.demo.guestboard.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class GuestBoardCreateRequest {
-  private Long gid;
-  private Long pid;
   private String content;
   private String viewScope;
 }

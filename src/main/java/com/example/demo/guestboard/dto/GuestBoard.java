@@ -2,24 +2,24 @@ package com.example.demo.guestboard.dto;
 
 import java.util.Date;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class GuestBoard {
   private Long gbid;
   private Long gid;
-  private Long pid;
+  private Long hostid;
   private String content;
   private String viewScope;
   private Date createdAt;
   private Date updatedAt;
 
   // board create 생성자
-  public GuestBoard(Long gid, Long pid, String content, String viewScope) {
+  public GuestBoard(Long gid, Long hostid, String content, String viewScope) {
     this.gid = gid;
-    this.pid = pid;
+    this.hostid = hostid;
     this.content = content;
     this.viewScope = viewScope;
   }

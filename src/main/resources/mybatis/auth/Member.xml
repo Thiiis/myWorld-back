@@ -12,7 +12,6 @@
     values (#{account}, #{email}, #{pwd})
   </insert>
 
-  
   <select id="selectByMid" parameterType="Long" resultType="Member">
     SELECT mid, account, email, pwd
     FROM members
@@ -31,18 +30,17 @@
       WHERE account = #{account}
   </select>
 
-  <update id="update" parameterType="com.example.demo.auth.dto.MemberUpdateRequest">
+  <update id="update" parameterType="MemberUpdateRequest">
       UPDATE MEMBERS
       SET EMAIL = #{email},
           PWD = #{pwd}
       WHERE MID = #{mid}
   </update>
 
-
-
   <delete id="deleteByMid" parameterType="Long"> 
     delete from Members
     where mid=#{mid} 
   </delete>
+
   
 </mapper>
