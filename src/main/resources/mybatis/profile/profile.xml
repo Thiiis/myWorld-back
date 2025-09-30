@@ -11,31 +11,40 @@
     FROM profiles
     WHERE nickname = #{nickname}
   </select>
-
-    <select id="selectByPid" resultType="Profile">
-        SELECT
-            PID,
-            MID,
-            NICKNAME,
-            TO_DATE(BIRTHDATE, 'YYYY-MM-DD') AS BIRTHDATE, -- Convert the string to a date
-            STATUS_MESSAGE,
-            INTRO,
-            MAIN_ADDRESS,
-            JID
-            -- List all other columns explicitly
-        FROM
-            PROFILES
-        WHERE
-            PID = #{pid}
-    </select>
+  <!-- <select id="selectByPid" resultType="Profile">
+    SELECT * FROM PROFILES WHERE PID = #{pid}
+  </select>
    
-  <select id="selectByMid" parameterType="Long" resultType="Profile">
+  <select id="selectByMid" resultType="Profile">
+    SELECT * FROM PROFILES WHERE MID = #{mid}
+  </select>  -->
+
+
+  <select id="selectByPid" resultType="com.example.demo.profile.dto.Profile">
+    SELECT
+        PID,
+        MID,
+        NICKNAME,
+        TO_CHAR(BIRTHDATE, 'YYYY-MM-DD') AS BIRTHDATE, -- DATE를 강제로 문자열로 변환
+        STATUS_MESSAGE,
+        INTRO,
+        MAIN_ADDRESS,
+        JID
+    FROM
+        PROFILES
+    WHERE
+        PID = #{pid}
+</select>
+
+<select id="selectByMid" resultType="com.example.demo.profile.dto.Profile">
     SELECT
         PID,
         MID,
         JID,
         NICKNAME,
-        TO_DATE(BIRTHDATE, 'YYYY-MM-DD') AS BIRTHDATE,
+        TO_CHAR(BIRTHDATE, 'YYYY-MM-DD') AS BIRTHDATE, -- DATE를 강제로 문자열로 변환
+        IMG_NAME,
+        IMG_URL,
         STATUS_MESSAGE,
         INTRO,
         MAIN_ADDRESS
@@ -43,8 +52,7 @@
         PROFILES
     WHERE
         MID = #{mid}
-  </select> 
-
+</select>
   <update id="update">
       UPDATE PROFILES
       <set>

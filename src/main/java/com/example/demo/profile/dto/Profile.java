@@ -18,8 +18,9 @@ public class Profile {
     // private Long tid; // 테마 FK
 
     private String nickname; // 회원가입할 때 닉네임 받아옴
-    
-    private Date birthdate; // 생년월일
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    // private Date birthdate; // 생년월일
+    private String birthdate; // 생년월일
     
     private String imgName; // 프로필 이미지 파일 이름
     private String imgUrl; // 프로필 이미지 서버 저장 경로
@@ -29,7 +30,7 @@ public class Profile {
 
     private String mainAddress; // 메인 주소
         
-    public Profile(long mid, String nickname, Date birthdate){
+    public Profile(long mid, String nickname, String birthdate){
         this.mid = mid;
         this.nickname = nickname;
         this.birthdate=birthdate;
