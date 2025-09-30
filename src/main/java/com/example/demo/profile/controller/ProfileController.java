@@ -29,8 +29,8 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @Login
-    @GetMapping("/detail")
-    public ResponseEntity<ProfileReadResponse> getProfileDetail(@RequestParam("pid") Long pid) {
+    @GetMapping("/{pid}")
+    public ResponseEntity<ProfileReadResponse> getProfileDetail(@PathVariable("pid") Long pid) {
         ProfileReadResponse result = profileService.getProfile(pid);
         return ResponseEntity.ok(result);
     }
@@ -47,9 +47,9 @@ public class ProfileController {
      * @return
      */
     @Login
-    @PutMapping("/{mid}")
+    @PutMapping("update/{mid}")
     public ResponseEntity<Void> updateProfile(
-            @PathVariable Long mid,
+            @PathVariable("mid") Long mid,
             @RequestBody ProfileUpdateRequest dto) { // JSON 본문을 DTO로 받음
 
         profileService.update(mid, dto);
@@ -58,9 +58,9 @@ public class ProfileController {
     }
 
     @Login
-    @PutMapping("/{mid}/image")
+    @PutMapping("update/{mid}/image")
     public ResponseEntity<String> updateProfileImage(
-            @PathVariable Long mid,
+            @PathVariable("mid") Long mid,
             @RequestParam("file") MultipartFile file) {
 
         // 1. 파일 유효성 검사
@@ -93,3 +93,4 @@ public class ProfileController {
 
     }
 }
+

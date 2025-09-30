@@ -23,7 +23,8 @@ public class ProfileService {
             throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
         }
         return new ProfileReadResponse(profile.getMid(), profile.getMid(),
-                profile.getNickname(), profile.getBirthdate(), profile.getImgName(), profile.getImgUrl(),
+                profile.getNickname(), profile.getBirthdate(),
+                profile.getImgName(), profile.getImgUrl(),
                 profile.getStatusMessage(), profile.getIntro(), profile.getMainAddress());
     }
     public Profile getProfileByMid(Long mid) {
