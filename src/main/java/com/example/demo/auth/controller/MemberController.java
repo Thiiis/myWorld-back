@@ -24,9 +24,6 @@ import com.example.demo.interceptor.Login;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import lombok.extern.slf4j.Slf4j;
 
 
 @RequiredArgsConstructor
@@ -63,13 +60,6 @@ public class MemberController {
         Member result = memberService.getMember(account);
         return ResponseEntity.ok(result);
     }
-
-    // @GetMapping("/detail")
-    // public ResponseEntity<ApiResponse<MemberReadResponse>> getMemberDetail (@Valid @RequestParam("mid") Long mid) {
-    //     MemberReadResponse result = memberService.getMember(mid);
-    //     return ResponseEntity.ok(ApiResponse.success(result,null));
-    // }
-    
 
     @Login
     @PutMapping("/update")
