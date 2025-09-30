@@ -44,13 +44,13 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<MemberLoginResponse>> loginMember(@Valid @RequestBody MemberLoginRequest dto) {
+    public ResponseEntity<MemberLoginResponse> loginMember(@Valid @RequestBody MemberLoginRequest dto) {
         try {
             // 서비스에 로그인 요청을 보내고 성공 시 JWT를 받음
             String jwt = memberService.login(dto);
             // 성공 응답 DTO 생성
             MemberLoginResponse result = new MemberLoginResponse(dto.getAccount(), jwt);
-            return ResponseEntity.ok(ApiResponse.success(result,"로그인 성공!"));
+            return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
             // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합
