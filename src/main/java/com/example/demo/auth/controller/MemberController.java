@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.MemberLoginRequest;
 import com.example.demo.auth.dto.MemberLoginResponse;
 import com.example.demo.auth.dto.MemberReadResponse;
@@ -35,7 +34,7 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<MemberSignupResponse> signupMember(@Valid @RequestBody MemberSignupRequest dto) {
         memberService.signup(dto);
-        MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(),dto.getNickname(),dto.getEmail(),dto.getBirthdate());
+        MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(),dto.getNickname(), dto.getEmail(), dto.getBirthdate());
         return ResponseEntity.ok(result);
     }
 
@@ -49,30 +48,30 @@ public class MemberController {
             return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
-            // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합
-            return ResponseEntity.noContent().build();
+            // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합        
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
-    // 예원 여기도 수정함 아래에 원래 코드 있음
     @GetMapping("/detail")
-    public ResponseEntity<Member> getMemberDetail (@Valid @RequestParam("account") String account) {
-        Member result = memberService.getMember(account);
+    public ResponseEntity<MemberReadResponse> getMemberDetail (@Valid @RequestParam("account") String account) {
+        MemberReadResponse result = memberService.getMember(account);
         return ResponseEntity.ok(result);
     }
 
     @Login
     @PutMapping("/update")
-    public ResponseEntity<String> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
+    public ResponseEntity<Void> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
         memberService.update(dto);
-        return ResponseEntity.ok("이메일 또는 패스워드 수정이 완료되었습니다.");
+        return ResponseEntity.noContent().build();
     }
 
-    // delete 둘 중에 하나 선택, 개발하면서 생각해보기
     @Login
     @DeleteMapping("/delete/mid/{mid}")
-    public ResponseEntity<String> deleteMember(@Valid @PathVariable("mid") Long mid) {
-        return ResponseEntity.ok("탈퇴가 완료되었습니다.");
+    public ResponseEntity<Void> deleteMember(@Valid @PathVariable("mid") Long mid) {
+        memberService.deleteByMid(mid);
+        return ResponseEntity.noContent().build();
     }
+    
 
 }

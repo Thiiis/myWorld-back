@@ -92,7 +92,5 @@ public class JwtService {
         map.put("account",claims.getSubject());
         map.put("email",claims.get("email").toString());
         return map;
-
     }
-
 }

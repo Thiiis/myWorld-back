@@ -4,11 +4,9 @@ import java.util.Date;
 
 import com.example.demo.profile.dto.Profile;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-@NoArgsConstructor
-@Getter
+@Data
 public class Member {
     private Long mid;
     private Date createdAt;
