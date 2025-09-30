@@ -25,8 +25,8 @@ import lombok.RequiredArgsConstructor;
 public class SongService {
   private final SongDao songDao;
 
-  // @Value("${youtube.api.key}")
-  // private String apiKey;
+  @Value("${youtube.api.key}")
+  private String apiKey;
 
   // 음악 검색하기
   // 관련 높은 10개만 가져오기
