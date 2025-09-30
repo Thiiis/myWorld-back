@@ -20,7 +20,6 @@ import com.example.demo.auth.dto.MemberSignupRequest;
 import com.example.demo.auth.dto.MemberSignupResponse;
 import com.example.demo.auth.dto.MemberUpdateRequest;
 import com.example.demo.auth.service.MemberService;
-import com.example.demo.common.dto.ApiResponse;
 import com.example.demo.interceptor.Login;
 
 import jakarta.validation.Valid;
