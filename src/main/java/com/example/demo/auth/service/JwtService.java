@@ -34,12 +34,13 @@ public class JwtService {
         secretKey = Keys.hmacShaKeyFor(bytes);
     }
     // JWT 생성 메소드
-    public String createJWT(String account, String email){
+    public String createJWT(Long mid, String account, String email){
         //JWT를 생성하는 빌더 얻기
         JwtBuilder jwtBuilder = Jwts.builder();
 
         //JWT에 포함할 Payload 추가, payload 자체가 싣는 짐
         jwtBuilder.subject(account);
+        jwtBuilder.claim("mid", mid);
         jwtBuilder.claim("email",email);
 
         //JWT 유효기간 설정
@@ -90,6 +91,7 @@ public class JwtService {
 
         Map<String,String> map = new HashMap<>();
         map.put("account",claims.getSubject());
+        map.put("mid", claims.get("mid").toString());
         map.put("email",claims.get("email").toString());
         return map;
     }
