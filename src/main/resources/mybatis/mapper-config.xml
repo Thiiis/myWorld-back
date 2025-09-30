@@ -16,6 +16,8 @@
     <typeAlias type="com.example.demo.auth.dto.Member" alias="Member" />
     <typeAlias type="com.example.demo.auth.dto.MemberUpdateRequest" alias="MemberUpdateRequest" />
 
+    <typeAlias type="com.example.demo.auth.dto.Admin" alias="Admin" />
+
     <typeAlias type="com.example.demo.profile.dto.Profile" alias="Profile" />
     <!-- <typeAlias type="com.example.demo.profile.dto.ProfileUpdateRequest" alias="ProfileUpdateRequest" /> -->
 

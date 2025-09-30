@@ -36,7 +36,40 @@
       SELECT * FROM PROFILES
   </select> -->
 
+  <update id="update">
+      UPDATE PROFILE
+      <set>
+          <if test="dto.jid != null">
+              JID = #{dto.jid},
+          </if>
+          <if test="dto.nickname != null and dto.nickname != ''">
+              NICKNAME = #{dto.nickname},
+          </if>
+          <if test="dto.birthdate != null">
+              BIRTHDATE = #{dto.birthdate},
+          </if>
+          <if test="dto.statusMessage != null">
+              STATUS_MESSAGE = #{dto.statusMessage},
+          </if>
+          <if test="dto.intro != null">
+              INTRO = #{dto.intro},
+          </if>
+          <if test="dto.mainAddress != null">
+              MAIN_ADDRESS = #{dto.mainAddress},
+          </if>
+      </set>
+      WHERE MID = #{mid}
+  </update>
 
+  <update id="updateImage">
+      UPDATE PROFILE
+      SET
+          IMG_NAME = #{imgName},
+          IMG_URL = #{imgUrl}
+      WHERE
+          MID = #{mid}
+  </update>
+    
   <!-- <update id="updateProfile" parameterType="ProfileUpdateRequest">
     UPDATE PROFILE_TABLE
     <set>

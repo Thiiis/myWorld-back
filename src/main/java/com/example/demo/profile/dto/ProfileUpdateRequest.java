@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class ProfileUpdateRequest {
-    // private Long pid; //pid 들어가니까 필요없지않나
+    private Long pid; //pid 들어가니까 필요없지않나
 
     private Long mid;
     private Long jid;
