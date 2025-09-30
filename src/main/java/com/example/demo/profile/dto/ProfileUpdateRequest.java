@@ -2,14 +2,11 @@ package com.example.demo.profile.dto;
 
 import java.util.Date;
 
-import com.example.demo.auth.dto.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-@Getter
-@NoArgsConstructor
+@Data
 public class ProfileUpdateRequest {
     private Long pid;
 

@@ -22,11 +22,10 @@ public class ProfileService {
         if (profile == null) {
             throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
         }
-        return new ProfileReadResponse(profile.getMid(),profile.getJid(),profile.getTid(),
-        profile.getCreatedAt(),profile.getNickname(),profile.getBirthdate(),profile.getImgName(),
-        profile.getImgUrl(),profile.getStatusMessage(),profile.getIntro());
+        return new ProfileReadResponse(profile.getPid(), profile.getMid(),profile.getMid(),
+        profile.getNickname(),profile.getBirthdate(),profile.getImgName(),profile.getImgUrl(),
+        profile.getStatusMessage(),profile.getIntro(),profile.getMainAddress());
     }
-
     public Profile getProfileByMid(Long mid) {
         return profileDao.selectByMid(mid);
     }
@@ -39,8 +38,6 @@ public class ProfileService {
     // 전체 업데이트 처리
     public void update(ProfileUpdateRequest dto){
         ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
-        
-
 
     }
 
@@ -76,3 +73,4 @@ public class ProfileService {
     return rows;
   }
 }
+

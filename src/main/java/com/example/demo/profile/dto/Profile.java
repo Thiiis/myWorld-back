@@ -2,15 +2,11 @@ package com.example.demo.profile.dto;
 
 import java.util.Date;
 
-import com.example.demo.auth.dto.Member;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Data
 public class Profile {
 
     private Long pid; // PK
@@ -18,7 +14,7 @@ public class Profile {
     private Long jid; // 주크박스 FK
     // private Long tid; // 테마 FK
 
-    private Member member; //1대1관계
+    // private Member member; //1대1관계
     
     private String nickname; // 회원가입할 때 닉네임 받아옴
     
@@ -31,7 +27,6 @@ public class Profile {
     private String statusMessage; // 상태메세지 VARCHAR2(255)
     private String intro; // 자기소개, CLOB
 
-    // 주소
     private String mainAddress; // 메인 주소
         
     public Profile(long mid, String nickname, Date birthdate){
