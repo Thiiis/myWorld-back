@@ -23,10 +23,8 @@ import com.example.demo.interceptor.Login;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
-@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/members")
@@ -74,5 +72,6 @@ public class MemberController {
         memberService.deleteByMid(mid);
         return ResponseEntity.noContent().build();
     }
+    
 
 }

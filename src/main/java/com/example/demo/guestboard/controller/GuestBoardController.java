@@ -40,7 +40,7 @@ public class GuestBoardController {
   // 방명록 생성
   @Login
   @PostMapping("/create/{hostid}")
-  public ResponseEntity<GuestBoardCreateResponse> guestBoardCreate(
+  public GuestBoardCreateResponse guestBoardCreate(
       @PathVariable Long hostid,
       @RequestBody GuestBoardCreateRequest dto,
       HttpServletRequest request) {
@@ -52,7 +52,7 @@ public class GuestBoardController {
     MemberReadResponse member = memberService.getMember(account);
 
     GuestBoardCreateResponse response = guestBoardService.create(hostid, member.getMid(), dto);
-    return ResponseEntity.ok(response);
+    return response;
   }
 
   // 방명록 조회

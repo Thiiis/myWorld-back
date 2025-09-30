@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
 import com.example.demo.profile.dto.ProfileReadResponse;
+import com.example.demo.profile.dto.ProfileUpdateRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +22,10 @@ public class ProfileService {
         if (profile == null) {
             throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
         }
-        return new ProfileReadResponse(profile.getMid(),profile.getJid(),profile.getTid(),
-        profile.getCreatedAt(),profile.getNickname(),profile.getBirthdate(),profile.getImgName(),
-        profile.getImgUrl(),profile.getStatusMessage(),profile.getIntro());
+        return new ProfileReadResponse(profile.getMid(),profile.getMid(),
+        profile.getNickname(),profile.getBirthdate(),profile.getImgName(),profile.getImgUrl(),
+        profile.getStatusMessage(),profile.getIntro(),profile.getMainAddress());
     }
-
     public Profile getProfileByMid(Long mid) {
         return profileDao.selectByMid(mid);
     }
@@ -34,8 +34,14 @@ public class ProfileService {
     //     return profileDao.selectByNickname(nickname);
     // }
 
-    // // Update
-    // // '주소' 업데이트 요청 처리
+    // Update
+    // 전체 업데이트 처리
+    public void update(ProfileUpdateRequest dto){
+        ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
+
+    }
+
+    // '주소' 업데이트 요청 처리
     // public void updateAddress(ProfileAddressUpdateRequest dto) {
     //     // 1. Mapper로 보낼 '통합 Request' 생성
     //     ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
@@ -62,4 +68,9 @@ public class ProfileService {
     // }
 
     // Delete
+    public int deleteByPid(Long pid) {
+    int rows = profileDao.deleteByPid(pid);
+    return rows;
+  }
 }
+

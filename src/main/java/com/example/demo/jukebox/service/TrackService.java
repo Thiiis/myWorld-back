@@ -27,7 +27,7 @@ public class TrackService {
 
   public List<TrackListResponse> getTrackListByJid(Long jid) {
     List<Song> songs = trackDao.selectSongsByJid(jid);
-    return songs.stream().map(song -> new TrackListResponse(song.getTitle(), song.getArtist())).toList();
+    return songs.stream().map(s -> new TrackListResponse(s.getTitle(), s.getArtist())).toList();
   }
 
   public int delete(Long trid) {
