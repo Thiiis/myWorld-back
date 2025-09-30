@@ -33,8 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class GuestBoardController {
 
   private final GuestBoardService guestBoardService;
-  private final JwtService jwtService;
-  private final MemberService memberService;
 
   // 방명록 생성
   @Login
@@ -44,12 +42,7 @@ public class GuestBoardController {
       @RequestBody GuestBoardCreateRequest dto,
       HttpServletRequest request) {
 
-    String authorization = request.getHeader("Authorization");
-    String jwt = authorization.substring(7);
-
-    Map<String, Object> claims = jwtService.getClaims(jwt);
-    Number midNum = (Number) claims.get("mid");
-    Long mid = midNum.longValue();
+    Long mid = (Long) request.getAttribute("loginMid");
 
     GuestBoardCreateResponse response = guestBoardService.create(hostid, mid, dto);
     return response;
@@ -73,25 +66,24 @@ public class GuestBoardController {
   }
 
   // 방명록 수정
-  //@Login
+  @Login
   @PutMapping("/update")
-  public ResponseEntity<Void> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest dto) {
-    guestBoardService.update(dto);
+  public ResponseEntity<Void> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest dto, HttpServletRequest request) {
+
+    Long mid = (Long) request.getAttribute("loginMid");
+
+    guestBoardService.update(mid, dto);
     return ResponseEntity.noContent().build();
   }
 
   // 방명록 삭제
-  // @Login
+  @Login
   @DeleteMapping("/delete/{gbid}")
   public ResponseEntity<Void> guestBoardDelete(@PathVariable("gbid") Long gbid, HttpServletRequest request) {
 
-    String authorization = request.getHeader("Authorization");
-    String jwt = authorization.substring(7);
-    
-    // String account = jwtService.getClaims(jwt).get("account");
-    // MemberReadResponse member = memberService.getMember(account);
+    Long mid = (Long) request.getAttribute("loginMid");
 
-    // guestBoardService.delete(gbid, member.getMid());
+    guestBoardService.delete(gbid, mid);
     return ResponseEntity.noContent().build();
 
   }

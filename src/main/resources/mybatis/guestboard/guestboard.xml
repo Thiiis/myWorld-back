@@ -17,7 +17,8 @@
   <!--앞에서 offset만큼 건너뛰고 limit만큼 행 가져오기-->
   <select id="select" parameterType="GuestBoardListRequest" resultType="GuestBoard">
     select * from guestboards
-    order by gbid desc
+    where hostid = #{hostid}
+    order by created_at desc
     offset #{offset} rows fetch next #{limit} rows only
   </select>
 

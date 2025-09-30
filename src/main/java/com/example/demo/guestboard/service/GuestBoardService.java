@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.demo.auth.dao.MemberDao;
 import com.example.demo.guestboard.dao.GuestBoardDao;
 import com.example.demo.guestboard.dto.GuestBoard;
 import com.example.demo.guestboard.dto.GuestBoardCreateRequest;
@@ -43,24 +42,23 @@ public class GuestBoardService {
 
   // board list
   public List<GuestBoardListResponse> getGuestBoardList(GuestBoardListRequest dto) {
-    List<GuestBoard> list = guestBoardDao.select(dto.getOffset(), dto.getLimit());
+    List<GuestBoard> list = guestBoardDao.select(dto.getHostid(), dto.getOffset(), dto.getLimit());
     return list.stream().map(g -> new GuestBoardListResponse(g.getGbid(), g.getGid(), g.getContent(), g.getCreatedAt(), g.getUpdatedAt())).toList();
   }
 
-  public GuestBoard getGuestBoard(Long gbid) {
-    GuestBoard guestBoard = guestBoardDao.selectByGbid(gbid);
-    return guestBoard;
-  }
-
   // board update
-  public int update(GuestBoardUpdateRequest dto) {
-    GuestBoard guestBoard = new GuestBoard(dto.getGbid(), dto.getContent());
-    return guestBoardDao.update(guestBoard);
+  public int update(Long mid, GuestBoardUpdateRequest dto) {
+    GuestBoard guestBoard = guestBoardDao.selectByGbid(dto.getGbid());
+    if(!guestBoard.getGid().equals(mid)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 글만 수정할 수 있습니다.");
+    }
+
+    GuestBoard newGuestBoard = new GuestBoard(dto.getGbid(), dto.getContent());
+    return guestBoardDao.update(newGuestBoard);
   }
 
   public int delete(Long gbid, Long mid) {
     GuestBoard dbGuestboard = guestBoardDao.selectByGbid(gbid);
-    // 만약에 작성하는 사람(mid) 와 디비에 있는 작성한 값이 같다면 이게 게스트보드의 pid가 저장되어 있자나. 
     if(!mid.equals(dbGuestboard.getGid())) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 글만 삭제할 수 있습니다.");
     }
