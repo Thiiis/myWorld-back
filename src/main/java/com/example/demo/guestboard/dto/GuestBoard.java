@@ -9,26 +9,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GuestBoard {
   private Long gbid;
-  private Long gid;
   private Long hostid;
+  private Long gid;
   private String content;
-  private String viewScope;
   private Date createdAt;
   private Date updatedAt;
 
   // board create 생성자
-  public GuestBoard(Long gid, Long hostid, String content, String viewScope) {
-    this.gid = gid;
+  public GuestBoard(Long hostid, Long gid, String content) {
     this.hostid = hostid;
+    this.gid = gid;
     this.content = content;
-    this.viewScope = viewScope;
   }
 
   // board update 생성자
-  public GuestBoard(Long gbid, String content, String viewScope) {
+  public GuestBoard(Long gbid, String content) {
     this.gbid = gbid;
     this.content = content;
-    this.viewScope = viewScope;
   }
 
 }

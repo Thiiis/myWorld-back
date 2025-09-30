@@ -56,7 +56,6 @@ public class GuestBoardController {
   }
 
   // 방명록 조회
-  // @Login
   @GetMapping("/list")
   public ResponseEntity<List<GuestBoardListResponse>> guestBoardList(
       @RequestParam Long mid,
@@ -74,7 +73,7 @@ public class GuestBoardController {
   }
 
   // 방명록 수정
-  // @Login
+  //@Login
   @PutMapping("/update")
   public ResponseEntity<Void> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest dto) {
     guestBoardService.update(dto);
@@ -84,8 +83,15 @@ public class GuestBoardController {
   // 방명록 삭제
   // @Login
   @DeleteMapping("/delete/{gbid}")
-  public ResponseEntity<Void> guestBoardDelete(@PathVariable("gbid") Long gbid) {
-    guestBoardService.delete(gbid);
+  public ResponseEntity<Void> guestBoardDelete(@PathVariable("gbid") Long gbid, HttpServletRequest request) {
+
+    String authorization = request.getHeader("Authorization");
+    String jwt = authorization.substring(7);
+    
+    String account = jwtService.getClaims(jwt).get("account");
+    MemberReadResponse member = memberService.getMember(account);
+
+    guestBoardService.delete(gbid, member.getMid());
     return ResponseEntity.noContent().build();
 
   }

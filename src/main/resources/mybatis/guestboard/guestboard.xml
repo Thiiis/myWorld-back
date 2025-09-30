@@ -6,8 +6,8 @@
 <mapper namespace="com.example.demo.guestboard.dao.GuestBoardDao">
   
   <insert id="insert" parameterType="GuestBoard" useGeneratedKeys="true" keyProperty="gbid" keyColumn="gbid">
-    insert into guestboards (gid, hostid, content, view_scope)
-    values (#{gid}, #{hostid}, #{content}, #{viewScope})
+    insert into guestboards (gid, hostid, content)
+    values (#{gid}, #{hostid}, #{content})
   </insert>
 
   <select id="selectByGbid" parameterType="Long" resultType="GuestBoard">
@@ -24,7 +24,6 @@
   <update id="update" parameterType="GuestBoard">
     update guestboards 
     set content = #{content},
-        view_scope = #{viewScope},
         updated_at = sysdate
     where gbid = #{gbid}
   </update>
