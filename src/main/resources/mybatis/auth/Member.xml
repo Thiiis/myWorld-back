@@ -12,7 +12,6 @@
     values (#{account}, #{email}, #{pwd})
   </insert>
 
-  
   <select id="selectByMid" parameterType="Long" resultType="Member">
     SELECT mid, account, email, pwd
     FROM members
@@ -38,11 +37,10 @@
       WHERE MID = #{mid}
   </update>
 
-
-
   <delete id="deleteByMid" parameterType="Long"> 
     delete from Members
     where mid=#{mid} 
   </delete>
+
   
 </mapper>
