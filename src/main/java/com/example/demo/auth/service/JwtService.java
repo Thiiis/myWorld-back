@@ -81,7 +81,7 @@ public class JwtService {
 
     }
     // jwt안 Claims(정보) 빼내기
-    public Map<String,String> getClaims(String jwt){
+    public Map<String, Object> getClaims(String jwt){
         JwtParserBuilder jwtParserBuilder = Jwts.parser();
         jwtParserBuilder.verifyWith(secretKey);
         JwtParser jwtParser = jwtParserBuilder.build();
@@ -89,9 +89,9 @@ public class JwtService {
         Jws<Claims> jws = jwtParser.parseSignedClaims(jwt);
         Claims claims = jws.getPayload();
 
-        Map<String,String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("account",claims.getSubject());
-        map.put("mid", claims.get("mid").toString());
+        map.put("mid", claims.get("mid"));
         map.put("email",claims.get("email").toString());
         return map;
     }

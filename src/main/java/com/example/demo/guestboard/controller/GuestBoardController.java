@@ -1,6 +1,7 @@
 package com.example.demo.guestboard.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.auth.dto.Member;
-import com.example.demo.auth.dto.MemberReadResponse;
 import com.example.demo.auth.service.JwtService;
 import com.example.demo.auth.service.MemberService;
 import com.example.demo.guestboard.dto.GuestBoardCreateRequest;
@@ -48,10 +47,11 @@ public class GuestBoardController {
     String authorization = request.getHeader("Authorization");
     String jwt = authorization.substring(7);
 
-    String account = jwtService.getClaims(jwt).get("account");
-    MemberReadResponse member = memberService.getMember(account);
+    Map<String, Object> claims = jwtService.getClaims(jwt);
+    Number midNum = (Number) claims.get("mid");
+    Long mid = midNum.longValue();
 
-    GuestBoardCreateResponse response = guestBoardService.create(hostid, member.getMid(), dto);
+    GuestBoardCreateResponse response = guestBoardService.create(hostid, mid, dto);
     return response;
   }
 
@@ -88,10 +88,10 @@ public class GuestBoardController {
     String authorization = request.getHeader("Authorization");
     String jwt = authorization.substring(7);
     
-    String account = jwtService.getClaims(jwt).get("account");
-    MemberReadResponse member = memberService.getMember(account);
+    // String account = jwtService.getClaims(jwt).get("account");
+    // MemberReadResponse member = memberService.getMember(account);
 
-    guestBoardService.delete(gbid, member.getMid());
+    // guestBoardService.delete(gbid, member.getMid());
     return ResponseEntity.noContent().build();
 
   }

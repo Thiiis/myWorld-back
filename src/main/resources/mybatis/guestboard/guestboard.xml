@@ -6,8 +6,8 @@
 <mapper namespace="com.example.demo.guestboard.dao.GuestBoardDao">
   
   <insert id="insert" parameterType="GuestBoard" useGeneratedKeys="true" keyProperty="gbid" keyColumn="gbid">
-    insert into guestboards (gid, hostid, content)
-    values (#{gid}, #{hostid}, #{content})
+    insert into guestboards (hostid, gid, content)
+    values (#{hostid}, #{gid}, #{content})
   </insert>
 
   <select id="selectByGbid" parameterType="Long" resultType="GuestBoard">
