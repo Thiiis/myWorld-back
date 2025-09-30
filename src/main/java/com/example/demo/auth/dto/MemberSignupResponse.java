@@ -14,10 +14,9 @@ public class MemberSignupResponse {
     private String account;
     private String nickname;
     private String email;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Date birthdate;
+    private String birthdate;
 
-    public MemberSignupResponse(String account, String nickname, String email, Date birthdate) {
+    public MemberSignupResponse(String account, String nickname, String email, String birthdate) {
         this.account = account;
         this.nickname = nickname;
         this.email = email;
