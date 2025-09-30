@@ -30,10 +30,9 @@
       WHERE account = #{account}
   </select>
 
-  <update id="update" parameterType="MemberUpdateRequest">
+  <update id="update" parameterType="Member">
       UPDATE MEMBERS
-      SET EMAIL = #{email},
-          PWD = #{pwd}
+      SET PWD = #{pwd}
       WHERE MID = #{mid}
   </update>
 
