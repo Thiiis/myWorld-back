@@ -1,5 +1,7 @@
 package com.example.demo.interceptor;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -46,7 +48,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             String jwt = null;
             String authorization = request.getHeader("Authorization");
             // 2-1) 요청 헤더에 실려왔는지 확인
-            if (authorization != null) {
+            if (authorization != null && authorization.startsWith("Bearer ")) {
                 // Authorization: Bearer XXXXXXXXXX
                 if (!authorization.substring(7).equals("")) {
                     jwt = authorization.substring(7);
@@ -63,6 +65,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
                 return false;
             } else {
                 if (jwtService.validateJwt(jwt)) {
+                    Map<String, String> claims = jwtService.getClaims(jwt);
+                    request.setAttribute("loginAccount", claims.get("account"));
+                    request.setAttribute("loginMid", Long.parseLong(claims.get("mid")));
                     return true;
                 } else {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN, "유효하지 않습니다.");
