@@ -1,14 +1,16 @@
 package com.example.demo.auth.dto;
 
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 
 @Data
 public class MemberUpdateRequest {
     private Long mid;
-    @Email
-    private String email;
-    private String pwd;
+    @NotBlank
+    private String currentPwd;
+    @NotBlank
+    private String newPwd;
+    @NotBlank
+    private String newPwdConfirm;
 }

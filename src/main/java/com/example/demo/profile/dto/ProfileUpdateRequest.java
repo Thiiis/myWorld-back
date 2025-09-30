@@ -8,15 +8,15 @@ import lombok.Data;
 
 @Data
 public class ProfileUpdateRequest {
-    // private Long pid; //pid 들어가니까 필요없지않나
+    private Long pid; //pid 들어가니까 필요없지않나
 
     private Long mid;
     private Long jid;
     private Long tid;
 
     private String nickname; // 회원가입할 때 닉네임 받아옴
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Date birthdate; // 생년월일
+    private String birthdate; // 생년월일
+
 
     private String imgName; // 프로필 이미지 파일 이름
     private String imgUrl; // 프로필 이미지 서버 저장 경로
