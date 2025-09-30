@@ -1,8 +1,8 @@
 package com.example.demo.guestboard.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class GuestBoardListRequest {
   private Long offset;
   private Long limit;

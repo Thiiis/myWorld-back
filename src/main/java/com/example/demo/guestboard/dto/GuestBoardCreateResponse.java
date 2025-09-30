@@ -2,9 +2,9 @@ package com.example.demo.guestboard.dto;
 
 import java.util.Date;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class GuestBoardCreateResponse {
   private String content;
   private String nickname;
