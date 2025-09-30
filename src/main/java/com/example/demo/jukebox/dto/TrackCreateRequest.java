@@ -1,9 +1,9 @@
 package com.example.demo.jukebox.dto;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class TrackCreateRequest {
   private Long jid;

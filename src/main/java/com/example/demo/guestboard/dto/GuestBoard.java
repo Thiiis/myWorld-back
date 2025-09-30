@@ -2,10 +2,10 @@ package com.example.demo.guestboard.dto;
 
 import java.util.Date;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class GuestBoard {
   private Long gbid;

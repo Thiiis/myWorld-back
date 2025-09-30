@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
-
+    
     @PostMapping("/signup")
     public ResponseEntity<MemberSignupResponse> signupMember(@Valid @RequestBody MemberSignupRequest dto) {
         memberService.signup(dto);
