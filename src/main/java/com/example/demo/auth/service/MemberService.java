@@ -73,7 +73,7 @@ public String login(MemberLoginRequest dto) {
     }
 
     // 3. JWT 발급
-    return jwtService.createJWT(member.getAccount(), member.getEmail());
+    return jwtService.createJWT(member.getMid(), member.getAccount(), member.getEmail());
 }
 
   @Transactional(readOnly = true)
