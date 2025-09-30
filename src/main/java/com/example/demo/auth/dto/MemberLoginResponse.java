@@ -1,12 +1,16 @@
 package com.example.demo.auth.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@Getter
+@NoArgsConstructor
+@Data
 public class MemberLoginResponse {
     private String account;
     private String jwt;
 
+    public MemberLoginResponse(String account, String jwt) {
+        this.account = account;
+        this.jwt = jwt;
+    }
 }

@@ -29,9 +29,8 @@ public class GuestBoardService {
   public GuestBoardCreateResponse create(Long hostid, Long gid, GuestBoardCreateRequest dto) {
     // 작성자 프로필ID
     Profile writerProfile = profileDao.selectByMid(gid);
-    Long writerPid = writerProfile.getPid();
 
-    GuestBoard guestBoard = new GuestBoard(writerPid, hostid, dto.getContent(), dto.getViewScope());
+    GuestBoard guestBoard = new GuestBoard(writerProfile.getPid(), hostid, dto.getContent(), dto.getViewScope());
     guestBoardDao.insert(guestBoard);
     GuestBoard dbGuestBoard = guestBoardDao.selectByGbid(guestBoard.getGbid());
     return new GuestBoardCreateResponse(dbGuestBoard.getContent(), writerProfile.getNickname(), dbGuestBoard.getCreatedAt());

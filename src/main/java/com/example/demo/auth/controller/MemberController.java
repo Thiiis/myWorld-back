@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.MemberLoginRequest;
 import com.example.demo.auth.dto.MemberLoginResponse;
 import com.example.demo.auth.dto.MemberReadResponse;
@@ -20,7 +19,6 @@ import com.example.demo.auth.dto.MemberSignupRequest;
 import com.example.demo.auth.dto.MemberSignupResponse;
 import com.example.demo.auth.dto.MemberUpdateRequest;
 import com.example.demo.auth.service.MemberService;
-import com.example.demo.common.dto.ApiResponse;
 import com.example.demo.interceptor.Login;
 
 import jakarta.validation.Valid;
@@ -38,52 +36,43 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<MemberSignupResponse> signupMember(@Valid @RequestBody MemberSignupRequest dto) {
         memberService.signup(dto);
-        MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(),dto.getNickname(),dto.getEmail(),dto.getBirthdate());
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(),dto.getNickname(), dto.getEmail(), dto.getBirthdate());
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<MemberLoginResponse>> loginMember(@Valid @RequestBody MemberLoginRequest dto) {
+    public ResponseEntity<MemberLoginResponse> loginMember(@Valid @RequestBody MemberLoginRequest dto) {
         try {
             // 서비스에 로그인 요청을 보내고 성공 시 JWT를 받음
             String jwt = memberService.login(dto);
             // 성공 응답 DTO 생성
             MemberLoginResponse result = new MemberLoginResponse(dto.getAccount(), jwt);
-            return ResponseEntity.ok(ApiResponse.success(result,"로그인 성공!"));
+            return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
-            // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.fail(401,"로그인 실패: "+e.getMessage()));
+            // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합        
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
-    // 예원 여기도 수정함 아래에 원래 코드 있음
     @GetMapping("/detail")
-    public ResponseEntity<Member> getMemberDetail (@Valid @RequestParam("account") String account) {
-        Member result = memberService.getMember(account);
+    public ResponseEntity<MemberReadResponse> getMemberDetail (@Valid @RequestParam("account") String account) {
+        MemberReadResponse result = memberService.getMember(account);
         return ResponseEntity.ok(result);
     }
 
-    // @GetMapping("/detail")
-    // public ResponseEntity<ApiResponse<MemberReadResponse>> getMemberDetail (@Valid @RequestParam("mid") Long mid) {
-    //     MemberReadResponse result = memberService.getMember(mid);
-    //     return ResponseEntity.ok(ApiResponse.success(result,null));
-    // }
-    
-
     @Login
     @PutMapping("/update")
-    public ResponseEntity<String> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
+    public ResponseEntity<Void> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
         memberService.update(dto);
-        return ResponseEntity.ok("이메일, 패스워드 수정이 완료되었습니다.");
+        return ResponseEntity.noContent().build();
     }
 
-    // delete 둘 중에 하나 선택, 개발하면서 생각해보기
     @Login
     @DeleteMapping("/delete/mid/{mid}")
-    public ResponseEntity<String> deleteMember(@Valid @PathVariable("mid") Long mid) {
+    public ResponseEntity<Void> deleteMember(@Valid @PathVariable("mid") Long mid) {
         memberService.deleteByMid(mid);
-        return ResponseEntity.ok("탈퇴되었습니다.");
+        return ResponseEntity.noContent().build();
     }
 
 }

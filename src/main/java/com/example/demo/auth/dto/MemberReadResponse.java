@@ -1,19 +1,16 @@
 package com.example.demo.auth.dto;
 
-// import com.fasterxml.jackson.annotation.JsonFormat;
-// import java.util.Date;
+import lombok.Data;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
+@Data
 public class MemberReadResponse {
+    private Long mid;
     private String account;
     private String email;
 
-    // private String nickname;
-    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    // private Data birthdate;
-
+    public MemberReadResponse(Long mid, String account, String email) {
+        this.mid = mid;
+        this.account = account;
+        this.email = email;
+    }
 }

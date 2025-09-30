@@ -7,11 +7,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
-@NoArgsConstructor
-@Getter
+@Data
 public class MemberSignupRequest {
     // 프로필에 저장될 정보
     @NotBlank(message = "닉네임은 필수입니다.")

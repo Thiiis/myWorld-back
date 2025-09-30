@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.auth.dto.Member;
+import com.example.demo.auth.dto.MemberReadResponse;
 import com.example.demo.auth.service.JwtService;
 import com.example.demo.auth.service.MemberService;
 import com.example.demo.guestboard.dto.GuestBoardCreateRequest;
@@ -48,7 +49,7 @@ public class GuestBoardController {
     String jwt = authorization.substring(7);
 
     String account = jwtService.getClaims(jwt).get("account");
-    Member member = memberService.getMember(account);
+    MemberReadResponse member = memberService.getMember(account);
 
     GuestBoardCreateResponse response = guestBoardService.create(hostid, member.getMid(), dto);
     return ResponseEntity.ok(response);
