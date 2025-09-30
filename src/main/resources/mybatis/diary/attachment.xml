@@ -6,34 +6,22 @@
 <mapper namespace="com.example.demo.diary.dao.AttachmentDao">
 
   <!--CREATE 첨부파일 저장 -->
- <insert id="insert" parameterType="Attachment">
+ <insert id="insert" parameterType="Attachment" useGeneratedKeys="true" keyProperty="aid" keyColumn="AID">
   INSERT INTO ATTACHMENTS ( DID, ANAME, ATYPE, ADATA, CREATED_AT, UPDATED_AT ) 
   VALUES ( #{did}, #{aname}, #{atype}, #{adata, jdbcType=BLOB}, SYSTIMESTAMP, SYSTIMESTAMP )
 </insert>
 
-
-<!--첨부파일 insert시 aid가 db에서 생성되므로 null이기 때문에 db에서 생성 후 별도로 aid값을 가져오기-->
-<select id="selectInsertedAttachmentId" parameterType="Attachment" resultType="long">
-  SELECT AID
-  FROM ATTACHMENTS
-  WHERE DID = #{did}
-    AND ANAME = #{aname}
-    AND ATYPE = #{atype}
-  ORDER BY CREATED_AT DESC
-  FETCH FIRST 1 ROWS ONLY
-</select>
-
   <!--READ 특정 Diary의 모든 첨부파일 조회 (BLOB 제외) -->
   <select id="selectAttachmentsByDid" parameterType="long" resultType="Attachment">
-    SELECT AID, DID, ANAME, ATYPE, NULL, CREATED_AT, UPDATED_AT <!--adata는 NULL로 표현(BLOB은 성능 문제로 응답 제외) -->
+    SELECT AID, DID, ANAME, ATYPE, CREATED_AT, UPDATED_AT <!--adata는 NULL로 표현(BLOB은 성능 문제로 응답 제외) -->
     FROM ATTACHMENTS
     WHERE DID = #{did}
     ORDER BY CREATED_AT ASC
   </select>
 
   <!--READ 특정 Diary의 첫 번째 첨부파일 조회 (대표 이미지 용) -->
-  <select id="selectFeaturedByDid" parameterType="long" resultType="Attachment">
-    SELECT AID, DID, ANAME, ATYPE, NULL, CREATED_AT, UPDATED_AT
+  <select id="selectThumbnailByDid" parameterType="long" resultType="Attachment">
+    SELECT *
     FROM ATTACHMENTS
     WHERE DID = #{did}
     ORDER BY CREATED_AT ASC
@@ -51,5 +39,18 @@
   <delete id="delete" parameterType="long">
     DELETE FROM ATTACHMENTS WHERE AID = #{aid}
   </delete>
+
+  <delete id="deleteByDid" parameterType="long">
+      DELETE FROM ATTACHMENTS WHERE DID = #{did}
+    </delete>
+
+    <delete id="deleteByDids" parameterType="java.util.List">
+      DELETE FROM ATTACHMENTS
+      WHERE DID IN
+      <foreach collection="list" item="did" open="(" separator="," close=")">
+        #{did}
+      </foreach>
+    </delete>
+
 
 </mapper>

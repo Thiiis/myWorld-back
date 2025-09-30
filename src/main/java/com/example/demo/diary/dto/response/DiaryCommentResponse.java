@@ -1,12 +1,16 @@
-// package com.example.demo.diary.dto;
+// package com.example.demo.diary.dto.response;
 
 // import java.util.Date;
 
+// import lombok.AllArgsConstructor;
 // import lombok.Data;
+// import lombok.NoArgsConstructor;
 
 // @Data
-// public class DiaryComment {
-
+// @NoArgsConstructor
+// @AllArgsConstructor
+// public class DiaryCommentResponse {
+//   // 공통(Create,Read)
 //   private Long dcid;
 //   private Long did;
 //   private Long mid;

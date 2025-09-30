@@ -9,7 +9,7 @@
 
     <!--단건 조회-->
     <select id="selectByDid" parameterType="Long" resultType="Diary">
-      SELECT DID as did, MID as mid, TITLE as title, CONTENT as content, EMO as emo, WEATHER as weather, VIEW_SCOPE as viewScope, CREATED_AT as createdAt, UPDATED_AT as updatedAt
+      SELECT *
       FROM DIARYS
       WHERE DID = #{did}
       ORDER BY CREATED_AT DESC
