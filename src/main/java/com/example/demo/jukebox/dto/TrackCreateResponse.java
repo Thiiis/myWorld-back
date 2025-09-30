@@ -1,8 +1,8 @@
 package com.example.demo.jukebox.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class TrackCreateResponse {
   private Long trid;
   private Long jid;

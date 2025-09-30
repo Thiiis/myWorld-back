@@ -2,10 +2,10 @@ package com.example.demo.jukebox.dto;
 
 import java.util.Date;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class Jukebox {
   private Long jid;
