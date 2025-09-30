@@ -40,7 +40,7 @@ public class MemberController {
     public ResponseEntity<MemberSignupResponse> signupMember(@Valid @RequestBody MemberSignupRequest dto) {
         memberService.signup(dto);
         MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(),dto.getNickname(),dto.getEmail(),dto.getBirthdate());
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/login")
@@ -54,7 +54,7 @@ public class MemberController {
 
         } catch (IllegalArgumentException e) {
             // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.fail(401,"로그인 실패: "+e.getMessage()));
+            return ResponseEntity.noContent().build();
         }
     }
 
