@@ -2,10 +2,10 @@ package com.example.demo.friend.dto;
 
 import java.util.Date;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class FriendCreateResponse {
   private Long fid;

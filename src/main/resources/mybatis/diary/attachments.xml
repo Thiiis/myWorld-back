@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.diary.dao.AttachmentsDao">
+
+  <!--CREATE 첨부파일 저장 -->
+ <insert id="insert" parameterType="Attachments" useGeneratedKeys="true" keyProperty="aid" keyColumn="AID">
+  INSERT INTO ATTACHMENTS ( DID, ANAME, ATYPE, ADATA, CREATED_AT, UPDATED_AT ) 
+  VALUES ( #{did}, #{aname}, #{atype}, #{adata, jdbcType=BLOB}, SYSTIMESTAMP, SYSTIMESTAMP )
+</insert>
+
+<!--READ 특정 Diary의 모든 첨부파일 조회 (BLOB 제외) -->
+<select id="selectAttachByDid" parameterType="long" resultType="Attachments">
+  SELECT AID, DID, ANAME, ATYPE, CREATED_AT, UPDATED_AT <!--adata는 NULL로 표현(BLOB은 성능 문제로 응답 제외) -->
+  FROM ATTACHMENTS
+  WHERE DID = #{did}
+  ORDER BY CREATED_AT ASC
+</select>
+
+<!--READ 사진 개별 조회 -->
+<select id="selectAttachByAid" parameterType="long" resultType="Attachments">
+  SELECT *
+  FROM ATTACHMENTS
+  WHERE AID = #{aid}
+ </select>
+
+  <!--READ 특정 Diary의 첫 번째 첨부파일 조회 (대표 이미지 용) -->
+<select id="selectThumbnailByDid" parameterType="long" resultType="Attachments">
+  SELECT *
+  FROM ATTACHMENTS
+  WHERE DID = #{did}
+  ORDER BY CREATED_AT ASC
+  FETCH FIRST 1 ROWS ONLY
+</select>
+
+  <!-- UPDATE -->
+  <update id="update" parameterType="Attachments">
+    UPDATE ATTACHMENTS
+    SET ANAME = #{aname}, ATYPE = #{atype}, ADATA = #{adata, jdbcType=BLOB}, UPDATED_AT = SYSTIMESTAMP
+    WHERE AID = #{aid}
+  </update>
+
+  <!-- DELETE -->
+  <delete id="delete" parameterType="long">
+    DELETE FROM ATTACHMENTS WHERE AID = #{aid}
+  </delete>
+
+  <delete id="deleteByDid" parameterType="long">
+      DELETE FROM ATTACHMENTS WHERE DID = #{did}
+    </delete>
+
+    <delete id="deleteByDids" parameterType="java.util.List">
+      DELETE FROM ATTACHMENTS
+      WHERE DID IN
+      <foreach collection="list" item="did" open="(" separator="," close=")">
+        #{did}
+      </foreach>
+    </delete>
+
+
+</mapper>

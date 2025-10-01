@@ -1,8 +1,8 @@
 package com.example.demo.common.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class ProfileInfo {
   private Long pid;
   private String nickname;

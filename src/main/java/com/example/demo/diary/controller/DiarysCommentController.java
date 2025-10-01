@@ -1,4 +1,4 @@
-// package com.example.demo.diary.controller;
+// // package com.example.demo.diary.controller;
 
 // import org.springframework.http.HttpStatus;
 // import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@
 // @RestController
 // @RequiredArgsConstructor  //생성자 주입 - 스프링 공식문서에서 생성자 주입을 권장(테스트하기 어렵고 순환 의존성 문제가 생길 수 있기 때문)
 // @RequestMapping("/diaries/{did}/comment")
-// public class DiaryCommentController {
+// public class DiarysCommentController {
   
 //   private final DiaryCommentService diaryCommentService;
 
@@ -58,4 +58,4 @@
 //     return ResponseEntity.noContent().build();
 //   }
   
-// }
+// // }

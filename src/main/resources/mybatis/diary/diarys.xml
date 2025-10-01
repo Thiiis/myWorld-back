@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-  <mapper namespace="com.example.demo.diary.dao.DiaryDao">
-    <insert id="insert" parameterType="Diary" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
-        INSERT INTO DIARYS (MID, TITLE, CONTENT, VIEW_SCOPE, EMO, WEATHER, CREATED_AT, UPDATED_AT)
-    VALUES (#{mid}, #{title}, #{content}, #{viewScope}, #{emo}, #{weather}, SYSTIMESTAMP, SYSTIMESTAMP)
+  <mapper namespace="com.example.demo.diary.dao.DiarysDao">
+    <insert id="insert" parameterType="Diarys" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
+        INSERT INTO DIARYS (MID, TITLE, CONTENT, EMO, WEATHER, CREATED_AT, UPDATED_AT)
+    VALUES (#{mid}, #{title}, #{content}, #{emo}, #{weather}, SYSTIMESTAMP, SYSTIMESTAMP)
     </insert>
 
     <!--단건 조회-->
-    <select id="selectByDid" parameterType="Long" resultType="Diary">
-      SELECT DID as did, MID as mid, TITLE as title, CONTENT as content, EMO as emo, WEATHER as weather, VIEW_SCOPE as viewScope, CREATED_AT as createdAt, UPDATED_AT as updatedAt
+    <select id="selectByDid" parameterType="Long" resultType="Diarys">
+      SELECT *
       FROM DIARYS
       WHERE DID = #{did}
       ORDER BY CREATED_AT DESC
@@ -22,7 +22,7 @@
     </select>
 
     <!--페이징-->
-    <select id="selectDiariesByPage" parameterType="Pager" resultType="Diary">
+    <select id="selectDiariesByPage" parameterType="Pager" resultType="Diarys">
       <![CDATA[
       SELECT *
       FROM (
@@ -39,9 +39,9 @@
     </select>
 
     <!-- 수정 -->
-    <update id="update" parameterType="Diary">
+    <update id="update" parameterType="Diarys">
       UPDATE DIARYS
-      SET TITLE = #{title}, CONTENT = #{content}, EMO = #{emo}, WEATHER = #{weather}, VIEW_SCOPE = #{viewScope}, UPDATED_AT = SYSTIMESTAMP
+      SET TITLE = #{title}, CONTENT = #{content}, EMO = #{emo}, WEATHER = #{weather}, UPDATED_AT = SYSTIMESTAMP
       WHERE DID = #{did}
     </update>
 

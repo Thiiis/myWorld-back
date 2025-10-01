@@ -1,11 +1,13 @@
 package com.example.demo.friend.dto;
 
 import java.util.Date;
+
 import com.example.demo.common.dto.ProfileInfo;
-import lombok.Getter;
+
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @NoArgsConstructor
 public class FriendRequestListResponse {
   private Long fid;

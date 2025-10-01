@@ -1,4 +1,4 @@
-// package com.example.demo.diary.service;
+// // package com.example.demo.diary.service;
 
 // import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +18,7 @@
 // @RequiredArgsConstructor
 // public class DiaryCommentService {
 
-//   private final DiaryCommentDao diaryCommentDao;
+//   private final DiarysCommentDao diaryCommentDao;
 
 //   // 댓글 생성
 //   @Transactional
