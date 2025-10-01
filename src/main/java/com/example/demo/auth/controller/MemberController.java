@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.MemberLoginRequest;
 import com.example.demo.auth.dto.MemberLoginResponse;
 import com.example.demo.auth.dto.MemberReadResponse;
@@ -41,10 +42,13 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity<MemberLoginResponse> loginMember(@Valid @RequestBody MemberLoginRequest dto) {
         try {
+            //mid를 가져오기 위한 임시 코드(나중에 한번에 수정해주세요)            
+            MemberReadResponse member = memberService.getMember(dto.getAccount());
+            
             // 서비스에 로그인 요청을 보내고 성공 시 JWT를 받음
             String jwt = memberService.login(dto);
             // 성공 응답 DTO 생성
-            MemberLoginResponse result = new MemberLoginResponse(dto.getAccount(), jwt);
+            MemberLoginResponse result = new MemberLoginResponse(member.getMid(), dto.getAccount(), jwt);
             return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
