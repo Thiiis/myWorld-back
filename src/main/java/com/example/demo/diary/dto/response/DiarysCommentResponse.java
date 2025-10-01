@@ -9,7 +9,7 @@
 // @Data
 // @NoArgsConstructor
 // @AllArgsConstructor
-// public class DiaryCommentResponse {
+// public class DiarysCommentResponse {
 //   // 공통(Create,Read)
 //   private Long dcid;
 //   private Long did;

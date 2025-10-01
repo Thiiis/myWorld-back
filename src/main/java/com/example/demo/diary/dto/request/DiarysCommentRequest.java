@@ -7,7 +7,7 @@
 // @Data
 // @NoArgsConstructor
 // @AllArgsConstructor
-// public class DiaryCommentRequest {
+// public class DiarysCommentRequest {
 //   //create,update시 공통적으로 필요
 //   private Long did;
 //   private String content;

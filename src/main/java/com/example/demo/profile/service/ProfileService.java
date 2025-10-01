@@ -1,6 +1,7 @@
 package com.example.demo.profile.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
@@ -11,66 +12,36 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ProfileService {
     private final ProfileDao profileDao;
-
     // Read
     public ProfileReadResponse getProfile(Long pid) {
         Profile profile = profileDao.selectByPid(pid);
         if (profile == null) {
             throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
         }
-        return new ProfileReadResponse(profile.getMid(),profile.getMid(),
-        profile.getNickname(),profile.getBirthdate(),profile.getImgName(),profile.getImgUrl(),
-        profile.getStatusMessage(),profile.getIntro(),profile.getMainAddress());
+        return new ProfileReadResponse(profile.getMid(), profile.getMid(),
+                profile.getNickname(), profile.getBirthdate(), profile.getImgName(), profile.getImgUrl(),
+                profile.getStatusMessage(), profile.getIntro(), profile.getMainAddress());
     }
     public Profile getProfileByMid(Long mid) {
         return profileDao.selectByMid(mid);
     }
-
     // public Profile getProfileByNickname(String nickname) {
-    //     return profileDao.selectByNickname(nickname);
+    // return profileDao.selectByNickname(nickname);
     // }
 
     // Update
-    // 전체 업데이트 처리
-    public void update(ProfileUpdateRequest dto){
-        ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
+    public void update(Long mid, ProfileUpdateRequest dto) {
+        profileDao.update(mid, dto);
 
     }
+    // 이미지 파일 정보를 DB에 업데이트하는 서비스 메서드
+    public void updateImage(Long mid, String imgName, String imgUrl) {
+        // profile.xml에 정의된 updateImage 쿼리를 실행
+        profileDao.updateImage(mid, imgName, imgUrl);
+    }
 
-    // '주소' 업데이트 요청 처리
-    // public void updateAddress(ProfileAddressUpdateRequest dto) {
-    //     // 1. Mapper로 보낼 '통합 Request' 생성
-    //     ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
-
-    //     // 2. 필수 값(pid)과 섹션에 맞는 값(address)을 통합 Request에 복사
-    //     unifiedDto.setPid(dto.getPid());
-    //     unifiedDto.setPostalCode(dto.getPostalCode());
-    //     unifiedDto.setMainAddress(dto.getMainAddress());
-    //     unifiedDto.setDetailAddress(dto.getDetailAddress());
-
-    //     // 3. 여기서도 동일한 updateProfile 메소드를 호출
-    //     // profileDao.update(unifiedDto);
-    // }
-
-    // public void updateFK(ProfileFKUpdateRequest dto) {
-    //     ProfileUpdateRequest unifiedDto = new ProfileUpdateRequest();
-
-    //     unifiedDto.setPid(dto.getPid());
-    //     unifiedDto.setMid(dto.getMid());
-    //     unifiedDto.setJid(dto.getJid());
-    //     unifiedDto.setTid(dto.getTid());
-
-    //     // profileDao.update(unifiedDto);
-    // }
-
-    // Delete
-    public int deleteByPid(Long pid) {
-    int rows = profileDao.deleteByPid(pid);
-    return rows;
-  }
 }
-

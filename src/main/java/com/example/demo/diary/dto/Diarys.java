@@ -6,7 +6,7 @@ import lombok.Data;
 
 //DB전용 엔티티
 @Data
-public class Diary {
+public class Diarys {
 
     private Long did;                       // GENERATED ALWAYS AS IDENTITY -> INSERT시 생략
     private Long mid;

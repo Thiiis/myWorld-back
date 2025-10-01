@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiaryResponse {
+public class DiarysResponse {
   
   private Long did;          // create
   private Long mid;          // read  - member id값
@@ -23,4 +23,9 @@ public class DiaryResponse {
   private Weather weather;   // create, read, update
   private Date createdAt;    // read
   private Date updatedAt;    // read
+  
+  //attachment
+  private List<AttachmentsResponse> attachments;  // 사진 리스트
+  private AttachmentsResponse thumbnail;          // 대표 이미지
+  //private Attachment thumbnail;                 // 썸네일 원본-방법1(DB에 저장-사용자가 정함)
 }

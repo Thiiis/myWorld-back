@@ -18,7 +18,7 @@
 // @RequiredArgsConstructor
 // public class DiaryCommentService {
 
-//   private final DiaryCommentDao diaryCommentDao;
+//   private final DiarysCommentDao diaryCommentDao;
 
 //   // 댓글 생성
 //   @Transactional

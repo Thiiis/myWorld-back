@@ -24,17 +24,17 @@ import com.example.demo.interceptor.Login;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/members")
 public class MemberController {
     private final MemberService memberService;
-    
+
     @PostMapping("/signup")
     public ResponseEntity<MemberSignupResponse> signupMember(@Valid @RequestBody MemberSignupRequest dto) {
         memberService.signup(dto);
-        MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(),dto.getNickname(), dto.getEmail(), dto.getBirthdate());
+        MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(), dto.getNickname(), dto.getEmail(),
+                dto.getBirthdate());
         return ResponseEntity.ok(result);
     }
 
@@ -48,22 +48,27 @@ public class MemberController {
             return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
-            // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합        
+            // 로그인 실패는 401 Unauthorized 상태 코드가 더 적합
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<MemberReadResponse> getMemberDetail (@Valid @RequestParam("account") String account) {
+    public ResponseEntity<MemberReadResponse> getMemberDetail(@Valid @RequestParam("account") String account) {
         MemberReadResponse result = memberService.getMember(account);
         return ResponseEntity.ok(result);
     }
 
     @Login
     @PutMapping("/update")
-    public ResponseEntity<Void> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
-        memberService.update(dto);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
+        try {
+            memberService.updatePwd(dto);
+            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+        } catch (IllegalArgumentException e) {
+            // 서비스에서 발생시킨 예외를 잡아 클라이언트에게 에러 메시지를 전달
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @Login
@@ -72,6 +77,5 @@ public class MemberController {
         memberService.deleteByMid(mid);
         return ResponseEntity.noContent().build();
     }
-    
 
 }

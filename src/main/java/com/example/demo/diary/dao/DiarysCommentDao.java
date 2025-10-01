@@ -6,7 +6,7 @@
 // import com.example.demo.diary.dto.DiaryComment;
 
 // @Mapper
-// public interface DiaryCommentDao {
+// public interface DiarysCommentDao {
 //   void insert(DiaryComment diaryComment);                                             // 생성
 //   DiaryComment selectByDcid(Long dcid);                                               // 
 //   DiaryComment selectByDidAndDcid(@Param("did") Long did, @Param("dcid") Long dcid);  //

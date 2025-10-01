@@ -8,15 +8,13 @@
   </settings>
 
   <typeAliases>
-    <typeAlias type="com.example.demo.diary.dto.Diary" alias="Diary" />
-    <!--<typeAlias type="com.example.demo.diary.dto.Attachment" alias="Attachment" />-->
+    <typeAlias type="com.example.demo.diary.dto.Diarys" alias="Diarys" />
+    <typeAlias type="com.example.demo.diary.dto.Attachments" alias="Attachments" />
     <!--<typeAlias type="com.example.demo.diary.dto.DiaryComment" alias="DiaryComment" />-->
     <typeAlias type="com.example.demo.diary.dto.Pager" alias="Pager" />
 
-    <typeAlias type="com.example.demo.auth.dto.Member" alias="Member" />
+     <typeAlias type="com.example.demo.auth.dto.Member" alias="Member" />
     <typeAlias type="com.example.demo.auth.dto.MemberUpdateRequest" alias="MemberUpdateRequest" />
-
-    <!--<typeAlias type="com.example.demo.auth.dto.Admin" alias="Admin" />-->
 
     <typeAlias type="com.example.demo.profile.dto.Profile" alias="Profile" />
     <!-- <typeAlias type="com.example.demo.profile.dto.ProfileUpdateRequest" alias="ProfileUpdateRequest" /> -->

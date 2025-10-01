@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiaryRequest {
+public class DiarysRequest {
 
   private Long did;               //update
-  private Long mid;         //create,update
+  private Long mid;               //create
   private String title;           //create,read,update
   private String content;         //create,read,update
   private String emo;             //create,read,update -HAPPY, CALM, EXCITED, SAD

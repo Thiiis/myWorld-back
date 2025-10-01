@@ -5,7 +5,9 @@ import java.util.Date;
 import com.example.demo.profile.dto.Profile;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Data
 public class Member {
     private Long mid;

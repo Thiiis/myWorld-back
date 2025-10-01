@@ -7,7 +7,7 @@
 
 // @Getter
 // @NoArgsConstructor
-// public class DiaryComment {
+// public class DiaryComments {
 
 //   private Long dcid;
 //   private Long did;

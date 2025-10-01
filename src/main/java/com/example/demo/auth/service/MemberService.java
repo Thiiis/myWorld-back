@@ -14,6 +14,7 @@ import com.example.demo.auth.dto.MemberUpdateRequest;
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -72,7 +73,7 @@ public String login(MemberLoginRequest dto) {
     }
 
     // 3. JWT 발급
-    return jwtService.createJWT(member.getAccount(), member.getEmail());
+    return jwtService.createJWT(member.getMid(), member.getAccount(), member.getEmail());
 }
 
   @Transactional(readOnly = true)
@@ -86,21 +87,27 @@ public String login(MemberLoginRequest dto) {
   }
 
   
-  @Transactional
-  public void update(MemberUpdateRequest dto) {
-    Long mid = dto.getMid();
-    String email = dto.getEmail();
-    String pwd = dto.getPwd();
+  public void updatePwd(@Valid MemberUpdateRequest dto) {
+// 1. 새로운 비밀번호와 비밀번호 확인이 일치하는지 검사
+        if (!dto.getNewPwd().equals(dto.getNewPwdConfirm())) {
+            throw new IllegalArgumentException("새로운 비밀번호가 일치하지 않습니다.");
+        }
 
-    // 이메일만 수정할 경우 비밀번호를 null로 보내지 않도록 확인
-    if (email == null || email.isEmpty()) {
-        throw new IllegalArgumentException("이메일을 입력해주세요.");
-    }
-    // 비밀번호가 null이 아닌 경우에만 비밀번호 업데이트
-    if (pwd != null && !pwd.isEmpty()) {
-        pwd = passwordEncoder.encode(pwd); // 비밀번호 암호화
-    }
-    memberDao.update(mid,email,pwd);
+        // 2. DB에서 현재 회원 정보 조회
+        Member member = memberDao.selectByMid(dto.getMid())
+                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
+
+        // 3. 현재 비밀번호가 맞는지 확인 (가장 중요!)
+        // DB에 저장된 암호화된 비밀번호와, 사용자가 입력한 현재 비밀번호를 비교
+        if (!passwordEncoder.matches(dto.getCurrentPwd(), member.getPwd())) {
+            throw new IllegalArgumentException("현재 비밀번호가 올바르지 않습니다.");
+        }
+
+        // 4. 새로운 비밀번호를 암호화
+        String newHashedPassword = passwordEncoder.encode(dto.getNewPwd());
+
+        // 5. DB에 암호화된 새 비밀번호로 업데이트
+        memberDao.update(member.getMid(), newHashedPassword);
   }
 
 
