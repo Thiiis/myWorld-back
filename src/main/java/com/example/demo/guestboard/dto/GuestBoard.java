@@ -11,6 +11,7 @@ public class GuestBoard {
   private Long gbid;
   private Long hostid;
   private Long gid;
+  private String nickname;
   private String content;
   private Date createdAt;
   private Date updatedAt;
