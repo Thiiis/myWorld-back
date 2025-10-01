@@ -2,6 +2,9 @@ package com.example.demo.profile.service;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.auth.dao.MemberDao;
+import com.example.demo.auth.dto.Member;
+import com.example.demo.common.dto.ProfileInfo;
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
 import com.example.demo.profile.dto.ProfileReadResponse;
@@ -15,10 +18,48 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileDao profileDao;
-
+    private final MemberDao memberDao;
     // Read
-    public ProfileReadResponse getProfile(Long mid) {
+
+    public ProfileInfo getProfileInfoByAccount(String account) {
+        Member member = memberDao.selectByAccount(account);
+        if (member == null) {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다: " + account);
+        }
+
+        Profile profile = profileDao.selectByMid(member.getMid());
+        if (profile == null) {
+            throw new IllegalArgumentException("프로필을 찾을 수 없습니다: mid " + member.getMid());
+        }
+        ;
+        return new ProfileInfo(profile.getPid(),profile.getNickname(),profile.getImgUrl(),profile.getStatusMessage());
+    }
+
+    public ProfileReadResponse getProfileByAccount(String account) {
+        Member member = memberDao.selectByAccount(account);
+        if (member == null) {
+            throw new IllegalArgumentException("사용자를 찾을 수 없습니다: " + account);
+        }
+
+        Profile profile = profileDao.selectByMid(member.getMid());
+        if (profile == null) {
+            throw new IllegalArgumentException("프로필을 찾을 수 없습니다: mid " + member.getMid());
+        }
+        ;
+        return new ProfileReadResponse(profile);
+    }
+
+    public ProfileReadResponse getProfileByMid(Long mid) {
         Profile profile = profileDao.selectByMid(mid);
+        if (profile == null) {
+            throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
+        }
+        // 생성자를 통해 DTO로 변환
+        return new ProfileReadResponse(profile);
+    }
+
+    public ProfileReadResponse getProfileByPid(Long pid) {
+        Profile profile = profileDao.selectByPid(pid);
         if (profile == null) {
             throw new IllegalArgumentException("존재하지 않는 프로필입니다.");
         }
