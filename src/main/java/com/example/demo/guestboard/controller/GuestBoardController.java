@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.auth.dto.Member;
+import com.example.demo.auth.dto.MemberReadResponse;
+import com.example.demo.auth.service.MemberService;
 import com.example.demo.guestboard.dto.GuestBoardCreateRequest;
 import com.example.demo.guestboard.dto.GuestBoardCreateResponse;
 import com.example.demo.guestboard.dto.GuestBoardListRequest;
@@ -30,14 +33,18 @@ import lombok.RequiredArgsConstructor;
 public class GuestBoardController {
 
   private final GuestBoardService guestBoardService;
+  private final MemberService memberService;
 
   // 방명록 생성
   @Login
-  @PostMapping("/create/{hostid}")
+  @PostMapping("/create/{hostaccount}")
   public ResponseEntity<GuestBoardCreateResponse> guestBoardCreate(
-      @PathVariable Long hostid,
+      @PathVariable("hostaccount") String hostaccount,
       @RequestBody GuestBoardCreateRequest dto,
       HttpServletRequest request) {
+
+    MemberReadResponse host = memberService.getMember(hostaccount);
+    Long hostid = host.getMid();
 
     Long loginMid = (Long) request.getAttribute("loginMid");
     GuestBoardCreateResponse response = guestBoardService.create(hostid, loginMid, dto);
