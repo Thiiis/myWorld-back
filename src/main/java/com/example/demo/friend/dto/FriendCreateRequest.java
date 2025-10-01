@@ -1,9 +1,8 @@
 package com.example.demo.friend.dto;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class FriendCreateRequest {
-  private Long reqId;
   private Long accId;
 }

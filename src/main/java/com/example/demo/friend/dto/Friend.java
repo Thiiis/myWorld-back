@@ -2,10 +2,7 @@ package com.example.demo.friend.dto;
 
 import java.util.Date;
 
-import com.example.demo.friend.enums.FriendStatus;
-
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class Friend {
