@@ -13,16 +13,8 @@
     FROM profiles
     WHERE nickname = #{nickname}
   </select>
-  <!-- <select id="selectByPid" resultType="Profile">
-    SELECT * FROM PROFILES WHERE PID = #{pid}
-  </select>
-   
-  <select id="selectByMid" resultType="Profile">
-    SELECT * FROM PROFILES WHERE MID = #{mid}
-  </select>  -->
 
-
-  <select id="selectByPid" resultType="com.example.demo.profile.dto.Profile">
+  <select id="selectByPid" resultType="Profile">
     SELECT
         PID,
         MID,
@@ -38,7 +30,7 @@
         PID = #{pid}
 </select>
 
-<select id="selectByMid" resultType="com.example.demo.profile.dto.Profile">
+<select id="selectByMid" resultType="Profile">
     SELECT
         PID,
         MID,
