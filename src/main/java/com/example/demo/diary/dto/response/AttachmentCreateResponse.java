@@ -1,6 +1,5 @@
 package com.example.demo.diary.dto.response;
 
-import java.util.Date;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

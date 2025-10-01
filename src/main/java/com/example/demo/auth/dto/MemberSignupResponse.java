@@ -1,8 +1,5 @@
 package com.example.demo.auth.dto;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
