@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.common.dto.ProfileInfo;
 import com.example.demo.interceptor.Login;
 import com.example.demo.profile.dto.ProfileReadResponse;
 import com.example.demo.profile.dto.ProfileUpdateRequest;
@@ -29,33 +30,30 @@ import lombok.RequiredArgsConstructor;
 public class ProfileController {
     private final ProfileService profileService;
 
+    @GetMapping("/info/{account}")
+    public ResponseEntity<ProfileInfo> getProfileInfo(@PathVariable("account") String account) {
+        ProfileInfo result = profileService.getProfileInfoByAccount(account);
+        return ResponseEntity.ok(result);
+    }
+
     @Login
-    @GetMapping("/me") 
+    @GetMapping("/detail/me") 
     public ResponseEntity<ProfileReadResponse> getMyProfile(HttpServletRequest request) {
-        // 인터셉터에서 저장한 로그인한 사용자의 ID를 가져옵니다.
         Long loginMid = (Long) request.getAttribute("loginMid");
-        ProfileReadResponse result = profileService.getProfile(loginMid);
+        ProfileReadResponse result = profileService.getProfileByMid(loginMid);
         return ResponseEntity.ok(result);
     }
 
     @Login
-    @GetMapping("/{pid}")
-    public ResponseEntity<ProfileReadResponse> getProfileDetail(@PathVariable("pid") Long pid) {
-        ProfileReadResponse result = profileService.getProfile(pid);
+    @GetMapping("/detail/{account}")
+    public ResponseEntity<ProfileReadResponse> getAnotherProfile(@PathVariable("account") String account) {
+        ProfileReadResponse result = profileService.getProfileByAccount(account);
         return ResponseEntity.ok(result);
     }
-
 
     @Value("${file.upload-dir}")
     private String uploadDir;
-
-    /**
-     * 프로필 정보(텍스트) 업데이트 API
-     * 
-     * @param mid       업데이트할 프로필의 멤버 ID
-     * @param dto 변경할 프로필 정보가 담긴 DTO
-     * @return
-     */
+    
     @Login
     @PutMapping("/update")
     public ResponseEntity<Void> updateProfile(HttpServletRequest request,
