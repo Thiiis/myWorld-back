@@ -33,8 +33,8 @@ public class ProfileController {
     @GetMapping("/me") 
     public ResponseEntity<ProfileReadResponse> getMyProfile(HttpServletRequest request) {
         // 인터셉터에서 저장한 로그인한 사용자의 ID를 가져옵니다.
-        Long mid = (Long) request.getAttribute("loginMid");
-        ProfileReadResponse result = profileService.getProfile(mid);
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        ProfileReadResponse result = profileService.getProfile(loginMid);
         return ResponseEntity.ok(result);
     }
 
@@ -61,8 +61,8 @@ public class ProfileController {
     public ResponseEntity<Void> updateProfile(HttpServletRequest request,
             @RequestBody ProfileUpdateRequest dto) { // JSON 본문을 DTO로 받음
 
-        Long mid = (Long) request.getAttribute("loginMid");
-        profileService.update(mid, dto);
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        profileService.update(loginMid, dto);
 
         return ResponseEntity.noContent().build();
     }
@@ -71,7 +71,7 @@ public class ProfileController {
     @PutMapping("/update/image")
     public ResponseEntity<String> updateProfileImage(HttpServletRequest request,
             @RequestParam("file") MultipartFile file) {
-        Long mid = (Long) request.getAttribute("loginMid"); 
+        Long loginMid = (Long) request.getAttribute("loginMid"); 
         // 1. 파일 유효성 검사
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("이미지 파일을 선택해주세요.");
@@ -91,7 +91,7 @@ public class ProfileController {
             String imageUrl = "/images/" + storedFilename;
 
             // 5. 서비스 계층을 호출하여 DB에 파일 정보(저장된 이름, URL) 업데이트
-            profileService.updateImage(mid, storedFilename, imageUrl);
+            profileService.updateImage(loginMid, storedFilename, imageUrl);
 
             return ResponseEntity.ok("프로필 이미지가 성공적으로 업데이트되었습니다.");
 
