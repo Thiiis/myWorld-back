@@ -20,6 +20,7 @@ import com.example.demo.profile.dto.ProfileReadResponse;
 import com.example.demo.profile.dto.ProfileUpdateRequest;
 import com.example.demo.profile.service.ProfileService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -27,6 +28,15 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/profiles")
 public class ProfileController {
     private final ProfileService profileService;
+
+    @Login
+    @GetMapping("/me") 
+    public ResponseEntity<ProfileReadResponse> getMyProfile(HttpServletRequest request) {
+        // 인터셉터에서 저장한 로그인한 사용자의 ID를 가져옵니다.
+        Long mid = (Long) request.getAttribute("loginMid");
+        ProfileReadResponse result = profileService.getProfile(mid);
+        return ResponseEntity.ok(result);
+    }
 
     @Login
     @GetMapping("/{pid}")
@@ -47,22 +57,21 @@ public class ProfileController {
      * @return
      */
     @Login
-    @PutMapping("update/{mid}")
-    public ResponseEntity<Void> updateProfile(
-            @PathVariable("mid") Long mid,
+    @PutMapping("/update")
+    public ResponseEntity<Void> updateProfile(HttpServletRequest request,
             @RequestBody ProfileUpdateRequest dto) { // JSON 본문을 DTO로 받음
 
+        Long mid = (Long) request.getAttribute("loginMid");
         profileService.update(mid, dto);
 
         return ResponseEntity.noContent().build();
     }
 
     @Login
-    @PutMapping("update/{mid}/image")
-    public ResponseEntity<String> updateProfileImage(
-            @PathVariable("mid") Long mid,
+    @PutMapping("/update/image")
+    public ResponseEntity<String> updateProfileImage(HttpServletRequest request,
             @RequestParam("file") MultipartFile file) {
-
+        Long mid = (Long) request.getAttribute("loginMid"); 
         // 1. 파일 유효성 검사
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("이미지 파일을 선택해주세요.");

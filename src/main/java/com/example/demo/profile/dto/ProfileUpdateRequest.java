@@ -1,16 +1,13 @@
 package com.example.demo.profile.dto;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
 @Data
 public class ProfileUpdateRequest {
-    private Long pid; //pid 들어가니까 필요없지않나
+    // private Long pid; //pid 들어가니까 필요없지않나
 
-    private Long mid;
+    // private Long mid;
     private Long jid;
     private Long tid;
 
@@ -18,8 +15,8 @@ public class ProfileUpdateRequest {
     private String birthdate; // 생년월일
 
 
-    private String imgName; // 프로필 이미지 파일 이름
-    private String imgUrl; // 프로필 이미지 서버 저장 경로
+    // private String imgName; // 프로필 이미지 파일 이름
+    // private String imgUrl; // 프로필 이미지 서버 저장 경로
 
     private String statusMessage; // 상태메세지 VARCHAR2(255)
     private String intro; // 자기소개, CLOB
