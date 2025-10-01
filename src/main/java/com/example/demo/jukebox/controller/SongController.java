@@ -31,16 +31,16 @@ public class SongController {
   //   return ResponseEntity.ok(response);
   // }
 
-  // @GetMapping("/search")
-  // public List<SongSearchResponse> searchSongs(@RequestParam String query) {
-  //   return songService.searchSongs(query);
-  // }
+  @GetMapping("/search")
+  public List<SongSearchResponse> searchSongs(@RequestParam String query) {
+    return songService.searchSongs(query);
+  }
 
-  // @DeleteMapping("/delete/{sid}")
-  // public ResponseEntity<Void> jukeboxDelete(@PathVariable("sid") Long sid) {
-  //   songService.delete(sid);
-  //   return ResponseEntity.noContent().build();
+  @DeleteMapping("/delete/{sid}")
+  public ResponseEntity<Void> jukeboxDelete(@PathVariable("sid") Long sid) {
+    songService.delete(sid);
+    return ResponseEntity.noContent().build();
 
-  // }
+  }
 
 }

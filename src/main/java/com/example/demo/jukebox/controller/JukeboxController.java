@@ -22,8 +22,11 @@ import com.example.demo.jukebox.dto.JukeboxUpdateRequest;
 import com.example.demo.jukebox.service.JukeboxLikesService;
 import com.example.demo.jukebox.service.JukeboxService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/jukeboxes")
@@ -35,13 +38,16 @@ public class JukeboxController {
     // 주크박스 생성
     @Login
     @PostMapping("/create")
-    public ResponseEntity<JukeboxCreateResponse> jukeboxCreate(@RequestBody JukeboxCreateRequest dto) {
-        JukeboxCreateResponse response = jukeboxservice.create(dto);
+    public ResponseEntity<JukeboxCreateResponse> jukeboxCreate(
+            @RequestBody JukeboxCreateRequest dto, 
+            HttpServletRequest request) {
+
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        JukeboxCreateResponse response = jukeboxservice.create(loginMid, dto);
         return ResponseEntity.ok(response);
     }
 
     // 주크박스 조회
-    @Login
     @GetMapping("/list")
     public ResponseEntity<List<JukeboxListResponse>> jukeboxList(@RequestParam Long mid) {
         List<JukeboxListResponse> list = jukeboxservice.getJukeboxList(mid);
@@ -49,7 +55,6 @@ public class JukeboxController {
     }
 
     // 주크박스 상세조회
-    @Login
     @GetMapping("/detail")
     public ResponseEntity<JukeboxDetailResponse> jukeboxDetail(@RequestParam Long jid) {
         JukeboxDetailResponse response = jukeboxservice.getJukeboxDetail(jid);
@@ -59,29 +64,35 @@ public class JukeboxController {
     // 주크박스 수정
     @Login
     @PutMapping("/update")
-    public ResponseEntity<Void> jukeboxUpdate(@RequestBody JukeboxUpdateRequest dto) {
-        jukeboxservice.update(dto);
+    public ResponseEntity<Void> jukeboxUpdate(@RequestBody JukeboxUpdateRequest dto, HttpServletRequest request) {
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        jukeboxservice.update(loginMid, dto);
         return ResponseEntity.noContent().build();
     }
 
     // 주크박스 삭제
     @Login
     @DeleteMapping("/delete/{jid}")
-    public ResponseEntity<Void> jukeboxDelete(@PathVariable("jid") Long jid) {
-        jukeboxservice.delete(jid);
+    public ResponseEntity<Void> jukeboxDelete(@PathVariable("jid") Long jid, HttpServletRequest request) {
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        jukeboxservice.delete(loginMid, jid);
         return ResponseEntity.noContent().build();
     }
 
     // 주크박스 좋아요
     @Login
     @PostMapping("/like")
-    public ResponseEntity<String> toggleJukeboxLike(@RequestParam Long jid, @RequestParam Long mid) {
-        boolean isLike = jukeboxLikesService.toggleLike(jid, mid);
+    public ResponseEntity<String> toggleJukeboxLike(@RequestParam("jid") Long jid, HttpServletRequest request) {
+
+        Long loginMid = (Long) request.getAttribute("loginMid");
+
+        boolean isLike = jukeboxLikesService.toggleLike(jid, loginMid);
         if (isLike) {
             return ResponseEntity.ok("좋아요");
         } else {
             return ResponseEntity.ok("좋아요 취소");
         }
     }
-
 }
+
+

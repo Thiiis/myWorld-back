@@ -80,7 +80,7 @@ public class SongService {
   }
 
   // 음악 추가하기
-  public SongCreateResponse create(SongCreateRequest dto) {
+  public void create(SongCreateRequest dto) {
     String videoId = dto.getVideoId();
 
     // YouTube API 호출
@@ -106,7 +106,7 @@ public class SongService {
     songDao.insert(song);
 
     Song dbSong = songDao.selectBySid(song.getSid());
-    return new SongCreateResponse(dbSong.getSid(), dbSong.getTitle(), dbSong.getArtist(), dbSong.getVideoId());
+    // return new SongCreateResponse(dbSong.getSid(), dbSong.getTitle(), dbSong.getArtist(), dbSong.getVideoId());
   }
 
   private Long parseDuration(String duration) {

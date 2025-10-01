@@ -48,8 +48,7 @@ public class GuestBoardService {
 
   // board update
   public int update(Long mid, GuestBoardUpdateRequest dto) {
-    GuestBoard guestBoard = guestBoardDao.selectByGbid(dto.getGbid());
-    if(!guestBoard.getGid().equals(mid)) {
+    if(!guestBoardDao.selectByGbid(dto.getGbid()).getGid().equals(mid)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 글만 수정할 수 있습니다.");
     }
 
@@ -58,8 +57,7 @@ public class GuestBoardService {
   }
 
   public int delete(Long gbid, Long mid) {
-    GuestBoard dbGuestboard = guestBoardDao.selectByGbid(gbid);
-    if(!mid.equals(dbGuestboard.getGid())) {
+    if(!guestBoardDao.selectByGbid(gbid).getGid().equals(mid)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 글만 삭제할 수 있습니다.");
     }
     return guestBoardDao.delete(gbid);
