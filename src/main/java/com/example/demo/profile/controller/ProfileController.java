@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.common.dto.ProfileInfo;
 import com.example.demo.interceptor.Login;
 import com.example.demo.profile.dto.ProfileReadResponse;
 import com.example.demo.profile.dto.ProfileUpdateRequest;
 import com.example.demo.profile.service.ProfileService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -28,41 +30,46 @@ import lombok.RequiredArgsConstructor;
 public class ProfileController {
     private final ProfileService profileService;
 
-    @Login
-    @GetMapping("/detail")
-    public ResponseEntity<ProfileReadResponse> getProfileDetail(@RequestParam("pid") Long pid) {
-        ProfileReadResponse result = profileService.getProfile(pid);
+    @GetMapping("/info/{account}")
+    public ResponseEntity<ProfileInfo> getProfileInfo(@PathVariable("account") String account) {
+        ProfileInfo result = profileService.getProfileInfoByAccount(account);
         return ResponseEntity.ok(result);
     }
 
+    @Login
+    @GetMapping("/detail/me") 
+    public ResponseEntity<ProfileReadResponse> getMyProfile(HttpServletRequest request) {
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        ProfileReadResponse result = profileService.getProfileByMid(loginMid);
+        return ResponseEntity.ok(result);
+    }
+
+    @Login
+    @GetMapping("/detail/{account}")
+    public ResponseEntity<ProfileReadResponse> getAnotherProfile(@PathVariable("account") String account) {
+        ProfileReadResponse result = profileService.getProfileByAccount(account);
+        return ResponseEntity.ok(result);
+    }
 
     @Value("${file.upload-dir}")
     private String uploadDir;
-
-    /**
-     * 프로필 정보(텍스트) 업데이트 API
-     * 
-     * @param mid       업데이트할 프로필의 멤버 ID
-     * @param dto 변경할 프로필 정보가 담긴 DTO
-     * @return
-     */
+    
     @Login
-    @PutMapping("/{mid}")
-    public ResponseEntity<Void> updateProfile(
-            @PathVariable Long mid,
+    @PutMapping("/update")
+    public ResponseEntity<Void> updateProfile(HttpServletRequest request,
             @RequestBody ProfileUpdateRequest dto) { // JSON 본문을 DTO로 받음
 
-        profileService.update(mid, dto);
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        profileService.update(loginMid, dto);
 
         return ResponseEntity.noContent().build();
     }
 
     @Login
-    @PutMapping("/{mid}/image")
-    public ResponseEntity<String> updateProfileImage(
-            @PathVariable Long mid,
+    @PutMapping("/update/image")
+    public ResponseEntity<String> updateProfileImage(HttpServletRequest request,
             @RequestParam("file") MultipartFile file) {
-
+        Long loginMid = (Long) request.getAttribute("loginMid"); 
         // 1. 파일 유효성 검사
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("이미지 파일을 선택해주세요.");
@@ -82,7 +89,7 @@ public class ProfileController {
             String imageUrl = "/images/" + storedFilename;
 
             // 5. 서비스 계층을 호출하여 DB에 파일 정보(저장된 이름, URL) 업데이트
-            profileService.updateImage(mid, storedFilename, imageUrl);
+            profileService.updateImage(loginMid, storedFilename, imageUrl);
 
             return ResponseEntity.ok("프로필 이미지가 성공적으로 업데이트되었습니다.");
 
@@ -93,3 +100,4 @@ public class ProfileController {
 
     }
 }
+

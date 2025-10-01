@@ -12,10 +12,8 @@ import com.example.demo.profile.dto.ProfileUpdateRequest;
 
     // Read
     int countByNickname(String nickname);
-    Profile selectByPid(Long pid);
-    //  Profile selectByMid(Long mid);
+    Profile selectByPid(@Param("pid") Long pid);
     Profile selectByMid(Long mid);
-    //  Profile selectByNickname(String nickname);
     // Update    
     int update(@Param("mid") Long mid, @Param("dto") ProfileUpdateRequest dto);
     // 프로필 이미지 정보만 업데이트하는 메서드

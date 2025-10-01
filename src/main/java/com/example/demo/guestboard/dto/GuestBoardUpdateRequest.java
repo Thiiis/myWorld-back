@@ -6,5 +6,4 @@ import lombok.Data;
 public class GuestBoardUpdateRequest {
   private Long gbid;
   private String content;
-  private String viewScope;
 }

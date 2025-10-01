@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.MemberReadResponse;
-import com.example.demo.auth.service.JwtService;
 import com.example.demo.auth.service.MemberService;
 import com.example.demo.guestboard.dto.GuestBoardCreateRequest;
 import com.example.demo.guestboard.dto.GuestBoardCreateResponse;
@@ -34,29 +33,25 @@ import lombok.RequiredArgsConstructor;
 public class GuestBoardController {
 
   private final GuestBoardService guestBoardService;
-  private final JwtService jwtService;
   private final MemberService memberService;
 
   // 방명록 생성
   @Login
-  @PostMapping("/create/{hostid}")
-  public GuestBoardCreateResponse guestBoardCreate(
-      @PathVariable Long hostid,
+  @PostMapping("/create/{hostaccount}")
+  public ResponseEntity<GuestBoardCreateResponse> guestBoardCreate(
+      @PathVariable("hostaccount") String hostaccount,
       @RequestBody GuestBoardCreateRequest dto,
       HttpServletRequest request) {
 
-    String authorization = request.getHeader("Authorization");
-    String jwt = authorization.substring(7);
+    MemberReadResponse host = memberService.getMember(hostaccount);
+    Long hostid = host.getMid();
 
-    String account = jwtService.getClaims(jwt).get("account");
-    MemberReadResponse member = memberService.getMember(account);
-
-    GuestBoardCreateResponse response = guestBoardService.create(hostid, member.getMid(), dto);
-    return response;
+    Long loginMid = (Long) request.getAttribute("loginMid");
+    GuestBoardCreateResponse response = guestBoardService.create(hostid, loginMid, dto);
+    return ResponseEntity.ok(response);
   }
 
   // 방명록 조회
-  // @Login
   @GetMapping("/list")
   public ResponseEntity<List<GuestBoardListResponse>> guestBoardList(
       @RequestParam Long mid,
@@ -74,20 +69,23 @@ public class GuestBoardController {
   }
 
   // 방명록 수정
-  // @Login
+  @Login
   @PutMapping("/update")
-  public ResponseEntity<Void> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest dto) {
-    guestBoardService.update(dto);
+  public ResponseEntity<Void> guestBoardUpdate(@RequestBody GuestBoardUpdateRequest dto, HttpServletRequest request) {
+
+    Long loginMid = (Long) request.getAttribute("loginMid");
+    guestBoardService.update(loginMid, dto);
     return ResponseEntity.noContent().build();
   }
 
   // 방명록 삭제
-  // @Login
+  @Login
   @DeleteMapping("/delete/{gbid}")
-  public ResponseEntity<Void> guestBoardDelete(@PathVariable("gbid") Long gbid) {
-    guestBoardService.delete(gbid);
-    return ResponseEntity.noContent().build();
+  public ResponseEntity<Void> guestBoardDelete(@PathVariable("gbid") Long gbid, HttpServletRequest request) {
 
+    Long loginMid = (Long) request.getAttribute("loginMid");
+    guestBoardService.delete(gbid, loginMid);
+    return ResponseEntity.noContent().build();
   }
 
 }

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class JukeboxCreateRequest {
-  private Long mid;
   private String title;
   private String content;
 }

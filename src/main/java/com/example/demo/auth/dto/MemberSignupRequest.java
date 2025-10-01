@@ -1,8 +1,5 @@
 package com.example.demo.auth.dto;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -15,8 +12,7 @@ public class MemberSignupRequest {
     @NotBlank(message = "닉네임은 필수입니다.")
     private String nickname;
     @NotNull(message = "생년월일은 필수입니다.")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Date birthdate;
+    private String birthdate;
 
     // 멤버에 저장될 정보
     @NotBlank(message = "아이디는 필수입니다.")

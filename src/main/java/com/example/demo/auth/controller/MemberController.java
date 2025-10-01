@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.MemberLoginRequest;
 import com.example.demo.auth.dto.MemberLoginResponse;
 import com.example.demo.auth.dto.MemberReadResponse;
@@ -31,7 +32,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<MemberSignupResponse> signupMember(@Valid @RequestBody MemberSignupRequest dto) {
+    public ResponseEntity<MemberSignupResponse> signupMember(@RequestBody @Valid MemberSignupRequest dto) {
         memberService.signup(dto);
         MemberSignupResponse result = new MemberSignupResponse(dto.getAccount(), dto.getNickname(), dto.getEmail(),
                 dto.getBirthdate());
@@ -39,12 +40,15 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberLoginResponse> loginMember(@Valid @RequestBody MemberLoginRequest dto) {
+    public ResponseEntity<MemberLoginResponse> loginMember(@RequestBody @Valid MemberLoginRequest dto) {
         try {
+            //mid를 가져오기 위한 임시 코드(나중에 한번에 수정해주세요)            
+            MemberReadResponse member = memberService.getMember(dto.getAccount());
+            
             // 서비스에 로그인 요청을 보내고 성공 시 JWT를 받음
             String jwt = memberService.login(dto);
             // 성공 응답 DTO 생성
-            MemberLoginResponse result = new MemberLoginResponse(dto.getAccount(), jwt);
+            MemberLoginResponse result = new MemberLoginResponse(member.getMid(), dto.getAccount(), jwt);
             return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
@@ -54,14 +58,16 @@ public class MemberController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<MemberReadResponse> getMemberDetail(@Valid @RequestParam("account") String account) {
+    public ResponseEntity<MemberReadResponse> getMemberDetail(@RequestParam("account") @Valid String account) {
         MemberReadResponse result = memberService.getMember(account);
         return ResponseEntity.ok(result);
     }
 
+
+    
     @Login
     @PutMapping("/update")
-    public ResponseEntity<String> updateMember(@Valid @RequestBody MemberUpdateRequest dto) {
+    public ResponseEntity<String> updateMember(@RequestBody @Valid MemberUpdateRequest dto) {
         try {
             memberService.updatePwd(dto);
             return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
@@ -73,7 +79,7 @@ public class MemberController {
 
     @Login
     @DeleteMapping("/delete/mid/{mid}")
-    public ResponseEntity<Void> deleteMember(@Valid @PathVariable("mid") Long mid) {
+    public ResponseEntity<Void> deleteMember(@PathVariable("mid") @Valid Long mid) {
         memberService.deleteByMid(mid);
         return ResponseEntity.noContent().build();
     }

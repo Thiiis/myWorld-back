@@ -5,5 +5,4 @@ import lombok.Data;
 @Data
 public class GuestBoardCreateRequest {
   private String content;
-  private String viewScope;
 }

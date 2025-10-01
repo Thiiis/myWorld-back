@@ -1,6 +1,6 @@
 package com.example.demo.diary.dto.response;
 
-import java.util.List;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

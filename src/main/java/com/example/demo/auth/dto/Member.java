@@ -7,8 +7,8 @@ import com.example.demo.profile.dto.Profile;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 public class Member {
     private Long mid;
     private Date createdAt;

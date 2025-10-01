@@ -9,6 +9,12 @@
         SELECT * FROM FRIENDS
         WHERE FID = #{fid} </select>
 
+    <select id="selectByMembers" resultType="Friend">
+        SELECT * FROM FRIENDS
+        WHERE (REQ_ID = #{req_id} AND ACC_ID = #{acc_id})
+        OR (REQ_ID = #{acc_id} AND ACC_ID = #{req_id})
+    </select>
+
     <update id="updateStatus" parameterType="Friend">
         UPDATE FRIENDS
         SET STATUS = #{status}, UPDATED_AT = SYSTIMESTAMP
@@ -21,7 +27,7 @@
         <association property="requester" javaType="com.example.demo.common.dto.ProfileInfo">
             <id property="pid" column="PID"/>
             <result property="nickname" column="NICKNAME"/>
-            <result property="profileImageUrl" column="IMG_URL"/>
+            <result property="imgUrl" column="IMG_URL"/>
             <result property="statusMessage" column="STATUS_MESSAGE"/>
         </association>
     </resultMap>
@@ -42,7 +48,7 @@
         <association property="friendInfo" javaType="com.example.demo.common.dto.ProfileInfo">
          <id property="pid" column="friend_pid"/>
          <result property="nickname" column="friend_nickname"/>
-         <result property="profileImageUrl" column="friend_img_url"/>
+         <result property="imgUrl" column="friend_img_url"/>
          <result property="statusMessage" column="friend_status_message"/>
         </association>
     </resultMap>
