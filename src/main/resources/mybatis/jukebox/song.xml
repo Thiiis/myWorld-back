@@ -12,7 +12,13 @@
   </select>
 
   <select id="selectByJid" parameterType="Long" resultType="Song">
-    select * from songs where jid = #{jid} order by created_at desc
+    select s.sid, s.mid, s.title, s.artist, s.duration, s.video_id 
+    from tracks t join songs s on t.sid = s.sid
+    where jid = #{jid} order by t.track_order desc
+  </select>
+
+  <select id="selectMySongsByMid" parameterType="Long" resultType="Song">
+    select * from songs where mid = #{mid} order by sid desc
   </select>
 
   <delete id="delete" parameterType="Long">

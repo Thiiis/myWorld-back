@@ -17,11 +17,11 @@ public class Song {
   private Date createdAt;
 
   // Song create 생성자
-  public Song(Long mid, String title, String artist, Long duration, String videoId) {
+  public Song(Long mid, String title, String artist, String videoId, Long duration) {
     this.mid = mid;
     this.title = title;
     this.artist = artist;
-    this.duration = duration;
     this.videoId = videoId;
+    this.duration = duration;
   }
 }

@@ -12,6 +12,7 @@ import com.example.demo.jukebox.dao.SongDao;
 import com.example.demo.jukebox.dto.Song;
 import com.example.demo.jukebox.dto.SongCreateRequest;
 import com.example.demo.jukebox.dto.SongCreateResponse;
+import com.example.demo.jukebox.dto.SongMyResponse;
 import com.example.demo.jukebox.dto.SongSearchResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -19,7 +20,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SongService {
@@ -102,7 +105,7 @@ public class SongService {
     Long duration = parseDuration(durationStr);
 
     // 2. DB 저장
-    Song song = new Song(dto.getMid(), title, artist, duration, videoId);
+    Song song = new Song(mid, title, artist, videoId, duration);
     songDao.insert(song);
 
     Song dbSong = songDao.selectBySid(song.getSid());
@@ -129,6 +132,12 @@ public class SongService {
       }
     }
     return (long) (minutes * 60 + seconds);
+  }
+
+  // 내 음악 전체 조회
+  public List<SongMyResponse> mySongs(Long mid) {
+    List<Song> songs = songDao.selectMySongsByMid(mid);
+    return songs.stream().map(song -> new SongMyResponse(song.getTitle(), song.getArtist(), song.getDuration())).toList();
   }
 
   // 음악 삭제하기
