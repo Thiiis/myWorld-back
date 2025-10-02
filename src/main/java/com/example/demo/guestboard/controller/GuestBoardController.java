@@ -52,13 +52,16 @@ public class GuestBoardController {
   }
 
   // 방명록 조회
-  @GetMapping("/list")
+  @GetMapping("/list/{hostaccount}")
   public ResponseEntity<List<GuestBoardListResponse>> guestBoardList(
-      @RequestParam Long mid,
-      @RequestParam(defaultValue = "0") Long offset,
-      @RequestParam(defaultValue = "10") Long limit) {
+      @PathVariable("hostaccount") String hostaccount,
+      @RequestParam(name="offset", defaultValue = "0") Long offset,
+      @RequestParam(name="limit", defaultValue = "10") Long limit) {
 
-    GuestBoardListRequest dto = new GuestBoardListRequest(mid, offset, limit);
+    MemberReadResponse host = memberService.getMember(hostaccount);
+    Long hostid = host.getMid();
+
+    GuestBoardListRequest dto = new GuestBoardListRequest(hostid, offset, limit);
     List<GuestBoardListResponse> list = guestBoardService.getGuestBoardList(dto);
 
     if (list.isEmpty()) {
