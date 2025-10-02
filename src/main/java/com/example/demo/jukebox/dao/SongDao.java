@@ -3,6 +3,7 @@ package com.example.demo.jukebox.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.demo.jukebox.dto.Song;
 
@@ -12,5 +13,5 @@ public interface SongDao {
   public Song selectBySid(Long sid);
   public List<Song> selectByJid(Long jid);
   public List<Song> selectMySongsByMid(Long mid);
-  public int delete(Long sid);
+  public int delete(@Param("mid") Long mid, @Param("sid") Long sid);
 }
