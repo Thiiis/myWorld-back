@@ -30,7 +30,7 @@ public class SongService {
 
   // 음악 검색하기
   // 관련 높은 10개만 가져오기
-  public List<SongSearchResponse> searchSongs(String search) {
+  public List<SongSearchResponse> searchSongs(Long mid, String search) {
     String url = "https://www.googleapis.com/youtube/v3/search"
         + "?part=snippet" // 제목, 채널 이름
         + "&type=video" // 동영상만 검색
@@ -80,7 +80,7 @@ public class SongService {
   }
 
   // 음악 추가하기
-  public void create(SongCreateRequest dto) {
+  public SongCreateResponse create(Long mid, SongCreateRequest dto) {
     String videoId = dto.getVideoId();
 
     // YouTube API 호출
@@ -106,7 +106,7 @@ public class SongService {
     songDao.insert(song);
 
     Song dbSong = songDao.selectBySid(song.getSid());
-    // return new SongCreateResponse(dbSong.getSid(), dbSong.getTitle(), dbSong.getArtist(), dbSong.getVideoId());
+    return new SongCreateResponse(dbSong.getSid(), dbSong.getTitle(), dbSong.getArtist(), dbSong.getVideoId());
   }
 
   private Long parseDuration(String duration) {
@@ -132,7 +132,7 @@ public class SongService {
   }
 
   // 음악 삭제하기
-  public int delete(Long sid) {
+  public int delete(Long mid, Long sid) {
     return songDao.delete(sid);
   }
 }

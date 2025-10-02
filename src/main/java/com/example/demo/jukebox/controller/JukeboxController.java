@@ -49,7 +49,7 @@ public class JukeboxController {
 
     // 주크박스 조회
     @GetMapping("/list")
-    public ResponseEntity<List<JukeboxListResponse>> jukeboxList(@RequestParam Long mid) {
+    public ResponseEntity<List<JukeboxListResponse>> jukeboxList(@RequestParam("mid") Long mid) {
         List<JukeboxListResponse> list = jukeboxservice.getJukeboxList(mid);
         return ResponseEntity.ok(list);
     }

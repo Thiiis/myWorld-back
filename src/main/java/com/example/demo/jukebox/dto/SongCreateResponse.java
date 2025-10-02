@@ -9,7 +9,7 @@ public class SongCreateResponse {
   private String artist;
   private String videoId;
 
-  public SongCreateResponse(Long jid, Long sid, String title, String artist, String videoId) {
+  public SongCreateResponse(Long sid, String title, String artist, String videoId) {
     this.sid = sid;
     this.title = title;
     this.artist = artist;
