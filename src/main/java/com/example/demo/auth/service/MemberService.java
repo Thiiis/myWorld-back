@@ -1,5 +1,7 @@
 package com.example.demo.auth.service;
 
+import java.util.List;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.auth.dao.MemberDao;
 import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.MemberLoginRequest;
-import com.example.demo.auth.dto.MemberLoginResponse;
 import com.example.demo.auth.dto.MemberReadResponse;
 import com.example.demo.auth.dto.MemberSignupRequest;
 import com.example.demo.auth.dto.MemberSignupResponse;
 import com.example.demo.auth.dto.MemberUpdateRequest;
+import com.example.demo.common.dto.ProfileInfo;
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
 
@@ -87,6 +89,9 @@ public String login(MemberLoginRequest dto) {
       return new MemberReadResponse(member.getMid(), member.getAccount(), member.getEmail());
   }
 
+  public List<ProfileInfo> searchMembers(String keyword, Long loginMid) {
+    return memberDao.searchMembers(keyword, loginMid);
+}
   
   public void updatePwd(@Valid MemberUpdateRequest dto) {
 // 1. 새로운 비밀번호와 비밀번호 확인이 일치하는지 검사

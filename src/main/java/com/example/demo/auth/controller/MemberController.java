@@ -1,5 +1,7 @@
 package com.example.demo.auth.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.auth.dto.Member;
 import com.example.demo.auth.dto.MemberLoginRequest;
 import com.example.demo.auth.dto.MemberLoginResponse;
 import com.example.demo.auth.dto.MemberReadResponse;
@@ -20,8 +21,10 @@ import com.example.demo.auth.dto.MemberSignupRequest;
 import com.example.demo.auth.dto.MemberSignupResponse;
 import com.example.demo.auth.dto.MemberUpdateRequest;
 import com.example.demo.auth.service.MemberService;
+import com.example.demo.common.dto.ProfileInfo;
 import com.example.demo.interceptor.Login;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -63,7 +66,12 @@ public class MemberController {
         return ResponseEntity.ok(result);
     }
 
-
+    @GetMapping("/search")
+    public ResponseEntity<List<ProfileInfo>> searchMembers(@RequestParam("keyword") String keyword, HttpServletRequest request) {
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        List<ProfileInfo> members = memberService.searchMembers(keyword, loginMid);
+        return ResponseEntity.ok(members);
+    }
     
     @Login
     @PutMapping("/update")

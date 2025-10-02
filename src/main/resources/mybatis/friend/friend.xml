@@ -11,8 +11,8 @@
 
     <select id="selectByMembers" resultType="Friend">
         SELECT * FROM FRIENDS
-        WHERE (REQ_ID = #{req_id} AND ACC_ID = #{acc_id})
-        OR (REQ_ID = #{acc_id} AND ACC_ID = #{req_id})
+        WHERE (REQ_ID = #{reqId} AND ACC_ID = #{accId})
+        OR (REQ_ID = #{accId} AND ACC_ID = #{reqId})
     </select>
 
     <update id="updateStatus" parameterType="Friend">
@@ -25,7 +25,8 @@
         <id property="fid" column="FID"/>
         <result property="createdAt" column="CREATED_AT"/>
         <association property="requester" javaType="com.example.demo.common.dto.ProfileInfo">
-            <id property="pid" column="PID"/>
+            <id property="mid" column="MID"/>
+            <result property="account" column="ACCOUNT"/>
             <result property="nickname" column="NICKNAME"/>
             <result property="imgUrl" column="IMG_URL"/>
             <result property="statusMessage" column="STATUS_MESSAGE"/>
@@ -33,7 +34,7 @@
     </resultMap>
 
     <select id="selectByAccId" parameterType="Long" resultMap="FriendRequestListResponseMap">
-        SELECT f.FID, p.PID, p.NICKNAME, p.IMG_URL, p.STATUS_MESSAGE, f.CREATED_AT
+        SELECT f.FID, m.MID, m.ACCOUNT, p.NICKNAME, p.IMG_URL, p.STATUS_MESSAGE, f.CREATED_AT
         FROM FRIENDS f
         INNER JOIN MEMBERS m ON f.REQ_ID = m.MID
         INNER JOIN PROFILES p ON m.MID = p.MID
@@ -46,7 +47,8 @@
         <id property="fid" column="FID"/>
         <result property="createdAt" column="CREATED_AT"/>
         <association property="friendInfo" javaType="com.example.demo.common.dto.ProfileInfo">
-         <id property="pid" column="friend_pid"/>
+         <id property="mid" column="friend_mid"/>
+         <result property="account" column="friend_account"/>
          <result property="nickname" column="friend_nickname"/>
          <result property="imgUrl" column="friend_img_url"/>
          <result property="statusMessage" column="friend_status_message"/>
@@ -55,7 +57,8 @@
 
     <select id="selectFriendsByMid" parameterType="Long" resultMap="FriendListResponseMap">
       SELECT f.FID,
-             CASE WHEN f.REQ_ID = #{mid} THEN acc_p.PID ELSE req_p.PID END as friend_pid,
+             CASE WHEN f.REQ_ID = #{mid} THEN acc_m.MID ELSE req_m.MID END as friend_mid,
+             CASE WHEN f.REQ_ID = #{mid} THEN acc_m.ACCOUNT ELSE req_m.ACCOUNT END as friend_account,
              CASE WHEN f.REQ_ID = #{mid} THEN acc_p.NICKNAME ELSE req_p.NICKNAME END as friend_nickname,
              CASE WHEN f.REQ_ID = #{mid} THEN acc_p.IMG_URL ELSE req_p.IMG_URL END as friend_img_url,
              CASE WHEN f.REQ_ID = #{mid} THEN acc_p.STATUS_MESSAGE ELSE req_p.STATUS_MESSAGE END as friend_status_message,

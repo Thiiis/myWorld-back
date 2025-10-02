@@ -30,6 +30,31 @@
       WHERE account = #{account}
   </select>
 
+  <resultMap id="ProfileInfoMap" type="com.example.demo.common.dto.ProfileInfo">
+    <id property="mid" column="MID"/>
+    <result property="account" column="ACCOUNT"/>
+    <result property="nickname" column="NICKNAME"/>
+    <result property="imgUrl" column="IMG_URL"/>
+    <result property="statusMessage" column="STATUS_MESSAGE"/>
+  </resultMap>
+
+  <select id="searchMembers" resultMap="ProfileInfoMap">
+    SELECT m.MID,
+           m.ACCOUNT,
+           p.NICKNAME,
+           p.IMG_URL,
+           p.STATUS_MESSAGE
+    FROM MEMBERS m
+    LEFT JOIN PROFILES p ON m.MID = p.MID
+    LEFT JOIN FRIENDS f 
+      ON ( (f.REQ_ID = #{loginMid} AND f.ACC_ID = m.MID)
+        OR (f.ACC_ID = #{loginMid} AND f.REQ_ID = m.MID) )
+    WHERE 
+      p.NICKNAME LIKE '%' || #{keyword} || '%'
+      AND (f.STATUS IS NULL OR f.STATUS != 'ACCEPTED')
+    ORDER BY p.NICKNAME
+  </select>
+
   <update id="update" parameterType="Member">
       UPDATE MEMBERS
       SET PWD = #{pwd}
