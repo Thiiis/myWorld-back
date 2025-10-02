@@ -3,9 +3,11 @@ package com.example.demo.diary.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.diary.dao.DiarysDao;
 import com.example.demo.diary.dto.Diarys;
@@ -29,10 +31,10 @@ public class DiarysService {
 
   // 일기 생성
   @Transactional
-  public DiarysResponse createDiary(DiarysRequest dto, List<MultipartFile> files) {
+  public DiarysResponse createDiary(Long loiginMid, DiarysRequest dto, List<MultipartFile> files) {
     // 1) Entity에 저장 Request DTO(String) -> Diary(String) 변환(유효성검증목적)
     Diarys diary = new Diarys();
-    diary.setMid(dto.getMid());
+    diary.setMid(loiginMid);
     diary.setTitle(dto.getTitle());
     diary.setContent(dto.getContent());
     // String -> Enum 변환 후 다시 String으로 Diary에 저장(DB 저장을 위해서)
@@ -110,11 +112,19 @@ public class DiarysService {
 
   // 수정
   @Transactional
-  public void updateDiary(DiarysRequest dto, List<Long> deleteAids, List<MultipartFile> addFiles) {
+  public void updateDiary(Long loginMid, DiarysRequest dto, List<Long> deleteAids, List<MultipartFile> addFiles) {
+    
+    // 1. DB에서 기존 일기 조회
+    Diarys existingDiary = diaryDao.selectByDid(dto.getDid());
+    
+    if (existingDiary.getMid() == null || !existingDiary.getMid().equals(loginMid)) {
+        throw new RuntimeException("작성자가 아니어서 수정할 수 없습니다.");
+    }
     // 1. 일기 본문 업데이트
     Diarys updateDiary = new Diarys();
     // 1.1 변경할 콘텐츠 필드 설정
     updateDiary.setDid(dto.getDid());
+    updateDiary.setMid(loginMid);
     updateDiary.setTitle(dto.getTitle());
     updateDiary.setContent(dto.getContent());
     // 1.2 String -> Enum 변환(유효성 검증) 후 String으로 DB에 전달
@@ -128,7 +138,11 @@ public class DiarysService {
 
   // 단건 삭제
   @Transactional
-  public void deleteDiary(Long did) {
+  public void deleteDiary(Long did, Long loginMid) {
+    Diarys diary = diaryDao.selectByDid(did);
+    if (!diary.getMid().equals(loginMid)) { 
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 글만 삭제할 수 있습니다.");
+        }
     // 1. 첨부파일 먼저 삭제 (종속성 관리)
     attachmentsService.deleteAttachByDiary(did);
     // 2. 일기 본문 삭제
@@ -137,7 +151,7 @@ public class DiarysService {
 
   // 다중 삭제
   @Transactional
-  public void deleteDiaries(List<Long> dids) {
+  public void deleteDiaries(List<Long> dids, Long loginMid) {
     // 1. 해당 일기들의 모든 첨부파일 먼저 삭제
      attachmentsService.deleteAttachByDiaries(dids);
     // 2. 일기 본문 다중 삭제
