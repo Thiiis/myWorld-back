@@ -32,7 +32,7 @@ public class ProfileService {
             throw new IllegalArgumentException("프로필을 찾을 수 없습니다: mid " + member.getMid());
         }
         ;
-        return new ProfileInfo(member.getMid(),profile.getNickname(),profile.getImgUrl(),profile.getStatusMessage());
+        return new ProfileInfo(member.getMid(),profile.getNickname(),profile.getBirthdate(),profile.getImgUrl(),profile.getStatusMessage());
     }
 
     public ProfileReadResponse getProfileByAccount(String account) {
