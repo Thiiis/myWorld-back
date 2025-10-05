@@ -43,7 +43,7 @@ public class JukeboxService {
 
   public List<JukeboxListResponse> getJukeboxList(Long mid) {
     List<Jukebox> list = jukeboxDao.selectListByMid(mid);
-    return list.stream().map(j -> new JukeboxListResponse(j.getJid(), j.getTitle())).toList();
+    return list.stream().map(j -> new JukeboxListResponse(j.getJid(), j.getTitle(), j.getContent(), j.getCreatedAt(), j.getUpdatedAt())).toList();
   }
 
   public JukeboxDetailResponse getJukeboxDetail(Long jid) {

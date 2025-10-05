@@ -1,14 +1,22 @@
 package com.example.demo.jukebox.dto;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
 public class JukeboxListResponse {
   private Long jid;
   private String title;
+  private String content;
+  private Date createdAt;
+  private Date updatedAt;
 
-  public JukeboxListResponse(Long jid, String title) {
+  public JukeboxListResponse(Long jid, String title, String content, Date createdAt, Date updatedAt) {
     this.jid = jid;
     this.title = title;
+    this.content = content;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
