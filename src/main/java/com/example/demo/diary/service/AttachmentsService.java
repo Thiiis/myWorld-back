@@ -22,10 +22,13 @@ public class AttachmentsService {
 
   private final AttachmentsDao attachmentDao;
 
+  private static final String BASE_URL = "http://localhost:8080";
+
   // 사진 생성(리스트)
   public List<AttachmentsResponse> createAttach(Long did, List<MultipartFile> files) {
     // 1. 사진 담을 객체 생성
     List<AttachmentsResponse> responses = new ArrayList<>();
+    if (files == null || files.isEmpty()) return responses; // ✅ null-safe
     // 2. 개별 사진 for문으로 List로 값 담기
     for (MultipartFile file : files) {
       try {
@@ -42,7 +45,7 @@ public class AttachmentsService {
       response.setAid(attachment.getAid());
       response.setAname(attachment.getAname());
       response.setAtype(attachment.getAtype());
-      response.setUrl("/diaries/" + did + "/attache/list/" + attachment.getAid()); // 클라이언트 접근용(데이터 대신)
+      response.setUrl(BASE_URL + "/diaries/" + did + "/attache/file/" + attachment.getAid());  //AttachmentController에서 받는 URL요청
       // 2-4. 객체 List에 담기
       responses.add(response);
       } catch(IOException e) {
@@ -61,21 +64,26 @@ public class AttachmentsService {
     response.setAid(att.getAid());
     response.setAname(att.getAname());
     response.setAtype(att.getAtype());
-    response.setUrl("/diaries/" + did + "/attache/list/" + att.getAid());
+    response.setUrl(BASE_URL + "/diaries/" + did + "/attache/file/" + att.getAid());
 
     return response;
   }
 
   // 사진 리스트로 조회
   public List<AttachmentsResponse> getAttachmentsByDiary(Long did) {
-    return attachmentDao.selectAttachByDid(did).stream().map(a -> new AttachmentsResponse(a.getAid(), a.getAname(), a.getAtype(), "/diaries/" + did + "/attache/list/" + a.getAid())).collect(Collectors.toList());
+    return attachmentDao.selectAttachByDid(did).stream().map(a -> new AttachmentsResponse(a.getAid(), a.getAname(), a.getAtype(), BASE_URL + "/diaries/" + did + "/attache/file/" + a.getAid())).collect(Collectors.toList());
   }
 
   // 특정 일기의 대표사진(첫 번째) 조회
   public AttachmentsResponse getThumbnailByDiary(Long did) {
     List<AttachmentsResponse> attachments = getAttachmentsByDiary(did);
+    if (attachments.isEmpty()) return null; // ✅ null-safe
     return attachments.get(0);
   }
+
+  public Attachments getAttachmentEntity(Long aid) {
+    return attachmentDao.selectAttachByAid(aid);
+}
 
   // 사진 리스트 수정
   public void updateAttach(Long did, List<Long> deleteAids, List<MultipartFile> addfiles) {

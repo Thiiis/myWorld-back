@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class DiarysRequest {
 
   private Long did;               //update
-  private Long hostid;            //create
   private String title;           //create,read,update
   private String content;         //create,read,update
   private String emo;             //create,read,update -HAPPY, CALM, EXCITED, SAD
