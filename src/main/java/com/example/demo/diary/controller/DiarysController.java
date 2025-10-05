@@ -43,14 +43,18 @@ public class DiarysController {
   @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<DiarysResponse> createDiary(
       @RequestPart("dto") DiarysRequest dto,
-      @RequestPart(value = "files", required = false) List<MultipartFile> files, @RequestParam(value = "hostAccount") String hostAccount,
+      @RequestPart(value = "files", required = false) List<MultipartFile> files,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount, // ✅ optional
       HttpServletRequest request) {
 
     Long loginMid = (Long) request.getAttribute("loginMid");
-    Long hostMid = memberService.getMember(hostAccount).getMid();
 
-    if(!loginMid.equals(hostMid)) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+    // ✅ hostAccount가 있을 때만 검사
+    if (hostAccount != null && !hostAccount.isEmpty()) {
+      Long hostMid = memberService.getMember(hostAccount).getMid();
+      if (!loginMid.equals(hostMid)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+      }
     }
 
     // 1) 일기 저장 + DB insert
@@ -71,11 +75,12 @@ public class DiarysController {
   @Login
   @GetMapping("/list")
   public ResponseEntity<Map<String, Object>> getDiariesPage(
-      @RequestParam(value = "pageNo", defaultValue = "1") int pageNo, @RequestParam(value ="hostAccount", required = false) String hostAccount, HttpServletRequest request) {
-        
-    Long loginMid = (Long) request.getAttribute("loginMid");   //로그인한 회원
+      @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount, HttpServletRequest request) {
 
-    Long hostMid = (hostAccount != null) ? memberService.getMember(hostAccount).getMid() : loginMid; // 로그인 여부와 별개로 등록되어있는 회원
+    Long loginMid = (Long) request.getAttribute("loginMid"); // 로그인한 회원
+    Long hostMid = (hostAccount != null) ? memberService.getMember(hostAccount).getMid() : loginMid; // 로그인 여부와 별개로
+                                                                                                     // 등록되어있는 회원
 
     int totalRows = diaryService.countDiaries(hostMid);
     Pager pager = new Pager(6, 5, totalRows, pageNo);
@@ -94,21 +99,24 @@ public class DiarysController {
   // 일기 수정
   @Login
   @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Void> updateDiary(
+  public ResponseEntity<DiarysResponse> updateDiary(
       @RequestPart("dto") DiarysRequest dto,
       @RequestParam(value = "deleteAids", required = false) List<Long> deleteAids,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount, // ✅ optional
       @RequestPart(value = "addFiles", required = false) List<MultipartFile> addFiles,
-      @RequestParam(value = "hostAccount") String hostAccount,
       HttpServletRequest request) {
 
     Long loginMid = (Long) request.getAttribute("loginMid");
-    Long hostMid = memberService.getMember(hostAccount).getMid();
-
-    if(!loginMid.equals(hostMid)) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+    // ✅ hostAccount가 있을 때만 검사
+    if (hostAccount != null && !hostAccount.isEmpty()) {
+      Long hostMid = memberService.getMember(hostAccount).getMid();
+      if (!loginMid.equals(hostMid)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+      }
     }
-    diaryService.updateDiary(loginMid, dto, deleteAids, addFiles);
-    return ResponseEntity.noContent().build();
+
+    DiarysResponse response = diaryService.updateDiary(loginMid, dto, deleteAids, addFiles);
+    return ResponseEntity.ok(response);
   }
 
   // 일기 단일 삭제
@@ -116,16 +124,18 @@ public class DiarysController {
   @DeleteMapping("/delete/{did}")
   public ResponseEntity<Void> deleteDiary(
       @PathVariable("did") Long did,
-      @RequestParam(value = "hostAccount") String hostAccount,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount, // ✅ optional
       HttpServletRequest request) {
 
     Long loginMid = (Long) request.getAttribute("loginMid");
-    Long hostMid = memberService.getMember(hostAccount).getMid();
-
-    if(!loginMid.equals(hostMid)) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+    // ✅ hostAccount가 있을 때만 검사
+    if (hostAccount != null && !hostAccount.isEmpty()) {
+      Long hostMid = memberService.getMember(hostAccount).getMid();
+      if (!loginMid.equals(hostMid)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+      }
     }
-    diaryService.deleteDiary(loginMid, did);
+    diaryService.deleteDiary(did);
     return ResponseEntity.noContent().build();
   }
 
@@ -134,16 +144,16 @@ public class DiarysController {
   @DeleteMapping("/delete-list")
   public ResponseEntity<Void> deleteDiaries(
       @RequestParam("did") List<Long> dids,
-      @RequestParam(value = "hostAccount") String hostAccount,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount,
       HttpServletRequest request) {
 
     Long loginMid = (Long) request.getAttribute("loginMid");
     Long hostMid = memberService.getMember(hostAccount).getMid();
 
-    if(!loginMid.equals(hostMid)) {
+    if (!loginMid.equals(hostMid)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
     }
-    
+
     diaryService.deleteDiaries(dids);
     return ResponseEntity.noContent().build();
   }

@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.diary.dao.DiarysDao;
+import com.example.demo.diary.dto.Attachments;
 import com.example.demo.diary.dto.Diarys;
 import com.example.demo.diary.dto.Pager;
 import com.example.demo.diary.dto.request.DiarysRequest;
@@ -112,14 +113,7 @@ public class DiarysService {
 
   // 수정
   @Transactional
-  public void updateDiary(Long mid, DiarysRequest dto, List<Long> deleteAids, List<MultipartFile> addFiles) {
-    
-    // 1. DB에서 기존 일기 조회
-    Diarys existingDiary = diaryDao.selectByDid(dto.getDid());
-    
-    if (existingDiary.getMid() == null || !existingDiary.getMid().equals(mid)) {
-        throw new RuntimeException("작성자가 아니어서 수정할 수 없습니다.");
-    }
+  public DiarysResponse updateDiary(Long mid, DiarysRequest dto, List<Long> deleteAids, List<MultipartFile> addFiles) {
     // 1. 일기 본문 업데이트
     Diarys updateDiary = new Diarys();
     // 1.1 변경할 콘텐츠 필드 설정
@@ -134,15 +128,29 @@ public class DiarysService {
     diaryDao.update(updateDiary);
     // 3. 첨부파일 수정 및 삭제 로직 위임
     attachmentsService.updateAttach(dto.getDid(), deleteAids, addFiles);
+    //4. 수정된 사진 조회
+    List<AttachmentsResponse> attachments = attachmentsService.getAttachmentsByDiary(updateDiary.getDid());
+    AttachmentsResponse thumbnail = attachments.isEmpty() ? null : attachments.get(0);
+
+    //5.DiaryResponse로 변환 후 리턴
+    DiarysResponse response = new DiarysResponse(
+        updateDiary.getDid(),
+        updateDiary.getMid(),
+        updateDiary.getTitle(),
+        updateDiary.getContent(),
+        Emo.valueOf(updateDiary.getEmo().toUpperCase()),
+        Weather.valueOf(updateDiary.getWeather().toUpperCase()),
+        updateDiary.getCreatedAt(),
+        updateDiary.getUpdatedAt(),
+        attachments,
+        thumbnail
+    );
+    return response;
   }
 
   // 단건 삭제
   @Transactional
-  public void deleteDiary(Long did, Long mid) {
-    Diarys diary = diaryDao.selectByDid(did);
-    if (!diary.getMid().equals(mid)) { 
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 글만 삭제할 수 있습니다.");
-        }
+  public void deleteDiary(Long did) {
     // 1. 첨부파일 먼저 삭제 (종속성 관리)
     attachmentsService.deleteAttachByDiary(did);
     // 2. 일기 본문 삭제

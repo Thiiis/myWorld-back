@@ -16,6 +16,5 @@ public class Diarys {
     private String weather;                 // SUNNY, CLOUDY, RAINY, SNOWY
     private Date createdAt;                 // DB에 저장되는 타입은 TIMESTAMP WITH TIME ZONE인데 DTO에서의 타입을 OffsetDateTime을 권장한다 만약에
     private Date updatedAt;                 // 단순히 시간만 필요하다면 LocalDateTime도 무방하다.
-    
 }
 
