@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class ProfileController {
     private final ProfileService profileService;
 
-    @GetMapping("/info/{account}")
+    @GetMapping("/info")
     public ResponseEntity<ProfileInfo> getProfileInfo(@PathVariable("account") String account) {
         ProfileInfo result = profileService.getProfileInfoByAccount(account);
         return ResponseEntity.ok(result);
@@ -44,8 +44,7 @@ public class ProfileController {
         return ResponseEntity.ok(result);
     }
 
-    @Login
-    @GetMapping("/detail/{account}")
+    @GetMapping("/detail")
     public ResponseEntity<ProfileReadResponse> getAnotherProfile(@PathVariable("account") String account) {
         ProfileReadResponse result = profileService.getProfileByAccount(account);
         return ResponseEntity.ok(result);
