@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +21,6 @@ import com.example.demo.auth.dto.MemberSignupResponse;
 import com.example.demo.auth.dto.MemberUpdateRequest;
 import com.example.demo.auth.service.MemberService;
 import com.example.demo.common.dto.ProfileInfo;
-import com.example.demo.interceptor.Login;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -72,12 +70,20 @@ public class MemberController {
         List<ProfileInfo> members = memberService.searchMembers(keyword, loginMid);
         return ResponseEntity.ok(members);
     }
-    
-    @Login
+
+    @GetMapping("/random")
+    public ResponseEntity<String> getRandomMember() {
+        // 서비스에서 랜덤 사용자 정보를 가져옵니다.
+        String result = memberService.getRandomAccount();
+        return ResponseEntity.ok(result);
+    }
+
+
     @PutMapping("/update")
-    public ResponseEntity<String> updateMember(@RequestBody @Valid MemberUpdateRequest dto) {
+    public ResponseEntity<String> updateMember(@RequestBody @Valid MemberUpdateRequest dto, HttpServletRequest request) {
+        Long loginMid = (Long) request.getAttribute("loginMid");
         try {
-            memberService.updatePwd(dto);
+            memberService.updatePwd(loginMid,dto);
             return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
         } catch (IllegalArgumentException e) {
             // 서비스에서 발생시킨 예외를 잡아 클라이언트에게 에러 메시지를 전달
@@ -85,10 +91,10 @@ public class MemberController {
         }
     }
 
-    @Login
-    @DeleteMapping("/delete/mid/{mid}")
-    public ResponseEntity<Void> deleteMember(@PathVariable("mid") @Valid Long mid) {
-        memberService.deleteByMid(mid);
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteMember(HttpServletRequest request) {
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        memberService.deleteByMid(loginMid);
         return ResponseEntity.noContent().build();
     }
 
