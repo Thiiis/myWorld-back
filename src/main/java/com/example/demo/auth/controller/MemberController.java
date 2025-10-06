@@ -21,6 +21,7 @@ import com.example.demo.auth.dto.MemberSignupResponse;
 import com.example.demo.auth.dto.MemberUpdateRequest;
 import com.example.demo.auth.service.MemberService;
 import com.example.demo.common.dto.ProfileInfo;
+import com.example.demo.interceptor.Login;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -78,7 +79,7 @@ public class MemberController {
         return ResponseEntity.ok(result);
     }
 
-
+    @Login
     @PutMapping("/update")
     public ResponseEntity<String> updateMember(@RequestBody @Valid MemberUpdateRequest dto, HttpServletRequest request) {
         Long loginMid = (Long) request.getAttribute("loginMid");
@@ -91,6 +92,7 @@ public class MemberController {
         }
     }
 
+    @Login
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteMember(HttpServletRequest request) {
         Long loginMid = (Long) request.getAttribute("loginMid");
