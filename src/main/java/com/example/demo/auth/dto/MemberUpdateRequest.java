@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class MemberUpdateRequest {
-    private Long mid;
     @NotBlank
     private String currentPwd;
     @NotBlank

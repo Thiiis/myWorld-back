@@ -1,6 +1,7 @@
 package com.example.demo.auth.service;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class MemberService {
 
   @Transactional
   public MemberSignupResponse signup(MemberSignupRequest dto) {
-    
+
     if (!dto.getPwd().equals(dto.getPwdConfirm())) {
       throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
@@ -50,72 +51,89 @@ public class MemberService {
       // 해당 경우 나오면 Mapper.xml 확인
       throw new RuntimeException("멤버 ID를 가져오지 못했습니다.");
     }
-    if(profileDao.countByNickname(dto.getNickname()) > 0){
-    throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+    if (profileDao.countByNickname(dto.getNickname()) > 0) {
+      throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
     }
     Profile profile = new Profile(member.getMid(), dto.getNickname(), dto.getBirthdate());
     profileDao.insert(profile);
     // 가져온 member.getId()로 Profile 생성
 
     // DB 최신 업뎃 반영
-      return new MemberSignupResponse(member.getAccount(), profile.getNickname(), member.getEmail(),profile.getBirthdate());
-    }
-  
+    return new MemberSignupResponse(member.getAccount(), profile.getNickname(), member.getEmail(),
+        profile.getBirthdate());
+  }
 
-@Transactional(readOnly = true)
-public String login(MemberLoginRequest dto) {
+  @Transactional(readOnly = true)
+  public String login(MemberLoginRequest dto) {
     // 1. 회원 조회
     Member member = memberDao.selectByAccount(dto.getAccount());
     if (member == null) {
-        throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
+      throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
     }
 
     // 2. 비밀번호 검증
     if (!passwordEncoder.matches(dto.getPwd(), member.getPwd())) {
-        throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
+      throw new IllegalArgumentException("아이디 또는 비밀번호가 올바르지 않습니다.");
     }
 
     // 3. JWT 발급
     return jwtService.createJWT(member.getMid(), member.getAccount(), member.getEmail());
-}
+  }
 
   @Transactional(readOnly = true)
   public MemberReadResponse getMember(String account) {
-      Member member = memberDao.selectByAccount(account);
-      
-      if (member == null) {
-          throw new IllegalArgumentException("존재하지 않는 회원입니다.");
-      }
-      return new MemberReadResponse(member.getMid(), member.getAccount(), member.getEmail());
+    Member member = memberDao.selectByAccount(account);
+
+    if (member == null) {
+      throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+    }
+    return new MemberReadResponse(member.getMid(), member.getAccount(), member.getEmail());
   }
 
   public List<ProfileInfo> searchMembers(String keyword, Long loginMid) {
     return memberDao.searchMembers(keyword, loginMid);
-}
-  
-  public void updatePwd(@Valid MemberUpdateRequest dto) {
-// 1. 새로운 비밀번호와 비밀번호 확인이 일치하는지 검사
-        if (!dto.getNewPwd().equals(dto.getNewPwdConfirm())) {
-            throw new IllegalArgumentException("새로운 비밀번호가 일치하지 않습니다.");
-        }
-
-        // 2. DB에서 현재 회원 정보 조회
-        Member member = memberDao.selectByMid(dto.getMid())
-                .orElseThrow(() -> new IllegalArgumentException("회원 정보를 찾을 수 없습니다."));
-
-        // 3. 현재 비밀번호가 맞는지 확인 (가장 중요!)
-        // DB에 저장된 암호화된 비밀번호와, 사용자가 입력한 현재 비밀번호를 비교
-        if (!passwordEncoder.matches(dto.getCurrentPwd(), member.getPwd())) {
-            throw new IllegalArgumentException("현재 비밀번호가 올바르지 않습니다.");
-        }
-
-        // 4. 새로운 비밀번호를 암호화
-        String newHashedPassword = passwordEncoder.encode(dto.getNewPwd());
-
-        // 5. DB에 암호화된 새 비밀번호로 업데이트
-        memberDao.update(member.getMid(), newHashedPassword);
   }
 
+  public String getRandomAccount() {
+    // 1. 전체 사용자 수를 가져옵니다.
+    int totalCount = memberDao.countAll();
+
+    // 2. 1부터 전체 사용자 수 사이의 랜덤한 숫자를 하나 뽑습니다. (ROWNUM은 1부터 시작)
+    Long randomMid = ThreadLocalRandom.current().nextLong(totalCount) + 1;
+
+    Member member = memberDao.selectByMid(randomMid);
+    if (member == null) {
+      throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+    }
+    return member.getAccount();
+  }
+
+  public void updatePwd(Long loginMid, @Valid MemberUpdateRequest dto) {
+    // 1. 새로운 비밀번호와 비밀번호 확인이 일치하는지 검사
+    if (!dto.getNewPwd().equals(dto.getNewPwdConfirm())) {
+      throw new IllegalArgumentException("새로운 비밀번호가 일치하지 않습니다.");
+    }
+
+    // 2. DB에서 현재 회원 정보 조회
+    Member member = memberDao.selectByMid(loginMid);
+    if (member == null) {
+      throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+    }
+
+    // 3. 현재 비밀번호가 맞는지 확인 (가장 중요!)
+    // DB에 저장된 암호화된 비밀번호와, 사용자가 입력한 현재 비밀번호를 비교
+    if (!passwordEncoder.matches(dto.getCurrentPwd(), member.getPwd())) {
+      throw new IllegalArgumentException("현재 비밀번호가 올바르지 않습니다.");
+    }
+
+    // 4. 새로운 비밀번호를 암호화
+    String newHashedPassword = passwordEncoder.encode(dto.getNewPwd());
+
+    // 5. DB에 암호화된 새 비밀번호로 업데이트
+    memberDao.update(loginMid, newHashedPassword);
+
+    
+  }
 
   public int deleteByMid(Long mid) {
     int rows = memberDao.deleteByMid(mid);

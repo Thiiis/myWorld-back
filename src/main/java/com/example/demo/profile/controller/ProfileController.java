@@ -44,8 +44,7 @@ public class ProfileController {
         return ResponseEntity.ok(result);
     }
 
-    @Login
-    @GetMapping("/detail/{account}")
+    @GetMapping("/detail")
     public ResponseEntity<ProfileReadResponse> getAnotherProfile(@PathVariable("account") String account) {
         ProfileReadResponse result = profileService.getProfileByAccount(account);
         return ResponseEntity.ok(result);
