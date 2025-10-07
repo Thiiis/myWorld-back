@@ -13,10 +13,10 @@ public class DiarysCommentResponse {
   // 공통(Create,Read)
   private Long dcid;
   private Long did;
-  private Long mid;           //보안상 mid 그대로 보내주면 안되고 mine으로 변경해주고 boolean으로 지정해서 확인용으로 하는것이 보안상 좋다.
+  private boolean mine;           //보안상 mid 그대로 보내주면 안되고 mine으로 변경해주고 boolean으로 지정해서 확인용으로 하는것이 보안상 좋다.
   //private Long parentDcid; //대댓글
   private String content;
-  private Date createAt;
-  private Date updateAt;
+  private Date createdAt;
+  private Date updatedAt;
 
 }

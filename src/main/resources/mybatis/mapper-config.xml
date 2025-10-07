@@ -11,6 +11,7 @@
     <typeAlias type="com.example.demo.diary.dto.Diarys" alias="Diarys" />
     <typeAlias type="com.example.demo.diary.dto.Attachments" alias="Attachments" />
     <typeAlias type="com.example.demo.diary.dto.DiaryComments" alias="DiaryComments" />
+    <typeAlias type="com.example.demo.diary.dto.DiarysLike" alias="DiarysLike" />
     <typeAlias type="com.example.demo.diary.dto.Pager" alias="Pager" />
 
      <typeAlias type="com.example.demo.auth.dto.Member" alias="Member" />

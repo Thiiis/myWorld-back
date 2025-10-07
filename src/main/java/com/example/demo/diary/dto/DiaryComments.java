@@ -16,14 +16,6 @@ public class DiaryComments {
   private Long mid;           //엔티티 DTO에는 굳이 mine으로 할 필요없다 왜냐하면 DB에 저장할 때 1:1로 매핑되기 때문에 컬럼명과 같으면 좋다
   //private Long parentDcid;
   private String content;
-  private Date createAt;
-  private Date updateAt;
-
-  public DiaryComments(Long dcid, Long did, Long mid, String content) {
-    this.dcid = dcid;
-    this.did = did;
-    this.mid = mid;
-    this.content = content;
-  }
-  
+  private Date createdAt;
+  private Date updatedAt;
 }

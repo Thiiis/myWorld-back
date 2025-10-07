@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.diary.dao.DiaryLikeDao">
+<insert id="insert" parameterType="DiarysLike">
+    INSERT INTO DIARY_LIKES (DID, MID)
+    VALUES (#{did}, #{mid})
+</insert>
+
+
+<delete id="delete">
+    DELETE FROM DIARY_LIKES
+    WHERE DID = #{did} AND MID = #{mid}
+</delete>
+
+<select id="exists" resultType="boolean">
+    SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+    FROM DIARY_LIKES
+    WHERE DID = #{did} AND MID = #{mid}
+</select>
+
+<select id="countLikes" resultType="int">
+  SELECT COUNT(*) 
+  FROM DIARY_LIKES 
+  WHERE DID = #{did}
+</select>
+
+</mapper>

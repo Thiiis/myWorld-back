@@ -3,14 +3,11 @@ package com.example.demo.diary.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.diary.dao.DiarysDao;
-import com.example.demo.diary.dto.Attachments;
 import com.example.demo.diary.dto.Diarys;
 import com.example.demo.diary.dto.Pager;
 import com.example.demo.diary.dto.request.DiarysRequest;
@@ -29,6 +26,7 @@ public class DiarysService {
 
   private final DiarysDao diaryDao;
   private final AttachmentsService attachmentsService;
+  private final DiarysLikeService diarysLikeService;
 
   // 일기 생성
   @Transactional
@@ -68,10 +66,9 @@ public class DiarysService {
 
   // 일기 페이징 리스트 조회
   public List<DiarysResponse> getDiariesPage(Long mid, Pager pager) {
-    // 1. DB에서 Entity에 저장된 페이징된 다이어리 목록 조회
     List<Diarys> diariesList = diaryDao.selectDiariesByPage(mid, pager);
-    
-    return diariesList.stream().map(diary-> {
+
+    return diariesList.stream().map(diary -> {
       DiarysResponse response = new DiarysResponse();
       response.setDid(diary.getDid());
       response.setMid(diary.getMid());
@@ -79,21 +76,26 @@ public class DiarysService {
       response.setContent(diary.getContent());
       response.setCreatedAt(diary.getCreatedAt());
       response.setUpdatedAt(diary.getUpdatedAt());
-      // 2. String -> ENUM으로 변환
       response.setEmo(Emo.valueOf(diary.getEmo().toUpperCase()));
       response.setWeather(Weather.valueOf(diary.getWeather().toUpperCase()));
-      // 3. 대표사진만
       response.setThumbnail(attachmentsService.getThumbnailByDiary(diary.getDid()));
+
+      // ✅ 추가: 좋아요 수/내 좋아요 여부
+      int likes = diarysLikeService.countLikes(diary.getDid());
+      boolean likedByMe = diarysLikeService.isLikedByMe(diary.getDid(), mid);
+      response.setLikes(likes);
+      response.setLikedByMe(likedByMe);
+
       return response;
     }).collect(Collectors.toList());
   }
-  
+
   // 일기 상세 읽기
-  public DiarysResponse getDiary(Long mid ,Long did) {
+  public DiarysResponse getDiary(Long mid, Long did) {
     // 1. 일기 본문 조회
-    Diarys dbDiary = diaryDao.selectByDid(did);    
-    
-    //2. DiaryResponse 타입으로 변환
+    Diarys dbDiary = diaryDao.selectByDid(did);
+
+    // 2. DiaryResponse 타입으로 변환
     DiarysResponse response = new DiarysResponse();
     response.setDid(dbDiary.getDid());
     response.setMid(dbDiary.getMid());
@@ -103,11 +105,17 @@ public class DiarysService {
     response.setCreatedAt(dbDiary.getCreatedAt());
     response.setEmo(Emo.valueOf(dbDiary.getEmo().toUpperCase()));
     response.setWeather(Weather.valueOf(dbDiary.getWeather().toUpperCase()));
-    //3. 첨부파일 목록과 대표사진 가져온 후 DiaryResponse 타입으로 변환(객체에 값 넣기)
+    // 3. 첨부파일 목록과 대표사진 가져온 후 DiaryResponse 타입으로 변환(객체에 값 넣기)
     List<AttachmentsResponse> attachments = attachmentsService.getAttachmentsByDiary(did);
     response.setAttachments(attachments);
     AttachmentsResponse thumbnail = attachments.get(0);
     response.setThumbnail(thumbnail);
+
+     // ✅ 좋아요 정보 채워넣기
+    int likes = diarysLikeService.countLikes(did);
+    boolean likedByMe = diarysLikeService.isLikedByMe(did, mid);
+    response.setLikes(likes);
+    response.setLikedByMe(likedByMe);
     return response;
   }
 
@@ -128,23 +136,22 @@ public class DiarysService {
     diaryDao.update(updateDiary);
     // 3. 첨부파일 수정 및 삭제 로직 위임
     attachmentsService.updateAttach(dto.getDid(), deleteAids, addFiles);
-    //4. 수정된 사진 조회
+    // 4. 수정된 사진 조회
     List<AttachmentsResponse> attachments = attachmentsService.getAttachmentsByDiary(updateDiary.getDid());
     AttachmentsResponse thumbnail = attachments.isEmpty() ? null : attachments.get(0);
 
-    //5.DiaryResponse로 변환 후 리턴
-    DiarysResponse response = new DiarysResponse(
-        updateDiary.getDid(),
-        updateDiary.getMid(),
-        updateDiary.getTitle(),
-        updateDiary.getContent(),
-        Emo.valueOf(updateDiary.getEmo().toUpperCase()),
-        Weather.valueOf(updateDiary.getWeather().toUpperCase()),
-        updateDiary.getCreatedAt(),
-        updateDiary.getUpdatedAt(),
-        attachments,
-        thumbnail
-    );
+    // 5.DiaryResponse로 변환 후 리턴
+    DiarysResponse response = new DiarysResponse();
+    response.setDid(updateDiary.getDid());
+    response.setMid(updateDiary.getMid());
+    response.setTitle(updateDiary.getTitle());
+    response.setContent(updateDiary.getContent());
+    response.setEmo(Emo.valueOf(updateDiary.getEmo().toUpperCase()));
+    response.setWeather(Weather.valueOf(updateDiary.getWeather().toUpperCase()));
+    response.setCreatedAt(updateDiary.getCreatedAt());
+    response.setUpdatedAt(updateDiary.getUpdatedAt());
+    response.setAttachments(attachments);
+    response.setThumbnail(thumbnail);
     return response;
   }
 
@@ -161,7 +168,7 @@ public class DiarysService {
   @Transactional
   public void deleteDiaries(List<Long> dids) {
     // 1. 해당 일기들의 모든 첨부파일 먼저 삭제
-     attachmentsService.deleteAttachByDiaries(dids);
+    attachmentsService.deleteAttachByDiaries(dids);
     // 2. 일기 본문 다중 삭제
     diaryDao.deleteDiaries(dids);
   }
