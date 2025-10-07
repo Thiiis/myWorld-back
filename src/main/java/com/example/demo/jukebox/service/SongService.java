@@ -137,7 +137,7 @@ public class SongService {
   // 내 음악 전체 조회
   public List<SongMyResponse> mySongs(Long mid) {
     List<Song> songs = songDao.selectMySongsByMid(mid);
-    return songs.stream().map(song -> new SongMyResponse(song.getSid(), song.getTitle(), song.getArtist(), song.getDuration())).toList();
+    return songs.stream().map(song -> new SongMyResponse(song.getSid(), song.getTitle(), song.getArtist(), song.getVideoId(), song.getDuration())).toList();
   }
 
   // 음악 삭제하기

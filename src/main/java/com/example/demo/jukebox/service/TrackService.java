@@ -19,10 +19,10 @@ public class TrackService {
   private final TrackDao trackDao;
 
   public TrackCreateResponse create(TrackCreateRequest dto) {
-    Track track = new Track(dto.getJid(), dto.getSid(), dto.getTrackOrder());
+    Track track = new Track(dto.getJid(), dto.getSid());
     trackDao.insert(track);
     Track dbTrack = trackDao.selectByTrid(track.getTrid());
-    return new TrackCreateResponse(dbTrack.getTrid(), dbTrack.getJid(), dbTrack.getSid(), dbTrack.getTrackOrder());
+    return new TrackCreateResponse(dbTrack.getTrid(), dbTrack.getJid(), dbTrack.getSid());
   }
 
   public List<TrackListResponse> getTrackListByJid(Long jid) {
@@ -33,4 +33,5 @@ public class TrackService {
   public int delete(Long trid) {
     return trackDao.delete(trid);
   }
+
 }

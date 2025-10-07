@@ -14,7 +14,7 @@
   <select id="selectByJid" parameterType="Long" resultType="Song">
     select s.sid, s.mid, s.title, s.artist, s.duration, s.video_id 
     from tracks t join songs s on t.sid = s.sid
-    where jid = #{jid} order by t.track_order desc
+    where jid = #{jid}
   </select>
 
   <select id="selectMySongsByMid" parameterType="Long" resultType="Song">

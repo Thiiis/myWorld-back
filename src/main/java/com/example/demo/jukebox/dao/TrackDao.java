@@ -13,4 +13,5 @@ public interface TrackDao {
   public Track selectByTrid(Long Trid);
   public List<Song> selectSongsByJid(Long jid);
   public int delete(Long trid);
+  public Long totalDuration(Long jid);
 }
