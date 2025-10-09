@@ -7,12 +7,10 @@ public class TrackCreateResponse {
   private Long trid;
   private Long jid;
   private Long sid;
-  private Long trackOrder;
   
-  public TrackCreateResponse(Long trid, Long jid, Long sid, Long trackOrder) {
+  public TrackCreateResponse(Long trid, Long jid, Long sid) {
     this.trid = trid;
     this.jid = jid;
     this.sid = sid;
-    this.trackOrder = trackOrder;
   }
 }

@@ -3,25 +3,32 @@
 <mapper namespace="com.example.demo.jukebox.dao.TrackDao">
   
   <insert id="insert" parameterType="Track" useGeneratedKeys="true" keyProperty="trid" keyColumn="trid">
-    insert into tracks (jid, sid, track_order)
-    values (#{jid}, #{sid}, #{trackOrder})
+    insert into tracks (jid, sid)
+    values (#{jid}, #{sid})
   </insert>
 
   <select id="selectByTrid" parameterType="Long" resultType="Track">
     select * from tracks where trid = #{trid}
   </select>
 
-  <select id="selectSongsByJid" parameterType="Long" resultType="Song">
-    select s.sid, s.title, s.artist, s.duration
+  <select id="selectSongsByJid" parameterType="Long" resultType="TrackListResponse">
+    select t.trid, s.sid, s.title, s.artist, s.duration, s.video_id
     from tracks t
     join songs s on t.sid = s.sid
     where t.jid = #{jid}
-    order by t.track_order asc
   </select>
 
   <delete id="delete" parameterType="Long">
     delete from tracks where trid = #{trid}
   </delete>
+
+  <!--주크박스 전체 재생시간-->
+  <select id="totalDuration" parameterType="Long" resultType="Long">
+    select sum(s.duration)
+    from tracks t
+    join songs s on t.sid = s.sid
+    where t.jid = #{jid}
+  </select>
 
 
 </mapper>

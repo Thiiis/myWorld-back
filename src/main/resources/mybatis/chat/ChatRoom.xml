@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.chat.dao.ChatRoomDao">
+
+  <insert id="insert" parameterType="com.example.demo.chat.dto.ChatRoom"
+          useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+    INSERT INTO CHAT_ROOMS (IS_GROUP, STATUS, CREATED_AT, UPDATED_AT)
+    VALUES (#{isGroup}, #{status}, SYSTIMESTAMP, SYSTIMESTAMP)
+  </insert>
+
+  <select id="selectById" parameterType="long" resultType="com.example.demo.chat.dto.ChatRoom">
+    SELECT ID, IS_GROUP, STATUS, CREATED_AT, UPDATED_AT
+    FROM CHAT_ROOMS
+    WHERE ID = #{id}
+  </select>
+
+   <select id="selectByMid" parameterType="long" resultType="com.example.demo.chat.dto.ChatRoomResponse">
+    SELECT
+      cr.ID         AS roomId,
+      cr.STATUS,
+      p.MID         AS friendMid,
+      p.NICKNAME    AS friendName,
+      p.IMG_URL     AS friendProfileImg,
+      lm.CONTENT    AS lastMessage,
+      lm.CREATED_AT AS lastMessageTime,
+      cr.CREATED_AT AS createdAt
+    FROM CHAT_ROOMS cr
+      JOIN CHAT_ROOM_MEMBERS my_cm ON cr.ID = my_cm.ROOM_ID
+      JOIN CHAT_ROOM_MEMBERS other_cm ON cr.ID = other_cm.ROOM_ID AND other_cm.MEMBER_ID != #{mid}
+      JOIN PROFILES p ON other_cm.MEMBER_ID = p.MID
+      LEFT JOIN (
+        SELECT msg1.ROOM_ID, msg1.content, msg1.created_at
+        FROM CHAT_MESSAGES msg1
+        WHERE msg1.CREATED_AT = (
+          SELECT MAX(msg2.CREATED_AT)
+          FROM CHAT_MESSAGES msg2
+          WHERE msg2.ROOM_ID = msg1.ROOM_ID
+        )
+      ) lm ON cr.ID = lm.ROOM_ID
+    WHERE my_cm.MEMBER_ID = #{mid}
+    ORDER BY lm.CREATED_AT DESC NULLS LAST
+  </select>
+
+  <select id="selectByMember" parameterType="long" resultType="com.example.demo.chat.dto.ChatRoom">
+    SELECT r.ID, r.IS_GROUP, r.STATUS, r.CREATED_AT, r.UPDATED_AT
+    FROM CHAT_ROOMS r
+    JOIN CHAT_ROOM_MEMBERS m ON r.ID = m.ROOM_ID
+    WHERE m.MEMBER_ID = #{memberId}
+    ORDER BY r.UPDATED_AT DESC
+  </select>
+
+  <select id="selectByMembers" resultType="com.example.demo.chat.dto.ChatRoom">
+    SELECT r.*
+    FROM CHAT_ROOMS r
+    WHERE r.ID IN (
+      SELECT ROOM_ID
+      FROM CHAT_ROOM_MEMBERS
+      WHERE MEMBER_ID = #{loginMid}
+         OR MEMBER_ID = #{mid}
+      GROUP BY ROOM_ID
+      HAVING COUNT(DISTINCT MEMBER_ID) = 2
+  )
+    </select>
+  
+
+  <update id="touchUpdatedAt" parameterType="long">
+    UPDATE CHAT_ROOMS SET UPDATED_AT = SYSTIMESTAMP WHERE ID = #{roomId}
+  </update>
+
+  <update id="updateStatus">
+    UPDATE CHAT_ROOMS SET STATUS = #{status}, UPDATED_AT = SYSTIMESTAMP WHERE ID = #{roomId}
+  </update>
+
+</mapper>

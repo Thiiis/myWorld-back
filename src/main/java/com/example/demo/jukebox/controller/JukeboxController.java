@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.auth.dto.Member;
+import com.example.demo.auth.dto.MemberReadResponse;
+import com.example.demo.auth.service.MemberService;
 import com.example.demo.interceptor.Login;
 import com.example.demo.jukebox.dto.JukeboxCreateRequest;
 import com.example.demo.jukebox.dto.JukeboxCreateResponse;
@@ -34,6 +37,7 @@ public class JukeboxController {
 
     private final JukeboxService jukeboxservice;
     private final JukeboxLikesService jukeboxLikesService;
+    private final MemberService memberService;
 
     // 주크박스 생성
     @Login
@@ -49,8 +53,9 @@ public class JukeboxController {
 
     // 주크박스 조회
     @GetMapping("/list")
-    public ResponseEntity<List<JukeboxListResponse>> jukeboxList(@RequestParam("mid") Long mid) {
-        List<JukeboxListResponse> list = jukeboxservice.getJukeboxList(mid);
+    public ResponseEntity<List<JukeboxListResponse>> jukeboxList(@RequestParam("account") String account) {
+        MemberReadResponse member = memberService.getMember(account);
+        List<JukeboxListResponse> list = jukeboxservice.getJukeboxList(member.getMid());
         return ResponseEntity.ok(list);
     }
 

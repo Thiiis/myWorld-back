@@ -117,7 +117,7 @@ public class SongService {
     int seconds = 0;
 
     int number = 0;
-    for (int i = 2; i < duration.length(); i++) { // "PT"는 건너뛰고 시작
+    for (int i = 2; i < duration.length(); i++) { // PT
       char c = duration.charAt(i);
 
       if (c >= '0' && c <= '9') {
@@ -137,7 +137,7 @@ public class SongService {
   // 내 음악 전체 조회
   public List<SongMyResponse> mySongs(Long mid) {
     List<Song> songs = songDao.selectMySongsByMid(mid);
-    return songs.stream().map(song -> new SongMyResponse(song.getSid(), song.getTitle(), song.getArtist(), song.getDuration())).toList();
+    return songs.stream().map(song -> new SongMyResponse(song.getSid(), song.getTitle(), song.getArtist(), song.getVideoId(), song.getDuration())).toList();
   }
 
   // 음악 삭제하기

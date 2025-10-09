@@ -1,63 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-  <mapper namespace="com.example.demo.diary.dao.DiarysDao">
-    <insert id="insert" parameterType="Diarys" useGeneratedKeys="true" keyProperty="did" keyColumn="did">
-        INSERT INTO DIARYS (MID, TITLE, CONTENT, EMO, WEATHER, CREATED_AT, UPDATED_AT)
-    VALUES (#{mid}, #{title}, #{content}, #{emo}, #{weather}, SYSTIMESTAMP, SYSTIMESTAMP)
-    </insert>
+<mapper namespace="com.example.demo.diary.dao.DiarysDao">
+  <insert id="insert" parameterType="Diarys" useGeneratedKeys="true" keyProperty="did"
+    keyColumn="did"> INSERT INTO DIARYS (MID, TITLE, CONTENT, EMO, WEATHER, CREATED_AT, UPDATED_AT)
+    VALUES (#{mid}, #{title}, #{content}, #{emo}, #{weather}, SYSTIMESTAMP, SYSTIMESTAMP) </insert>
 
-    <!--단건 조회-->
-    <select id="selectByDid" parameterType="Long" resultType="Diarys">
-      SELECT *
-      FROM DIARYS
-      WHERE DID = #{did}
-      ORDER BY CREATED_AT DESC
-    </select>
+  <!--단건
+  조회-->
+  <select id="selectByDid" parameterType="Long" resultType="Diarys"> SELECT * FROM DIARYS WHERE DID
+    = #{did} ORDER BY CREATED_AT DESC </select>
 
-    <!--총 글 개수(전체글 조회 대신 사용-성능향상)-->
-    <select id="countDiaries" resultType="int">
-      SELECT COUNT(*)
-      FROM DIARYS
-    </select>
+  <!--총
+  글 개수(전체글 조회 대신 사용-성능향상)-->
+  <select id="countDiariesByMid" parameterType="Long" resultType="int"> SELECT COUNT(*) FROM DIARYS
+    WHERE MID = #{mid} </select>
 
-    <!--페이징-->
-    <select id="selectDiariesByPage" parameterType="Pager" resultType="Diarys">
-      <![CDATA[
-      SELECT *
-      FROM (
-        SELECT d.*, ROWNUM rn
-        FROM ( 
-          SELECT * 
-          FROM DIARYS 
-          ORDER BY CREATED_AT DESC 
-          ) d
-        WHERE ROWNUM <= #{endRowNo}
-       )
-       WHERE rn >= #{startRowNo}
-      ]]>
-    </select>
+  <!--페이징-->
+  <select id="selectDiariesByPage" resultType="Diarys">
+  <![CDATA[
+  SELECT *
+  FROM (
+    SELECT d.*, ROWNUM rn
+    FROM ( 
+      SELECT * 
+      FROM DIARYS 
+      WHERE MID = #{mid}
+      ORDER BY CREATED_AT DESC 
+    ) d
+    WHERE ROWNUM <= #{pager.endRowNo}
+  )
+  WHERE rn >= #{pager.startRowNo}
+  ]]>
+</select>
 
-    <!-- 수정 -->
-    <update id="update" parameterType="Diarys">
-      UPDATE DIARYS
-      SET TITLE = #{title}, CONTENT = #{content}, EMO = #{emo}, WEATHER = #{weather}, UPDATED_AT = SYSTIMESTAMP
-      WHERE DID = #{did}
-    </update>
+  <!-- 수정 -->
+  <update id="update" parameterType="Diarys"> UPDATE DIARYS SET TITLE = #{title}, CONTENT =
+    #{content}, EMO = #{emo}, WEATHER = #{weather}, UPDATED_AT = SYSTIMESTAMP WHERE DID = #{did} </update>
 
-    <!-- 단건 삭제 -->
-    <delete id="delete" parameterType="Long">
-      DELETE FROM DIARYS
-      WHERE DID = #{did}
-    </delete>
+  <!-- 단건 삭제 -->
+  <delete id="delete" parameterType="Long"> DELETE FROM DIARYS WHERE DID = #{did} </delete>
 
-    <!-- 다중 삭제 -->
-     <delete id="deleteDiaries" parameterType="java.util.List">
-      DELETE FROM DIARYS
-      WHERE DID IN
-      <foreach collection="list" item="did" open="(" separator="," close=")">
-        #{did}
-      </foreach>
-     </delete>
+  <!-- 다중 삭제 -->
+  <delete id="deleteDiaries" parameterType="java.util.List"> DELETE FROM DIARYS WHERE DID IN <foreach
+      collection="list" item="did" open="(" separator="," close=")"> #{did} </foreach>
+  </delete>
 
-  </mapper>
+</mapper>

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.interceptor.Login;
 import com.example.demo.jukebox.dto.TrackCreateRequest;
 import com.example.demo.jukebox.dto.TrackCreateResponse;
 import com.example.demo.jukebox.dto.TrackListResponse;
@@ -40,7 +41,6 @@ public class TrackController {
   public ResponseEntity<Void> trackDelete(@PathVariable("trid") Long trid) {
     trackService.delete(trid);
     return ResponseEntity.noContent().build();
-
   }
 
 }

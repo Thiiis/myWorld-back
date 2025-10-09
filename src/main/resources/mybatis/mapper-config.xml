@@ -10,7 +10,8 @@
   <typeAliases>
     <typeAlias type="com.example.demo.diary.dto.Diarys" alias="Diarys" />
     <typeAlias type="com.example.demo.diary.dto.Attachments" alias="Attachments" />
-    <!--<typeAlias type="com.example.demo.diary.dto.DiaryComment" alias="DiaryComment" />-->
+    <typeAlias type="com.example.demo.diary.dto.DiaryComments" alias="DiaryComments" />
+    <typeAlias type="com.example.demo.diary.dto.DiarysLike" alias="DiarysLike" />
     <typeAlias type="com.example.demo.diary.dto.Pager" alias="Pager" />
 
      <typeAlias type="com.example.demo.auth.dto.Member" alias="Member" />
@@ -22,10 +23,12 @@
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoard" alias="GuestBoard" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardListRequest" alias="GuestBoardListRequest" />
     <typeAlias type="com.example.demo.guestboard.dto.GuestBoardUpdateRequest" alias="GuestBoardUpdateRequest" />
+    
     <typeAlias type="com.example.demo.jukebox.dto.Jukebox" alias="Jukebox" />
     <typeAlias type="com.example.demo.jukebox.dto.JukeboxLikes" alias="JukeboxLikes" />
     <typeAlias type="com.example.demo.jukebox.dto.Song" alias="Song" />
     <typeAlias type="com.example.demo.jukebox.dto.Track" alias="Track" />
+    <typeAlias type="com.example.demo.jukebox.dto.TrackListResponse" alias="TrackListResponse" />
 
     <typeAlias type="com.example.demo.friend.dto.Friend" alias="Friend" />
     <typeAlias type="com.example.demo.friend.dto.FriendRequestListResponse" alias="FriendRequestListResponse"/>

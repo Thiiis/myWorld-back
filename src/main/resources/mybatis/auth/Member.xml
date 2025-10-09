@@ -24,12 +24,15 @@
     WHERE account = #{account}
   </select>
 
-  <select id="countByAccount" parameterType="String" resultType="int">
+  <select id="countByAccount" resultType="int">
       SELECT COUNT(*)
       FROM members
       WHERE account = #{account}
   </select>
-
+  <select id="countAll" resultType="int">
+      SELECT COUNT(*)
+      FROM members
+  </select>
   <resultMap id="ProfileInfoMap" type="com.example.demo.common.dto.ProfileInfo">
     <id property="mid" column="MID"/>
     <result property="account" column="ACCOUNT"/>
@@ -54,8 +57,7 @@
       AND (f.STATUS IS NULL OR f.STATUS != 'ACCEPTED')
     ORDER BY p.NICKNAME
   </select>
-
-  <update id="update" parameterType="Member">
+  <update id="update">
       UPDATE MEMBERS
       SET PWD = #{pwd}
       WHERE MID = #{mid}

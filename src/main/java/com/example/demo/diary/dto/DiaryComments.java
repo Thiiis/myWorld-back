@@ -1,46 +1,21 @@
-// // package com.example.demo.diary.dto;
+package com.example.demo.diary.dto;
 
-// // import java.util.Date;
+import java.util.Date;
 
-// import lombok.Getter;
-// import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// @Getter
-// @NoArgsConstructor
-// public class DiaryComments {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class DiaryComments {
 
-//   private Long dcid;
-//   private Long did;
-//   private Long mid;
-//   private Long parentDcid;
-//   private String content;
-//   private Date createAt;
-//   private Date updateAt;
-
-//   //생성용
-//   public DiaryComment(Long did, Long mid, Long parentDcid, String content) {
-//     this.did = did;
-//     this.mid = mid;
-//     this.parentDcid = parentDcid;
-//     this.content = content;
-//   }
-
-//   //읽기용
-//   public DiaryComment(Long dcid, Long did, Long mid, Long parentDcid, String content, Date createAt, Date updateAt) {
-//     this.dcid = dcid;
-//     this.did = did;
-//     this.mid = mid;
-//     this.parentDcid = parentDcid;
-//     this.content = content;
-//     this.createAt = createAt;
-//     this.updateAt = updateAt;
-//   }
-
-//   //수정용
-//   public DiaryComment(Long did, Long dcid, String content) {
-//     this.did = did;
-//     this.dcid = dcid;
-//     this.content = content;
-//   }
-
-// }
+  private Long dcid;
+  private Long did;
+  private Long mid;           //엔티티 DTO에는 굳이 mine으로 할 필요없다 왜냐하면 DB에 저장할 때 1:1로 매핑되기 때문에 컬럼명과 같으면 좋다
+  //private Long parentDcid;
+  private String content;
+  private Date createdAt;
+  private Date updatedAt;
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.diary.dao.DiarysCommentDao">
+  <insert id="insert" parameterType="DiaryComments" useGeneratedKeys="true" keyProperty="dcid" keyColumn="DCID">
+    INSERT INTO DIARY_COMMENTS (DID, MID, CONTENT, CREATED_AT, UPDATED_AT)
+    VALUES (#{did}, #{mid}, #{content}, SYSTIMESTAMP, SYSTIMESTAMP)
+  </insert>
+  <!--insert용 조회-->
+  <select id="selectByDcid" parameterType="Long" resultType="DiaryComments">
+    SELECT *
+    FROM DIARY_COMMENTS
+    WHERE DCID = #{dcid}
+  </select>
+  <!--상세조회 Read용-->
+  <select id="selectByDidAndDcid" parameterType="Long" resultType="DiaryComments">
+    SELECT *
+    FROM DIARY_COMMENTS
+    WHERE DID = #{did} AND DCID = #{dcid}
+  </select>
+  <select id="selectByDid" parameterType="Long" resultType="DiaryComments">
+    SELECT *
+    FROM DIARY_COMMENTS
+    WHERE DID = #{did}
+    ORDER BY CREATED_AT DESC
+  </select>
+  <!-- 댓글 수정 (did와 comment DTO 기준) -->
+  <update id="update" parameterType="map">
+    UPDATE DIARY_COMMENTS
+    SET CONTENT = #{comment.content}, UPDATED_AT = SYSTIMESTAMP
+    WHERE DCID = #{comment.dcid} AND DID = #{did}
+  </update>
+  <!--댓글 삭제-->
+  <delete id="delete" parameterType="map">
+    DELETE FROM DIARY_COMMENTS
+    WHERE DCID = #{dcid} AND DID = #{did} AND MID = #{mid}
+  </delete>
+</mapper>

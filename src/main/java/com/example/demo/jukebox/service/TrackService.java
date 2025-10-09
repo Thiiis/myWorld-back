@@ -19,18 +19,19 @@ public class TrackService {
   private final TrackDao trackDao;
 
   public TrackCreateResponse create(TrackCreateRequest dto) {
-    Track track = new Track(dto.getJid(), dto.getSid(), dto.getTrackOrder());
+    Track track = new Track(dto.getJid(), dto.getSid());
     trackDao.insert(track);
     Track dbTrack = trackDao.selectByTrid(track.getTrid());
-    return new TrackCreateResponse(dbTrack.getTrid(), dbTrack.getJid(), dbTrack.getSid(), dbTrack.getTrackOrder());
+    return new TrackCreateResponse(dbTrack.getTrid(), dbTrack.getJid(), dbTrack.getSid());
   }
 
   public List<TrackListResponse> getTrackListByJid(Long jid) {
-    List<Song> songs = trackDao.selectSongsByJid(jid);
-    return songs.stream().map(s -> new TrackListResponse(s.getTitle(), s.getArtist())).toList();
+    List<TrackListResponse> tracks = trackDao.selectSongsByJid(jid);
+    return tracks.stream().map(s -> new TrackListResponse(s.getTrid(), s.getSid(), s.getTitle(), s.getArtist(), s.getDuration(), s.getVideoId())).toList();
   }
 
   public int delete(Long trid) {
     return trackDao.delete(trid);
   }
+
 }
