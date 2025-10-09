@@ -15,20 +15,24 @@
   <!--상세조회 Read용-->
   <select id="selectByDidAndDcid" parameterType="Long" resultType="DiaryComments">
     SELECT *
-    FROM DIARY_COMMENT
+    FROM DIARY_COMMENTS
     WHERE DID = #{did} AND DCID = #{dcid}
+  </select>
+  <select id="selectByDid" parameterType="Long" resultType="DiaryComments">
+    SELECT *
+    FROM DIARY_COMMENTS
+    WHERE DID = #{did}
+    ORDER BY CREATED_AT DESC
   </select>
   <!-- 댓글 수정 (did와 comment DTO 기준) -->
   <update id="update" parameterType="map">
-    UPDATE DIARY_COMMENTS <!-- 모든 쿼리의 테이블 이름을 DIARY_COMMENT로 통일 -->
-    SET
-      CONTENT = #{comment.content},
-      UPDATED_AT = SYSTIMESTAMP  <!-- DB에서 현재 시각을 직접 기록 -->
-    WHERE DCID = #{comment.dcid} AND DID = #{did} <!-- did를 사용하여 보안 검증 -->
+    UPDATE DIARY_COMMENTS
+    SET CONTENT = #{comment.content}, UPDATED_AT = SYSTIMESTAMP
+    WHERE DCID = #{comment.dcid} AND DID = #{did}
   </update>
   <!--댓글 삭제-->
   <delete id="delete" parameterType="map">
     DELETE FROM DIARY_COMMENTS
-    WHERE DCID = #{dcid}
+    WHERE DCID = #{dcid} AND DID = #{did} AND MID = #{mid}
   </delete>
 </mapper>

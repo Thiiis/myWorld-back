@@ -1,5 +1,7 @@
 package com.example.demo.diary.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.diary.dto.request.DiarysCommentRequest;
 import com.example.demo.diary.dto.response.DiarysCommentResponse;
 import com.example.demo.diary.service.DiarysCommentService;
+import com.example.demo.interceptor.Login;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class DiarysCommentController {
   private final DiarysCommentService diaryCommentService;
 
   // 댓글 생성
+  @Login
   @PostMapping("/create")
   public ResponseEntity<DiarysCommentResponse> createDiaryComment(@PathVariable("did") Long did,
       @RequestBody DiarysCommentRequest dto, HttpServletRequest request) {
@@ -36,29 +40,48 @@ public class DiarysCommentController {
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
-  // 댓글 읽기
+  // 댓글 상세 읽기
+  @Login
   @GetMapping("/{dcid}")
-  public ResponseEntity<DiarysCommentResponse> getMethodName(@PathVariable("did") Long did,
-      @PathVariable("dcid") Long dcid) {
-    DiarysCommentResponse response = diaryCommentService.getDiaryComment(did, dcid);
+  public ResponseEntity<DiarysCommentResponse> getDiaryComment(@PathVariable("did") Long did,
+      @PathVariable("dcid") Long dcid, HttpServletRequest request) {
+        Long mid = (Long) request.getAttribute("loginMid");
+    DiarysCommentResponse response = diaryCommentService.getDiaryComment(did, dcid, mid);
+    return ResponseEntity.ok(response);
+  }
+
+  // 댓글 리스트 읽기
+  @Login
+  @GetMapping("/list")
+  public ResponseEntity<List<DiarysCommentResponse>> getDiaryComments(@PathVariable("did") Long did, HttpServletRequest request) {
+    Long mid = (Long) request.getAttribute("loginMid");
+    List<DiarysCommentResponse> response = diaryCommentService.getCommentsByDid(did, mid);
     return ResponseEntity.ok(response);
   }
 
   // 댓글 수정
-  @PutMapping("/{dcid}")
-  public ResponseEntity<Void> updateDiaryComment(@PathVariable("did") Long did, @PathVariable("dcid") Long dcid,
-      @RequestBody DiarysCommentRequest dto, HttpServletRequest request) {
+  @Login
+  @PutMapping("/{dcid}") 
+  public ResponseEntity<DiarysCommentResponse> updateDiaryComment(
+    @PathVariable("did") Long did,
+    @PathVariable("dcid") Long dcid,
+    @RequestBody DiarysCommentRequest dto,
+    HttpServletRequest request) {
+
+    log.info("PUT /diaries/{}/comment/{} 호출, DTO: {}", did, dcid, dto);
+
     Long mid = (Long) request.getAttribute("loginMid");
-    diaryCommentService.updateDiaryComment(did, mid, dcid, dto);
-    return ResponseEntity.noContent().build();
+    DiarysCommentResponse updated = diaryCommentService.updateDiaryComment(did, mid, dcid, dto);
+
+    return ResponseEntity.ok(updated); // ✅ 수정된 댓글 정보를 그대로 반환
   }
 
   // 댓글 삭제
-  @DeleteMapping("{dcid}")
+  @Login
+  @DeleteMapping("/{dcid}")
   public ResponseEntity<Void> deleteDiaryComment(@PathVariable("did") Long did, @PathVariable("dcid") Long dcid, HttpServletRequest request) {
     Long mid = (Long) request.getAttribute("loginMid");
     diaryCommentService.deleteDiaryComment(did, mid, dcid);
     return ResponseEntity.noContent().build();
   }
-
 }

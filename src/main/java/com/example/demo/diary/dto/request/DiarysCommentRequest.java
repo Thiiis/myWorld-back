@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DiarysCommentRequest {
   //create,update시 공통적으로 필요
-  private Long did;
   private String content;
   //create시 필요(대댓글id)
   //private Long parentDcid;

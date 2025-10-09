@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +22,15 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.demo.auth.service.MemberService;
 import com.example.demo.diary.dto.Pager;
 import com.example.demo.diary.dto.request.DiarysRequest;
+import com.example.demo.diary.dto.response.DiarysLikeResponse;
 import com.example.demo.diary.dto.response.DiarysResponse;
+import com.example.demo.diary.service.DiarysLikeService;
 import com.example.demo.diary.service.DiarysService;
 import com.example.demo.interceptor.Login;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,22 +41,24 @@ public class DiarysController {
 
   private final DiarysService diaryService;
   private final MemberService memberService;
+  private final DiarysLikeService diarysLikeService;
 
   // 일기 생성
   @Login
   @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<DiarysResponse> createDiary(
-      @RequestPart("dto") DiarysRequest dto,
-      @RequestPart(value = "files", required = false) List<MultipartFile> files, @RequestParam(value = "hostAccount") String hostAccount,
-      HttpServletRequest request) {
+  public ResponseEntity<DiarysResponse> createDiary(@RequestPart("dto") DiarysRequest dto,
+      @RequestPart(value = "files", required = false) List<MultipartFile> files,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount, HttpServletRequest request) {
 
     Long loginMid = (Long) request.getAttribute("loginMid");
-    Long hostMid = memberService.getMember(hostAccount).getMid();
 
-    if(!loginMid.equals(hostMid)) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+    // ✅ hostAccount가 있을 때만 검사
+    if (hostAccount != null && !hostAccount.isEmpty()) {
+      Long hostMid = memberService.getMember(hostAccount).getMid();
+      if (!loginMid.equals(hostMid)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+      }
     }
-
     // 1) 일기 저장 + DB insert
     DiarysResponse diaryResponse = diaryService.createDiary(loginMid, dto, files);
     return ResponseEntity.status(HttpStatus.CREATED).body(diaryResponse);
@@ -71,11 +77,12 @@ public class DiarysController {
   @Login
   @GetMapping("/list")
   public ResponseEntity<Map<String, Object>> getDiariesPage(
-      @RequestParam(value = "pageNo", defaultValue = "1") int pageNo, @RequestParam(value ="hostAccount", required = false) String hostAccount, HttpServletRequest request) {
-        
-    Long loginMid = (Long) request.getAttribute("loginMid");   //로그인한 회원
+      @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount, HttpServletRequest request) {
 
-    Long hostMid = (hostAccount != null) ? memberService.getMember(hostAccount).getMid() : loginMid; // 로그인 여부와 별개로 등록되어있는 회원
+    Long loginMid = (Long) request.getAttribute("loginMid"); // 로그인한 회원
+    Long hostMid = (hostAccount != null) ? memberService.getMember(hostAccount).getMid() : loginMid; // 로그인 여부와 별개로
+                                                                                                     // 등록되어있는 회원
 
     int totalRows = diaryService.countDiaries(hostMid);
     Pager pager = new Pager(6, 5, totalRows, pageNo);
@@ -94,57 +101,85 @@ public class DiarysController {
   // 일기 수정
   @Login
   @PostMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Void> updateDiary(
-      @RequestPart("dto") DiarysRequest dto,
+  public ResponseEntity<DiarysResponse> updateDiary(@RequestPart("dto") DiarysRequest dto,
       @RequestParam(value = "deleteAids", required = false) List<Long> deleteAids,
-      @RequestPart(value = "addFiles", required = false) List<MultipartFile> addFiles,
-      @RequestParam(value = "hostAccount") String hostAccount,
-      HttpServletRequest request) {
+      @RequestParam(value = "hostAccount", required = false) String hostAccount,
+      @RequestPart(value = "addFiles", required = false) List<MultipartFile> addFiles, HttpServletRequest request) {
 
     Long loginMid = (Long) request.getAttribute("loginMid");
-    Long hostMid = memberService.getMember(hostAccount).getMid();
-
-    if(!loginMid.equals(hostMid)) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+    // ✅ hostAccount가 있을 때만 검사
+    if (hostAccount != null && !hostAccount.isEmpty()) {
+      Long hostMid = memberService.getMember(hostAccount).getMid();
+      if (!loginMid.equals(hostMid)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+      }
     }
-    diaryService.updateDiary(loginMid, dto, deleteAids, addFiles);
-    return ResponseEntity.noContent().build();
+    DiarysResponse response = diaryService.updateDiary(loginMid, dto, deleteAids, addFiles);
+    return ResponseEntity.ok(response);
   }
 
   // 일기 단일 삭제
   @Login
   @DeleteMapping("/delete/{did}")
-  public ResponseEntity<Void> deleteDiary(
-      @PathVariable("did") Long did,
-      @RequestParam(value = "hostAccount") String hostAccount,
-      HttpServletRequest request) {
+  public ResponseEntity<Void> deleteDiary(@PathVariable("did") Long did,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount, HttpServletRequest request) {
 
     Long loginMid = (Long) request.getAttribute("loginMid");
-    Long hostMid = memberService.getMember(hostAccount).getMid();
-
-    if(!loginMid.equals(hostMid)) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+    // ✅ hostAccount가 있을 때만 검사
+    if (hostAccount != null && !hostAccount.isEmpty()) {
+      Long hostMid = memberService.getMember(hostAccount).getMid();
+      if (!loginMid.equals(hostMid)) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
+      }
     }
-    diaryService.deleteDiary(loginMid, did);
+    diaryService.deleteDiary(did);
     return ResponseEntity.noContent().build();
   }
 
   // 일기 다중 삭제 (여러 아이디를 받을 때에는 쿼리 파라미터를 사용하는 것이 일반적)
   @Login
   @DeleteMapping("/delete-list")
-  public ResponseEntity<Void> deleteDiaries(
-      @RequestParam("did") List<Long> dids,
-      @RequestParam(value = "hostAccount") String hostAccount,
-      HttpServletRequest request) {
+  public ResponseEntity<Void> deleteDiaries(@RequestParam("did") List<Long> dids,
+      @RequestParam(value = "hostAccount", required = false) String hostAccount, HttpServletRequest request) {
 
     Long loginMid = (Long) request.getAttribute("loginMid");
     Long hostMid = memberService.getMember(hostAccount).getMid();
 
-    if(!loginMid.equals(hostMid)) {
+    if (!loginMid.equals(hostMid)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, "다른 사용자의 일기장에는 작성할 수 없습니다.");
     }
-    
+
     diaryService.deleteDiaries(dids);
     return ResponseEntity.noContent().build();
+  }
+
+  // ✅ 좋아요 생성
+  @Login
+  @PostMapping("/{did}/like")
+  public ResponseEntity<DiarysLikeResponse> likeDiary(@PathVariable("did") Long did, HttpServletRequest request) {
+    Long loginMid = (Long) request.getAttribute("loginMid");
+    diarysLikeService.addLike(did, loginMid);
+
+    // ✅ 좋아요 개수와 likedByMe 상태를 응답
+    int likes = diarysLikeService.countLikes(did);
+    boolean likedByMe = diarysLikeService.isLikedByMe(did, loginMid);
+
+    DiarysLikeResponse response = new DiarysLikeResponse(likes, likedByMe);
+    return ResponseEntity.ok(response);
+  }
+
+  // ✅ 좋아요 삭제
+  @Login
+  @DeleteMapping("/{did}/like")
+  public ResponseEntity<DiarysLikeResponse> removeDiary(@PathVariable("did") Long did, HttpServletRequest request) {
+    Long loginMid = (Long) request.getAttribute("loginMid");
+    diarysLikeService.removeLike(did, loginMid);
+
+    // ✅ 최신 좋아요 개수 재계산
+    int likes = diarysLikeService.countLikes(did);
+    boolean likedByMe = diarysLikeService.isLikedByMe(did, loginMid);
+
+    DiarysLikeResponse response = new DiarysLikeResponse(likes, likedByMe);
+    return ResponseEntity.ok(response);
   }
 }

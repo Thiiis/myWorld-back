@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class DiarysResponse {
   
   private Long did;          // create
@@ -28,4 +27,8 @@ public class DiarysResponse {
   private List<AttachmentsResponse> attachments;  // 사진 리스트
   private AttachmentsResponse thumbnail;          // 대표 이미지 - 원래는 컬럼으로 있어야 하지만 그냥 개발자가 지정해주었다. 프론트에서도 처리 가능 (이유는 사진의 0번째로 썸네일을 지정했기 때문)
   //private Attachment thumbnail;                 // 썸네일 원본-방법1(DB에 저장-사용자가 정함)
+
+  // 좋아요 총 개수 반환
+  private int likes;        // 총 좋아요 수
+  private boolean likedByMe; // 현재 로그인 사용자가 좋아요 눌렀는지 여부
 }

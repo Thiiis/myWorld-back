@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.chat.dao.ChatMessageDao">
+
+  <insert id="insert" parameterType="com.example.demo.chat.dto.ChatMessage"
+          useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+    INSERT INTO CHAT_MESSAGES (ROOM_ID, SENDER_ID, CONTENT, CREATED_AT)
+    VALUES (#{roomId}, #{senderId}, #{content}, SYSTIMESTAMP)
+  </insert>
+
+  <select id="selectByRoomId" parameterType="long"
+        resultType="com.example.demo.chat.dto.ChatMessageResponse">
+  SELECT
+      m.MID            As senderId, 
+      m.ACCOUNT        AS senderAccount,
+      p.NICKNAME       AS senderNickname,
+      p.IMG_URL        AS senderProfileImg,
+      msg.CONTENT      AS content,
+      msg.CREATED_AT   AS createdAt
+  FROM CHAT_MESSAGES msg
+  JOIN MEMBERS m  ON msg.SENDER_ID = m.MID
+  JOIN PROFILES p ON p.MID = m.MID
+  WHERE msg.ROOM_ID = #{roomId}
+  ORDER BY msg.CREATED_AT ASC
+</select>
+
+<select id="selectById" parameterType="long"
+        resultType="com.example.demo.chat.dto.ChatMessageResponse">
+    SELECT
+        m.ACCOUNT      AS senderAccount,
+        p.NICKNAME     AS senderNickname,
+        p.IMG_URL      AS senderProfileImg,
+        msg.CONTENT    AS content,
+        msg.CREATED_AT AS createdAt
+    FROM CHAT_MESSAGES msg
+    JOIN MEMBERS m ON msg.SENDER_ID = m.MID
+    JOIN PROFILES p ON p.MID = m.MID
+    WHERE msg.ID = #{id}
+</select>
+
+</mapper>
