@@ -14,9 +14,9 @@ public class JukeboxDetailResponse {
   private Date updatedAt;
   private int trackCount;
   private Long totalDuration;
-  private List<Song> songs;
+  private List<TrackListResponse> songs;
 
-  public JukeboxDetailResponse(Long jid, String title, String content, Date createdAt, Date updatedAt, Long totalDuration, int trackCount, List<Song> songs) {
+  public JukeboxDetailResponse(Long jid, String title, String content, Date createdAt, Date updatedAt, Long totalDuration, int trackCount, List<TrackListResponse> songs) {
     this.jid = jid;
     this.title = title;
     this.content = content;

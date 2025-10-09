@@ -6,12 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.demo.jukebox.dto.Song;
 import com.example.demo.jukebox.dto.Track;
+import com.example.demo.jukebox.dto.TrackListResponse;
 
 @Mapper
 public interface TrackDao {
   public int insert(Track track);
   public Track selectByTrid(Long Trid);
-  public List<Song> selectSongsByJid(Long jid);
+  public List<TrackListResponse> selectSongsByJid(Long jid);
   public int delete(Long trid);
   public Long totalDuration(Long jid);
 }

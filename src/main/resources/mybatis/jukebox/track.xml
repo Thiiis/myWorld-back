@@ -11,8 +11,8 @@
     select * from tracks where trid = #{trid}
   </select>
 
-  <select id="selectSongsByJid" parameterType="Long" resultType="Song">
-    select s.sid, s.title, s.artist, s.duration
+  <select id="selectSongsByJid" parameterType="Long" resultType="TrackListResponse">
+    select t.trid, s.sid, s.title, s.artist, s.duration, s.video_id
     from tracks t
     join songs s on t.sid = s.sid
     where t.jid = #{jid}
