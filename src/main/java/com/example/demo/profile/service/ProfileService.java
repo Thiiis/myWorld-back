@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import com.example.demo.auth.dao.MemberDao;
 import com.example.demo.auth.dto.Member;
 import com.example.demo.common.dto.ProfileInfo;
+import com.example.demo.jukebox.dao.JukeboxDao;
+import com.example.demo.jukebox.dto.Jukebox;
+import com.example.demo.jukebox.dto.JukeboxSelectResponse;
 import com.example.demo.profile.dao.ProfileDao;
 import com.example.demo.profile.dto.Profile;
 import com.example.demo.profile.dto.ProfileReadResponse;
@@ -19,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProfileService {
     private final ProfileDao profileDao;
     private final MemberDao memberDao;
+    private final JukeboxDao jukeboxDao;
     // Read
 
     public ProfileInfo getProfileInfoByAccount(String account) {
@@ -85,6 +89,25 @@ public class ProfileService {
             // 이미지 업데이트가 실패한 경우 예외 처리
             throw new IllegalArgumentException("프로필 이미지 업데이트에 실패했습니다. 사용자를 찾을 수 없습니다.");
         }
+    }
+
+
+    // 주크박스 선택
+    public void updateProfileJukebox(String account, Long jid) {
+        Member member = memberDao.selectByAccount(account);
+        profileDao.updateProfileJukebox(member.getMid(), jid);
+    }
+
+    // 선택된 주크박스 조회
+    public JukeboxSelectResponse getSelectedJukebox(String account) {
+        Member member = memberDao.selectByAccount(account);
+        Long jid = profileDao.selectByMid(member.getMid()).getJid();
+        if (jid == null) return null;
+
+        Jukebox jukebox = jukeboxDao.selectByJid(jid);
+        if(jukebox == null) return null;
+
+        return new JukeboxSelectResponse(jukebox.getJid(), jukebox.getTitle());
     }
 
 }

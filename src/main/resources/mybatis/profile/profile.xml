@@ -80,5 +80,16 @@
       WHERE
           MID = #{mid}
   </update>
+
+  
+  <update id="updateProfileJukebox">
+    update profiles
+    set jid = #{jid}
+    where mid = #{mid}
+  </update>
+
+  <select id="selectJukeboxIdByMid" parameterType="Long" resultType="Long">
+    select jid from profiles where mid = #{mid}
+  </select>
     
 </mapper>

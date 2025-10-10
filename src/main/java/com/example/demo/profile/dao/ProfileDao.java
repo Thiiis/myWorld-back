@@ -19,5 +19,9 @@ import com.example.demo.profile.dto.ProfileUpdateRequest;
     // 프로필 이미지 정보만 업데이트하는 메서드
     int updateImage(@Param("mid") Long mid, @Param("imgName") String imgName, @Param("imgUrl") String imgUrl);
 
-    
+
+    // 주크박스 선택
+    int updateProfileJukebox(@Param("mid") Long mid, @Param("jid") Long jid);
+    // 선택된 주크박스 조회
+    Long selectJukeboxIdByMid(@Param("mid") Long mid);
 }

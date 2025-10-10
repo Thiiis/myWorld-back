@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.common.dto.ProfileInfo;
 import com.example.demo.interceptor.Login;
+import com.example.demo.jukebox.dto.JukeboxSelectRequest;
+import com.example.demo.jukebox.dto.JukeboxSelectResponse;
 import com.example.demo.profile.dto.ProfileReadResponse;
 import com.example.demo.profile.dto.ProfileUpdateRequest;
 import com.example.demo.profile.service.ProfileService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -98,5 +102,24 @@ public class ProfileController {
         }
 
     }
+
+    // 선택된 주크박스 저장
+    @PostMapping("/{account}/jukebox")
+    public ResponseEntity<Void> updateSelectedJukebox(
+        @PathVariable("account") String account, 
+        @RequestBody(required = false) JukeboxSelectRequest dto) {
+
+        profileService.updateProfileJukebox(account, dto.getJid());
+        return ResponseEntity.ok().build();
+    }
+
+    // 선택된 주크박스 조회
+    @GetMapping("/{account}/jukebox")
+    public ResponseEntity<JukeboxSelectResponse> getSelectedJukebox(@PathVariable("account") String account) {
+        JukeboxSelectResponse jukebox = profileService.getSelectedJukebox(account);
+        return ResponseEntity.ok(jukebox);
+    }
+    
+    
 }
 
