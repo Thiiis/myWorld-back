@@ -61,7 +61,7 @@ public class JukeboxController {
 
     // 주크박스 상세조회
     @GetMapping("/detail")
-    public ResponseEntity<JukeboxDetailResponse> jukeboxDetail(@RequestParam Long jid) {
+    public ResponseEntity<JukeboxDetailResponse> jukeboxDetail(@RequestParam("jid") Long jid) {
         JukeboxDetailResponse response = jukeboxservice.getJukeboxDetail(jid);
         return ResponseEntity.ok(response);
     }
