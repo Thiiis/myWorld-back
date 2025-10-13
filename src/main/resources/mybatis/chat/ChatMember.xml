@@ -14,4 +14,11 @@
     WHERE ROOM_ID = #{roomId}
   </select>
 
+  <update id="updateLastReadAt">
+  UPDATE CHAT_ROOM_MEMBERS
+  SET LAST_READ_AT = SYSTIMESTAMP
+  WHERE ROOM_ID = #{roomId}
+  AND MEMBER_ID = #{memberId}
+</update>
+
 </mapper>

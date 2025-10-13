@@ -52,9 +52,19 @@ public class ChatController {
     // 채팅방 조회
     @Login
     @GetMapping("/rooms/{roomId}/messages")
-    public ResponseEntity<List<ChatMessageResponse>> getMessages(@PathVariable("roomId") Long roomId) {
-        List<ChatMessageResponse> messages = chatService.getMessages(roomId);
+    public ResponseEntity<List<ChatMessageResponse>> getMessages(@PathVariable("roomId") Long roomId, HttpServletRequest request) {
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        List<ChatMessageResponse> messages = chatService.getMessages(roomId, loginMid);
         return ResponseEntity.ok(messages);
+    }
+
+    // 안 읽은 메시지 개수
+    @Login
+    @GetMapping("/rooms/{roomId}/unread-count")
+    public ResponseEntity<Integer> getUnreadCount(@PathVariable("roomId") Long roomId, HttpServletRequest request) {
+        Long loginMid = (Long) request.getAttribute("loginMid");
+        int count = chatService.getUnreadCount(roomId, loginMid);
+        return ResponseEntity.ok(count);
     }
 
     // 실시간 메시지 송수신

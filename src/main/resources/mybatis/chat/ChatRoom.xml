@@ -15,6 +15,7 @@
   </select>
 
    <select id="selectByMid" parameterType="long" resultType="com.example.demo.chat.dto.ChatRoomResponse">
+    <![CDATA[
     SELECT
       cr.ID         AS roomId,
       cr.STATUS,
@@ -23,7 +24,8 @@
       p.IMG_URL     AS friendProfileImg,
       lm.CONTENT    AS lastMessage,
       lm.CREATED_AT AS lastMessageTime,
-      cr.CREATED_AT AS createdAt
+      cr.CREATED_AT AS createdAt,
+      NVL(unread.UNREAD_COUNT, 0) AS unreadCount
     FROM CHAT_ROOMS cr
       JOIN CHAT_ROOM_MEMBERS my_cm ON cr.ID = my_cm.ROOM_ID
       JOIN CHAT_ROOM_MEMBERS other_cm ON cr.ID = other_cm.ROOM_ID AND other_cm.MEMBER_ID != #{mid}
@@ -37,8 +39,20 @@
           WHERE msg2.ROOM_ID = msg1.ROOM_ID
         )
       ) lm ON cr.ID = lm.ROOM_ID
+      LEFT JOIN (
+        SELECT
+          r.ID AS ROOM_ID,
+          COUNT(m.ID) AS UNREAD_COUNT
+        FROM CHAT_ROOMS r
+        JOIN CHAT_ROOM_MEMBERS rm ON r.ID = rm.ROOM_ID
+        JOIN CHAT_MESSAGES m ON r.ID = m.ROOM_ID
+        WHERE rm.MEMBER_ID = #{mid}
+        AND (rm.LAST_READ_AT IS NULL OR m.CREATED_AT > rm.LAST_READ_AT)
+        GROUP BY r.ID
+      ) unread ON cr.ID = unread.ROOM_ID
     WHERE my_cm.MEMBER_ID = #{mid}
-    ORDER BY lm.CREATED_AT DESC NULLS LAST
+    ORDER BY my_cm.LAST_READ_AT DESC NULLS LAST
+    ]]>
   </select>
 
   <select id="selectByMember" parameterType="long" resultType="com.example.demo.chat.dto.ChatRoom">
@@ -60,8 +74,7 @@
       GROUP BY ROOM_ID
       HAVING COUNT(DISTINCT MEMBER_ID) = 2
   )
-    </select>
-  
+    </select>  
 
   <update id="touchUpdatedAt" parameterType="long">
     UPDATE CHAT_ROOMS SET UPDATED_AT = SYSTIMESTAMP WHERE ID = #{roomId}

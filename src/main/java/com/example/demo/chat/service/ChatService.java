@@ -69,7 +69,18 @@ public class ChatService {
 }
 
     // 방 히스토리
-    public List<ChatMessageResponse> getMessages(Long roomId) {
-       return chatMessageDao.selectByRoomId(roomId);
+    @Transactional
+    public List<ChatMessageResponse> getMessages(Long roomId, Long memberId) {
+    // 채팅방 메시지 불러오기
+    List<ChatMessageResponse> messages = chatMessageDao.selectByRoomId(roomId);    
+    // 마지막 읽은 시간 갱신
+    chatMemberDao.updateLastReadAt(roomId, memberId);
+    return messages;
     }
+
+    // 안 읽은 메세지 개수
+    public int getUnreadCount(Long roomId, Long memberId) {
+    return chatMessageDao.countUnreadMessages(roomId, memberId);
+}
+
 }

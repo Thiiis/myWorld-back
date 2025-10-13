@@ -27,6 +27,7 @@
 <select id="selectById" parameterType="long"
         resultType="com.example.demo.chat.dto.ChatMessageResponse">
     SELECT
+        m.MID          As senderId,
         m.ACCOUNT      AS senderAccount,
         p.NICKNAME     AS senderNickname,
         p.IMG_URL      AS senderProfileImg,
@@ -36,6 +37,17 @@
     JOIN MEMBERS m ON msg.SENDER_ID = m.MID
     JOIN PROFILES p ON p.MID = m.MID
     WHERE msg.ID = #{id}
+</select>
+
+<select id="countUnreadMessages" resultType="int">
+  <![CDATA[
+    SELECT COUNT(*)
+    FROM CHAT_MESSAGES m
+    JOIN CHAT_ROOM_MEMBERS rm ON m.ROOM_ID = rm.ROOM_ID
+    WHERE m.ROOM_ID = #{roomId}
+    AND rm.MEMBER_ID = #{memberId}
+    AND (rm.LAST_READ_AT IS NULL OR m.CREATED_AT > rm.LAST_READ_AT)
+  ]]>
 </select>
 
 </mapper>
