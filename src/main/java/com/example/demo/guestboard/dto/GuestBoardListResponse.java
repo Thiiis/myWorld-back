@@ -8,14 +8,16 @@ import lombok.Data;
 public class GuestBoardListResponse {
   private Long gbid;
   private Long gid;
+  private String account;
   private String nickname;
   private String content;
   private Date createdAt;
   private Date updatedAt;
 
-  public GuestBoardListResponse(Long gbid, Long gid, String nickname, String content, Date createdAt, Date updatedAt) {
+  public GuestBoardListResponse(Long gbid, Long gid, String account, String nickname, String content, Date createdAt, Date updatedAt) {
     this.gbid = gbid;
     this.gid = gid;
+    this.account = account;
     this.nickname = nickname;
     this.content = content;
     this.createdAt = createdAt;

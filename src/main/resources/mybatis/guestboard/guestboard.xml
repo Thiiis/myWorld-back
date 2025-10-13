@@ -15,9 +15,10 @@
   </select>
 
   <!--앞에서 offset만큼 건너뛰고 limit만큼 행 가져오기-->
-  <select id="select" parameterType="GuestBoardListRequest" resultType="GuestBoard">
-    select g.gbid, g.hostid, g.gid, g.content, g.created_at, g.updated_at, p.nickname
+  <select id="select" parameterType="GuestBoardListRequest" resultType="GuestBoardListResponse">
+    select g.gbid, g.hostid, g.gid, m.account, g.content, g.created_at, g.updated_at, p.nickname
     from guestboards g
+    join members m on g.gid = m.mid
     join profiles p on g.gid = p.mid
     where g.hostid = #{hostid}
     order by created_at desc

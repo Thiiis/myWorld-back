@@ -42,8 +42,8 @@ public class GuestBoardService {
 
   // board list
   public List<GuestBoardListResponse> getGuestBoardList(GuestBoardListRequest dto) {
-    List<GuestBoard> list = guestBoardDao.select(dto.getHostid(), dto.getOffset(), dto.getLimit());
-    return list.stream().map(g -> new GuestBoardListResponse(g.getGbid(), g.getGid(), g.getNickname(), g.getContent(), g.getCreatedAt(), g.getUpdatedAt())).toList();
+    List<GuestBoardListResponse> list = guestBoardDao.select(dto.getHostid(), dto.getOffset(), dto.getLimit());
+    return list.stream().map(g -> new GuestBoardListResponse(g.getGbid(), g.getGid(), g.getAccount(), g.getNickname(), g.getContent(), g.getCreatedAt(), g.getUpdatedAt())).toList();
   }
 
   // board update
