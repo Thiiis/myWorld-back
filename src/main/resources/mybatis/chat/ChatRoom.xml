@@ -51,7 +51,7 @@
         GROUP BY r.ID
       ) unread ON cr.ID = unread.ROOM_ID
     WHERE my_cm.MEMBER_ID = #{mid}
-    ORDER BY my_cm.LAST_READ_AT DESC NULLS LAST
+    ORDER BY my_cm.LAST_READ_AT DESC
     ]]>
   </select>
 

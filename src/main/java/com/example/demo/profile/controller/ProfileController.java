@@ -27,7 +27,6 @@ import com.example.demo.profile.service.ProfileService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/profiles")
@@ -41,7 +40,7 @@ public class ProfileController {
     }
 
     @Login
-    @GetMapping("/detail/me") 
+    @GetMapping("/detail/me")
     public ResponseEntity<ProfileReadResponse> getMyProfile(HttpServletRequest request) {
         Long loginMid = (Long) request.getAttribute("loginMid");
         ProfileReadResponse result = profileService.getProfileByMid(loginMid);
@@ -54,9 +53,6 @@ public class ProfileController {
         return ResponseEntity.ok(result);
     }
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
-    
     @Login
     @PutMapping("/update")
     public ResponseEntity<Void> updateProfile(HttpServletRequest request,
@@ -72,42 +68,29 @@ public class ProfileController {
     @PutMapping("/update/image")
     public ResponseEntity<String> updateProfileImage(HttpServletRequest request,
             @RequestParam("file") MultipartFile file) {
-        Long loginMid = (Long) request.getAttribute("loginMid"); 
-        // 1. 파일 유효성 검사
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("이미지 파일을 선택해주세요.");
-        }
+        Long loginMid = (Long) request.getAttribute("loginMid");
 
         try {
-            // 2. 고유한 파일 이름 생성 (파일 이름 중복 방지)
-            String originalFilename = file.getOriginalFilename();
-            String storedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
+            // 서비스 계층의 단일 메서드 호출로 모든 로직 처리
+            String newImageUrl = profileService.updateImage(loginMid, file);
+            return ResponseEntity.ok("프로필 이미지가 성공적으로 업데이트되었습니다. URL: " + newImageUrl);
 
-            // 3. 지정된 경로에 파일 저장
-            // File.separator는 OS에 맞는 경로 구분자(\ 또는 /)를 자동으로 넣어줍니다.
-            String fullPath = uploadDir + File.separator + storedFilename;
-            file.transferTo(new File(fullPath));
-
-            // 4. DB에 저장할 URL 생성
-            String imageUrl = "/images/" + storedFilename;
-
-            // 5. 서비스 계층을 호출하여 DB에 파일 정보(저장된 이름, URL) 업데이트
-            profileService.updateImage(loginMid, storedFilename, imageUrl);
-
-            return ResponseEntity.ok("프로필 이미지가 성공적으로 업데이트되었습니다.");
-
+        } catch (IllegalArgumentException e) {
+            // 서비스에서 발생시킨 유효성 검사 예외 처리
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (IOException e) {
+            // 파일 저장 중 발생한 예외 처리
             e.printStackTrace(); // 서버 로그에 에러 기록
             return ResponseEntity.internalServerError().body("파일 업로드 중 오류가 발생했습니다.");
         }
-
     }
+
 
     // 선택된 주크박스 저장
     @PostMapping("/{account}/jukebox")
     public ResponseEntity<Void> updateSelectedJukebox(
-        @PathVariable("account") String account, 
-        @RequestBody(required = false) JukeboxSelectRequest dto) {
+            @PathVariable("account") String account,
+            @RequestBody(required = false) JukeboxSelectRequest dto) {
 
         profileService.updateProfileJukebox(account, dto.getJid());
         return ResponseEntity.ok().build();
@@ -119,7 +102,5 @@ public class ProfileController {
         JukeboxSelectResponse jukebox = profileService.getSelectedJukebox(account);
         return ResponseEntity.ok(jukebox);
     }
-    
-    
-}
 
+}

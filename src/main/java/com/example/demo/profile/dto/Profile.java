@@ -15,8 +15,6 @@ public class Profile {
     // private Long tid; // 테마 FK
 
     private String nickname; // 회원가입할 때 닉네임 받아옴
-    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    // private Date birthdate; // 생년월일
     private String birthdate; // 생년월일
     
     private String imgName; // 프로필 이미지 파일 이름

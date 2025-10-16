@@ -1,6 +1,13 @@
 package com.example.demo.profile.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.auth.dao.MemberDao;
 import com.example.demo.auth.dto.Member;
@@ -36,7 +43,8 @@ public class ProfileService {
             throw new IllegalArgumentException("프로필을 찾을 수 없습니다: mid " + member.getMid());
         }
         ;
-        return new ProfileInfo(member.getMid(),profile.getNickname(),profile.getBirthdate(),profile.getImgUrl(),profile.getStatusMessage());
+        return new ProfileInfo(member.getMid(), profile.getNickname(), profile.getBirthdate(), profile.getImgUrl(),
+                profile.getStatusMessage());
     }
 
     public ProfileReadResponse getProfileByAccount(String account) {
@@ -81,16 +89,39 @@ public class ProfileService {
 
     }
 
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+    
     // 이미지 파일 정보를 DB에 업데이트하는 서비스 메서드
-    public void updateImage(Long mid, String imgName, String imgUrl) {
-        // profile.xml에 정의된 updateImage 쿼리를 실행
-        int updatedRows = profileDao.updateImage(mid, imgName, imgUrl);
+    @Transactional // DB 업데이트와 파일 저장을 하나의 트랜잭션으로 묶는 것이 좋습니다.
+    public String updateImage(Long mid, MultipartFile file) throws IOException {
+        // 1. 파일 유효성 검사 (서비스 계층에서 책임)
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("이미지 파일을 선택해주세요.");
+        }
+
+        // 2. 고유한 파일 이름 생성
+        String originalFilename = file.getOriginalFilename();
+        String storedFilename = UUID.randomUUID().toString() + "_" + originalFilename;
+
+        // 3. 지정된 경로에 파일 저장
+        // File.separator는 OS에 맞는 경로 구분자(\ 또는 /)를 자동으로 넣어줍니다.
+        String fullPath = uploadDir + File.separator + storedFilename;
+        file.transferTo(new File(fullPath));
+
+        // 4. DB에 저장할 URL 생성
+        String imageUrl = "/images/" + storedFilename;
+
+        // 5. DB에 파일 정보 업데이트
+        int updatedRows = profileDao.updateImage(mid, storedFilename, imageUrl);
         if (updatedRows == 0) {
-            // 이미지 업데이트가 실패한 경우 예외 처리
+            // DB 업데이트 실패 시, 방금 저장한 파일을 삭제하는 로직을 추가할 수도 있습니다.
             throw new IllegalArgumentException("프로필 이미지 업데이트에 실패했습니다. 사용자를 찾을 수 없습니다.");
         }
-    }
 
+        return imageUrl; // 성공 시 이미지 URL 반환
+    }
 
     // 주크박스 선택
     public void updateProfileJukebox(String account, Long jid) {
@@ -102,10 +133,12 @@ public class ProfileService {
     public JukeboxSelectResponse getSelectedJukebox(String account) {
         Member member = memberDao.selectByAccount(account);
         Long jid = profileDao.selectByMid(member.getMid()).getJid();
-        if (jid == null) return null;
+        if (jid == null)
+            return null;
 
         Jukebox jukebox = jukeboxDao.selectByJid(jid);
-        if(jukebox == null) return null;
+        if (jukebox == null)
+            return null;
 
         return new JukeboxSelectResponse(jukebox.getJid(), jukebox.getTitle());
     }
