@@ -5,7 +5,7 @@
   
   <insert id="insert" parameterType="Profile">
     INSERT INTO PROFILES (MID, NICKNAME, BIRTHDATE)
-    VALUES (#{mid}, #{nickname}, #{birthdate})
+    VALUES (#{mid}, #{nickname}, TO_DATE(#{birthdate}, 'YYYY-MM-DD'))
   </insert>
   
   <select id="countByNickname" parameterType="String" resultType="int">

@@ -33,13 +33,13 @@ public class SongService {
 
   // 음악 검색하기
   // 관련 높은 10개만 가져오기
-  public List<SongSearchResponse> searchSongs(Long mid, String search) {
+  public List<SongSearchResponse> searchSongs(Long mid, String query) {
     String url = "https://www.googleapis.com/youtube/v3/search"
         + "?part=snippet" // 제목, 채널 이름
         + "&type=video" // 동영상만 검색
         + "&videoCategoryId=10" // 음악 카테고리
         + "&maxResults=10"
-        + "&q=" + search
+        + "&q=" + query
         + "&key=" + apiKey;
 
     // HTTP 통신 처리. 요청을 보내기 위해 RestTemplate 객체 생성

@@ -47,19 +47,23 @@ public class MemberService {
     memberDao.insert(member);
 
     // member.getId()에 유효한 값이 들어왔는지 확인, Profile에 써야함
-    if (member.getMid() == null || member.getMid() == 0) {
-      // 해당 경우 나오면 Mapper.xml 확인
-      throw new RuntimeException("멤버 ID를 가져오지 못했습니다.");
-    }
+    // if (member.getMid() == null || member.getMid() == 0) {
+    //   // 해당 경우 나오면 Mapper.xml 확인
+    //   throw new RuntimeException("멤버 ID를 가져오지 못했습니다.");
+    // }
+
+    Member savedMember = memberDao.selectByAccount(dto.getAccount());
+
+
     if (profileDao.countByNickname(dto.getNickname()) > 0) {
       throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
     }
-    Profile profile = new Profile(member.getMid(), dto.getNickname(), dto.getBirthdate());
+    Profile profile = new Profile(savedMember.getMid(), dto.getNickname(), dto.getBirthdate());
     profileDao.insert(profile);
     // 가져온 member.getId()로 Profile 생성
 
     // DB 최신 업뎃 반영
-    return new MemberSignupResponse(member.getAccount(), profile.getNickname(), member.getEmail(),
+    return new MemberSignupResponse(savedMember.getAccount(), profile.getNickname(), savedMember.getEmail(),
         profile.getBirthdate());
   }
 

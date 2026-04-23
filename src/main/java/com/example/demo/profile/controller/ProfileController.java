@@ -87,6 +87,7 @@ public class ProfileController {
 
 
     // 선택된 주크박스 저장
+    
     @PostMapping("/{account}/jukebox")
     public ResponseEntity<Void> updateSelectedJukebox(
             @PathVariable("account") String account,
