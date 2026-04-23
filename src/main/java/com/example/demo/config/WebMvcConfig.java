@@ -19,6 +19,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
+    @Value("${app.cors.allowed-origin-patterns}")
+    private String[] allowedOriginPatterns;
+
     // LoginCheckInterceptor를 주입받습니다.
     @Autowired
     private LoginCheckInterceptor loginCheckInterceptor;
@@ -32,9 +35,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOriginPatterns(allowedOriginPatterns)
                 .allowedMethods("*")
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 
     /**
